@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Student Application Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-blue: #4a90e2;
+            --text-gray: #666;
+            --border-light: #ddd;
+            --bg-light: #f9fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 50px;
+            color: #556080;
+        }
+
+        .header i {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .register-container h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #fff;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-register:hover {
+            background-color: #357abd;
+        }
+
+        .footer-links {
+            margin-top: 25px;
+        }
+
+        .footer-links p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .footer-links p a {
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1rem; }
+            .register-container h2 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <i class="fas fa-user-graduate"></i>
+        <h1>Student Application Portal</h1>
+    </div>
+
+    <div class="register-container">
+        <h2>Register</h2>
+        
+        <form id="registerForm">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="email" id="regEmail" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="regPassword" placeholder="Create Password" required>
+            </div>
+
+            <button type="submit" class="btn-register">Create Account</button>
+        </form>
+
+        <div class="footer-links">
+            <p>Already have an account? <a href="index.html">Log In</a></p>
+        </div>
+    </div>
+
+    <script type="module" src="register.js"></script>
+</body>
+</html>
