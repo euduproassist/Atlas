@@ -1,5 +1,5 @@
 import { auth } from './firebase-config.js';
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 const loginForm = document.getElementById('loginForm');
 const togglePassword = document.querySelector('.password-toggle');
