@@ -129,25 +129,6 @@
             .register-container h2 { font-size: 1.7rem; }
         }
 
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #999;
-            display: flex;
-            gap: 10px;
-            font-size: 0.9rem;
-            background: white;
-            padding-left: 5px;
-        }
-
-        .input-group input[type="password"],
-        .input-group input[type="text"] {
-            padding-right: 70px; 
-        }
-
     </style>
 </head>
 <body>
@@ -186,7 +167,6 @@
             <i class="fas fa-lock"></i>
             <input type="password" id="regPassword" placeholder="Password" required>
             <div class="password-toggle">
-                <span>...</span>
                 <i class="fas fa-eye-slash" id="toggleIcon"></i>
             </div>
         </div>
