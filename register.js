@@ -42,7 +42,7 @@ registerForm.addEventListener('submit', async (e) => {
         await sendEmailVerification(user);
 
         alert("Account created! Please check your email inbox and click the verification link before logging in.");
-        window.location.href = "index.html";
+        window.location.href = "login.html";
         
     } catch (error) {
         alert("Error: " + error.message);
