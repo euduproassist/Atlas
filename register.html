@@ -132,7 +132,53 @@
 </head>
 <body>
 
-  
+    <div class="header">
+    <i class="fas fa-user-graduate"></i>
+    <h1>Student Application Portal</h1>
+</div>
+
+<div class="register-container">
+    <h2>Register</h2>
+    <p style="color: #666; margin-bottom: 25px; font-size: 0.95rem;">Create a new account to start your application.</p>
+    
+    <form id="registerForm">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="fullName" placeholder="Full Name" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="regEmail" placeholder="Email Address" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="tel" id="phoneNumber" placeholder="Phone Number" required>
+        </div>
+
+        <div class="input-group">
+            <i class="far fa-id-card"></i>
+            <input type="text" id="idNumber" placeholder="ID Number" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="regPassword" placeholder="Password" required>
+            <div class="password-toggle">
+                <span>...</span>
+                <i class="fas fa-eye-slash" id="toggleIcon"></i>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-register">Sign Up</button>
+    </form>
+
+    <div class="footer-links">
+        <p>Already have an account? <a href="index.html">Login</a></p>
+    </div>
+</div>
+
     <script type="module" src="register.js"></script>
 </body>
 </html>
