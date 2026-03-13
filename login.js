@@ -37,7 +37,7 @@ loginForm.addEventListener('submit', (e) => {
 
             console.log("Logged in as:", user.email);
             alert("Login Successful!");
-            window.location.href = "dashboard.html"; 
+            window.location.href = "applicant.html"; 
         })
         .catch((error) => {
             alert("Error: " + error.message);
