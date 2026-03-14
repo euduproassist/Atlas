@@ -91,8 +91,8 @@ mainForm.addEventListener('submit', async (e) => {
             gender: document.getElementById('gender').value,
             title: document.getElementById('title').value,
             nationality: document.getElementById('nationality').value === 'Other'
-                         ? document.getElementBtId('otherNationality').value
-                         : document.getElementBtId('nationality').value,
+                         ? document.getElementById('otherNationality').value
+                         : document.getElementById('nationality').value,
             homeLanguage: document.getElementById('homeLanguage').value,
             email: document.getElementById('email').value,
             mobile: document.getElementById('mobile').value,
