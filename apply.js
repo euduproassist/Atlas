@@ -188,5 +188,6 @@ mainForm.addEventListener('submit', async (e) => {
             uploadBtn.innerText = "Upload & Continue";
             uploadBtn.disabled = false;
         }
+    }
 });
 
