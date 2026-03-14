@@ -8,6 +8,19 @@ const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
 let syncTimer;
 
+window.toggleOtherNationality = function(value) {
+    const otherGroup = document.getElementById('otherNationalityGroup');
+    const otherInput = document.getElementById('otherNationality');
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true;
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false;
+        otherInput.value = '';
+    }
+};
+
 // This saves data to the cloud only after 2 seconds of 'silence' (no typing)
 async function syncFieldToCloud(fieldId, value) {
     const user = auth.currentUser;
