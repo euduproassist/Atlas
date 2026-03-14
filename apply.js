@@ -59,15 +59,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Save when they stop typing for 2 seconds
-mainForm.addEventListener('input', (e) => {
-    if (e.target.id && e.target.type !== 'file') {
-        clearTimeout(syncTimer);
-        syncTimer = setTimeout(() => {
-            syncFieldToCloud(e.target.id, e.target.value);
-        }, 2000); 
-    }
-});
+
 
 // Save IMMEDIATELY when they click or tab out of a field
 mainForm.addEventListener('focusout', (e) => {
