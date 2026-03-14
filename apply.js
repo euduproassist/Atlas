@@ -66,5 +66,64 @@ mainForm.addEventListener('submit', async (e) => {
             alert("Error: " + error.message);
         }
 
+            } else if (currentStep === 2) {
+        // Collect ALL Step 2 Data from your list
+        const step2Data = {
+            // 1. Matric Details
+            schoolName: document.getElementById('schoolName').value,
+            schoolLoc: document.getElementById('schoolLoc').value,
+            matricYear: document.getElementById('matricYear').value,
+            examBody: document.getElementById('examBody').value,
+            highestGrade: document.getElementById('highestGrade').value,
+            
+            // 2. Marks & APS
+            sub1: document.getElementById('sub1').value,
+            res1: document.getElementById('res1').value,
+            aps1: document.getElementById('aps1').value,
+            sub2: document.getElementById('sub2').value,
+            res2: document.getElementById('res2').value,
+            aps2: document.getElementById('aps2').value,
+            apsScore: document.getElementById('apsScore').value,
+            
+            // 3. Post-School
+            prevInst: document.getElementById('prevInst').value,
+            prevQual: document.getElementById('prevQual').value,
+            prevStatus: document.getElementById('prevStatus').value,
+            prevStudentNum: document.getElementById('prevStudentNum').value,
+            
+            // 4. Choices
+            choice1: document.getElementById('choice1').value,
+            choice2: document.getElementById('choice2').value,
+            acadYear: document.getElementById('acadYear').value,
+            campus: document.getElementById('campus').value,
+            attendance: document.getElementById('attendance').value,
+            
+            // 5. Additional
+            nbtNum: document.getElementById('nbtNum').value,
+            housing: document.getElementById('housing').value,
+            nsfas: document.getElementById('nsfas').value,
+            
+            lastUpdated: new Date()
+        };
+
+        try {
+            await setDoc(doc(db, "applications", user.uid), {
+                step2: step2Data,
+                progress: 50, // Updated progress
+                currentStep: 3
+            }, { merge: true });
+
+            alert("Step 2 Saved! Moving to Step 3.");
+            
+            // Logic to move to Step 3 would go here
+            currentStep = 3; 
+            // document.getElementById('step2Container').style.display = 'none';
+            // document.getElementById('step3Container').style.display = 'block';
+
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+    }
+
 });
 
