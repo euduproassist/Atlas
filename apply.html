@@ -109,7 +109,79 @@
                 </div>
             </div>
 
+                        <div id="step2Container" style="display: none;">
+                <h2>Step 2 of 4: Course & Education Qualifications</h2>
+                <p>Please enter your secondary school and post-school qualifications.</p>
+                
+                <div class="section-title">Secondary School Details</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>School Name *</label><input type="text" id="schoolName" placeholder="As per ID/Passport"></div>
+                    <div class="input-group"><label>School Province / Country *</label><select id="schoolLoc"><option value="">Select</option><option value="Gauteng">Gauteng</option><option value="Other">Other / International</option></select></div>
+                    <div class="input-group"><label>Matric Year *</label><select id="matricYear"><option value="">Select</option><option value="2025">2025</option><option value="2024">2024</option></select></div>
+                    <div class="input-group"><label>Exam Body *</label><select id="examBody"><option value="">Select</option><option value="NSC">NSC</option><option value="IEB">IEB</option><option value="SACAI">SACAI</option><option value="Cambridge">Cambridge</option></select></div>
+                    <div class="input-group"><label>Highest Grade Passed *</label><input type="text" id="highestGrade" placeholder="e.g. Grade 12"></div>
+                </div>
 
+                <div class="section-title">Subject-Specific Marks & APS (optional)</div>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                        <thead>
+                            <tr style="background: #f1f4f8; font-size: 0.8rem; color: #555;">
+                                <th style="padding: 10px; text-align: left;">Subject Name</th>
+                                <th style="padding: 10px; text-align: left;">Level/Result</th>
+                                <th style="padding: 10px; text-align: left;">APS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 5px;"><input type="text" id="sub1" placeholder="Select Subject" style="width:100%; padding: 8px; border: 1px solid var(--border);"></td>
+                                <td style="padding: 5px;"><input type="number" id="res1" placeholder="— %" style="width:100%; padding: 8px; border: 1px solid var(--border);"></td>
+                                <td style="padding: 5px;"><input type="number" id="aps1" placeholder="—" style="width:100%; padding: 8px; border: 1px solid var(--border);"></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px;"><input type="text" id="sub2" placeholder="Select Subject" style="width:100%; padding: 8px; border: 1px solid var(--border);"></td>
+                                <td style="padding: 5px;"><input type="number" id="res2" placeholder="— %" style="width:100%; padding: 8px; border: 1px solid var(--border);"></td>
+                                <td style="padding: 5px;"><input type="number" id="aps2" placeholder="—" style="width:100%; padding: 8px; border: 1px solid var(--border);"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" style="text-align: right; padding: 10px; font-weight: 600;">Total APS:</td>
+                                <td style="padding: 5px;"><input type="number" id="apsScore" placeholder="—" style="width:100%; padding: 8px; border: 1px solid var(--border); background: #f9f9f9;"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="section-title">Post-School / Previous Qualifications</div>
+                <div class="form-grid">
+                    <div class="input-group"><label>Institution Name (optional)</label><input type="text" id="prevInst"></div>
+                    <div class="input-group"><label>Qualification Name (optional)</label><input type="text" id="prevQual"></div>
+                    <div class="input-group"><label>Status</label><select id="prevStatus"><option value="N/A">N/A</option><option value="Completed">Completed</option><option value="Registered">Currently Registered</option><option value="Discontinued">Discontinued</option></select></div>
+                    <div class="input-group"><label>Student Number (optional)</label><input type="text" id="prevStudentNum"></div>
+                </div>
+
+                <div class="section-title">Programme Choices</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>First Choice *</label><input type="text" id="choice1" placeholder="e.g. BSc Computer Science"></div>
+                    <div class="input-group full-width"><label>Second/Third Choice</label><input type="text" id="choice2"></div>
+                    <div class="input-group"><label>Academic Year *</label><input type="text" id="acadYear" value="2027"></div>
+                    <div class="input-group"><label>Campus Selection *</label><input type="text" id="campus"></div>
+                    <div class="input-group full-width"><label>Attendance Mode *</label><select id="attendance"><option value="Full-Time">Full-time (Contact)</option><option value="Distance">Distance Learning</option></select></div>
+                </div>
+
+                <div class="section-title">Additional Requirements & Checklist</div>
+                <div class="form-grid">
+                    <div class="input-group"><label>NBT Registration Number</label><input type="text" id="nbtNum"></div>
+                    <div class="input-group"><label>Housing Preference *</label><select id="housing"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                    <div class="input-group full-width"><label>Financial Aid Intent (NSFAS) *</label><select id="nsfas"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-cancel" onclick="location.reload()">Back</button>
+                    <button type="submit" class="btn btn-next">Next</button>
+                </div>
+            </div>
 
         </form>
     </div>
