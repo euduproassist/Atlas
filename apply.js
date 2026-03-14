@@ -39,6 +39,37 @@ async function syncFieldToCloud(fieldId, value) {
     }
 }
 
+window.toggleDisability = function(value) {
+    const container = document.getElementById('disabilityDetailsContainer');
+    if (value === 'Yes') {
+        container.style.display = 'block';
+    } else {
+        container.style.display = 'none';
+        // Reset and hide extra boxes
+        document.getElementById('disability1').value = '';
+        document.getElementById('disability2').value = '';
+        document.getElementById('disability3').value = '';
+        document.getElementById('box2').style.display = 'none';
+        document.getElementById('box3').style.display = 'none';
+    }
+};
+
+window.checkAddButton = function() {
+    const d1 = document.getElementById('disability1').value;
+    const d2 = document.getElementById('disability2').value;
+    
+    document.getElementById('addBtn1').style.display = (d1.length > 0 && document.getElementById('box2').style.display === 'none') ? 'block' : 'none';
+};
+
+window.addDisabilityBox = function() {
+    if (document.getElementById('box2').style.display === 'none') {
+        document.getElementById('box2').style.display = 'block';
+        document.getElementById('addBtn1').style.display = 'none';
+    } else if (document.getElementById('box3').style.display === 'none') {
+        document.getElementById('box3').style.display = 'block';
+    }
+};
+
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = "login.html";
