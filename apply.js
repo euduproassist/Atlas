@@ -3,6 +3,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/fi
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const applyForm = document.getElementById('applyForm');
+let currentStep = 1;
 
 // 1. SECURE: Kick out if not logged in
 onAuthStateChanged(auth, async (user) => {
@@ -70,8 +71,50 @@ applyForm.addEventListener('submit', async (e) => {
             currentStep: 2
         }, { merge: true });
 
+                if (currentStep === 1) {
+            currentStep = 2;
+            document.getElementById('step1Container').style.display = 'none';
+            document.getElementById('step2Container').style.display = 'block';
+            document.querySelector('h2').innerText = "Step 2 of 4: Course & Education";
+            
+            // Update Progress Bar
+            const dots = document.querySelectorAll('.step-dot');
+            const lines = document.querySelectorAll('.step-line');
+            dots[1].classList.add('active');
+            lines[1].classList.add('active');
+            
+            window.scrollTo(0, 0);
+            return; // Stop here so it doesn't try to save Step 2 yet
+        }
+
         alert("Step 1 saved! Moving to Step 2.");
         // window.location.href = "step2.html"; 
+            if (currentStep === 2) {
+        const step2Data = {
+            schoolName: document.getElementById('schoolName').value,
+            schoolLoc: document.getElementById('schoolLoc').value,
+            matricYear: document.getElementById('matricYear').value,
+            examBody: document.getElementById('examBody').value,
+            highestGrade: document.getElementById('highestGrade').value,
+            apsScore: document.getElementById('apsScore').value,
+            choice1: document.getElementById('choice1').value,
+            choice2: document.getElementById('choice2').value,
+            acadYear: document.getElementById('acadYear').value,
+            campus: document.getElementById('campus').value,
+            attendance: document.getElementById('attendance').value,
+            nsfas: document.getElementById('housing').value,
+            lastUpdated: new Date()
+        };
+
+        await setDoc(doc(db, "applications", user.uid), {
+            step2: step2Data,
+            progress: 50,
+            currentStep: 3
+        }, { merge: true });
+
+        alert("Step 2 Saved! Proceed to Document Uploads.");
+    }
+
     } catch (error) {
         alert("Error saving: " + error.message);
     }
