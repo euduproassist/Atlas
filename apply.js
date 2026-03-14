@@ -142,7 +142,7 @@ mainForm.addEventListener('submit', async (e) => {
             address: document.getElementById('address').value,
             postalAddress: document.getElementById('postalAddress').value,
             race: document.getElementById('race').value,
-            disability: document.getElementById('disability').value,
+            
             citizenship: document.getElementById('citizenship').value,
             nokName: document.getElementById('nokName').value,
             nokRelation: document.getElementById('nokRelation').value,
