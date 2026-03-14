@@ -90,7 +90,9 @@ mainForm.addEventListener('submit', async (e) => {
             dob: document.getElementById('dob').value,
             gender: document.getElementById('gender').value,
             title: document.getElementById('title').value,
-            nationality: document.getElementById('nationality').value,
+            nationality: document.getElementById('nationality').value === 'Other'
+                         ? document.getElementBtId('otherNationality').value
+                         : document.getElementBtId('nationality').value,
             homeLanguage: document.getElementById('homeLanguage').value,
             email: document.getElementById('email').value,
             mobile: document.getElementById('mobile').value,
