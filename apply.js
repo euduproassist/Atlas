@@ -133,10 +133,6 @@ onAuthStateChanged(auth, async (user) => {
               document.getElementById('otherQualGroup').style.display = 'block';
             document.getElementById('otherQual').required = true;
          }
-                // Inside your if (data.draft) loop:
-                if (key === 'matricYear') {
-                document.getElementById('matricYear').value = data.draft[key];
-                }
 
         // 2. NEW: Restore Disability boxes
         const savedDisability = data.draft['disability'];
