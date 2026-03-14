@@ -127,7 +127,6 @@ mainForm.addEventListener('submit', async (e) => {
         } catch (error) {
             alert("Error: " + error.message);
         }
-    }
 
         } else if (currentStep === 3) {
         const uploadBtn = document.getElementById('uploadBtn');
@@ -189,7 +188,5 @@ mainForm.addEventListener('submit', async (e) => {
             uploadBtn.innerText = "Upload & Continue";
             uploadBtn.disabled = false;
         }
-    }
-
 });
 
