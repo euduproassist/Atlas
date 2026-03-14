@@ -234,7 +234,9 @@ mainForm.addEventListener('submit', async (e) => {
             schoolName: document.getElementById('schoolName').value,
             schoolLoc: document.getElementById('schoolLoc').value,
             matricYear: document.getElementById('matricYear').value,
-            examBody: document.getElementById('examBody').value,
+            examBody: document.getElementById('examBody').value === 'Other'
+                ? document.getElementById('otherQual').value
+                : document.getElementById('examBody').value,                
             highestGrade: document.getElementById('highestGrade').value,
             
             // 2. Marks & APS
