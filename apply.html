@@ -183,6 +183,69 @@
                 </div>
             </div>
 
+          <div id="step3Container" style="display: none;">
+                <h2>Step 3 of 4: Upload Documents</h2>
+                <p>Please upload the required documents to support your application.<br>
+                <small>Accepted file types: PDF, JPG, PNG. Max file size: 5MB</small></p>
+
+                <div class="section-title">1. Identity Documents</div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Certified Copy of ID / Passport *</label>
+                    <input type="file" id="file_id" accept=".pdf,.jpg,.png" required>
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Birth Certificate (optional)</label>
+                    <input type="file" id="file_birth" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Marriage Certificate (if applicable)</label>
+                    <input type="file" id="file_marriage" accept=".pdf,.jpg,.png">
+                </div>
+
+                <div class="section-title">2. Academic Records</div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Matric / Grade 12 Certificate *</label>
+                    <input type="file" id="file_matric" accept=".pdf,.jpg,.png" required>
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Grade 11 Final Results (optional)</label>
+                    <input type="file" id="file_grade11" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Official Academic Transcripts</label>
+                    <input type="file" id="file_transcripts" accept=".pdf,.jpg,.png">
+                </div>
+
+                <div class="section-title">3. Financial & Residency Documents</div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Proof of Address *</label>
+                    <input type="file" id="file_address" accept=".pdf,.jpg,.png" required>
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Proof of Payment (optional)</label>
+                    <input type="file" id="file_pop" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Sponsor / Parent ID (optional)</label>
+                    <input type="file" id="file_sponsor" accept=".pdf,.jpg,.png">
+                </div>
+
+                <div class="section-title">4. Other Requirements</div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Motivation Letter (optional)</label>
+                    <input type="file" id="file_motivation" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Curriculum Vitae (CV)</label>
+                    <input type="file" id="file_cv" accept=".pdf,.jpg,.png">
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-cancel" onclick="location.reload()">Back</button>
+                    <button type="submit" class="btn btn-next" id="uploadBtn">Upload & Continue</button>
+                </div>
+            </div>
+
         </form>
     </div>
 
