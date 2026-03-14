@@ -192,7 +192,21 @@
                     <div class="input-group full-width"><label>School Name *</label><input type="text" id="schoolName" placeholder="Enter School"></div>
                     <div class="input-group"><label>School Province / Country *</label><select id="schoolLoc"><option value="">Select</option><option value="Gauteng">Gauteng</option><option value="Other">Other / International</option></select></div>
                     <div class="input-group"><label>Year Completed / To Be Completed *</label><select id="matricYear"><option value="">Select</option><option value="2025">2025</option><option value="2024">2024</option></select></div>
-                    
+                    <div class="input-group">
+                    <label>Qualification Type *</label>
+                    <select id="examBody" required onchange="toggleOtherQual(this.value)">
+                    <option value="" selected disabled>Select</option>
+                    <option value="NSC">NSC</option>
+                    <option value="IEB">IEB</option>
+                    <option value="SACAI">SACAI</option>
+                    <option value="NCV">NCV</option>
+                    <option value="Other">Other</option>
+                    </select>
+                    </div>
+                    <div class="input-group" id="otherQualGroup" style="display: none;">
+                    <label>Specify Qualification Type *</label>
+                    <input type="text" id="otherQual">
+                    </div>
                     <div class="input-group"><label>Highest Grade Passed *</label><input type="text" id="highestGrade" placeholder="e.g. Grade 12"></div>
                 </div>
 
