@@ -4,6 +4,42 @@ import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/f
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 const storage = getStorage();
 
+let syncTimer;
+
+// This saves data to the cloud only after 2 seconds of 'silence' (no typing)
+async function syncFieldToCloud(fieldId, value) {
+    const user = auth.currentUser;
+    if (!user || !fieldId) return;
+
+    try {
+        await setDoc(doc(db, "applications", user.uid), {
+            draft: { [fieldId]: value },
+            lastUpdated: new Date()
+        }, { merge: true });
+        console.log("Field synced to cloud:", fieldId);
+    } catch (e) {
+        console.error("Sync error:", e);
+    }
+}
+
+// Save when they stop typing for 2 seconds
+mainForm.addEventListener('input', (e) => {
+    if (e.target.id && e.target.type !== 'file') {
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => {
+            syncFieldToCloud(e.target.id, e.target.value);
+        }, 2000); 
+    }
+});
+
+// Save IMMEDIATELY when they click or tab out of a field
+mainForm.addEventListener('focusout', (e) => {
+    if (e.target.id && e.target.type !== 'file') {
+        syncFieldToCloud(e.target.id, e.target.value);
+    }
+});
+
+
 const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
 
@@ -12,6 +48,26 @@ onAuthStateChanged(auth, async (user) => {
         window.location.href = "login.html";
     } else {
         document.getElementById('email').value = user.email || '';
+        
+        // --- LOAD SAVED DATA FROM CLOUD ---
+        const docSnap = await getDoc(doc(db, "applications", user.uid));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            
+            // Fill inputs from the 'draft' object
+            if (data.draft) {
+                Object.keys(data.draft).forEach(key => {
+                    const input = document.getElementById(key);
+                    if (input) input.value = data.draft[key];
+                });
+            }
+
+            // Move to the last saved step
+            if (data.currentStep) {
+                currentStep = data.currentStep;
+                jumpToStep(currentStep); // Make sure you have a function to show the right step
+            }
+        }
     }
 });
 
