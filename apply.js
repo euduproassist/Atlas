@@ -59,7 +59,18 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-
+// Save when they stop typing for 2 seconds
+mainForm.addEventListener('input', (e) => {
+    // ADDED: List of IDs to IGNORE for auto-saving
+    const ignoreList = ['nationality', 'otherNationality']; 
+    
+    if (e.target.id && e.target.type !== 'file' && !ignoreList.includes(e.target.id)) {
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => {
+            syncFieldToCloud(e.target.id, e.target.value);
+        }, 2000); 
+    }
+});
 
 // Save IMMEDIATELY when they click or tab out of a field
 mainForm.addEventListener('focusout', (e) => {
