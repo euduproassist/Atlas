@@ -86,7 +86,18 @@
                     <option value="Mx">Mx</option>
                     </select>
                     </div>
-                    
+                    <div class="input-group">
+                   <label>Nationality *</label>
+                   <select id="nationality" required onchange="toggleOtherNationality(this.value)">
+                   <option value="" selected disabled>Select</option>
+                   <option value="South African">South African</option>
+                   <option value="Other">Other</option>
+                </select>
+                </div>
+                    <div class="input-group" id="otherNationalityGroup" style="display: none;">
+                    <label>Please Specify Nationality *</label>
+                    <input type="text" id="otherNationality">
+                </div>
                     <div class="input-group full-width"><label>Home Language *</label><input type="text" id="homeLanguage" required></div>
                 </div>
 
