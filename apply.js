@@ -153,7 +153,20 @@ mainForm.addEventListener('submit', async (e) => {
             email: document.getElementById('email').value,
             mobile: document.getElementById('mobile').value,
             altPhone: document.getElementById('altPhone').value,
-
+            address: {
+                street: document.getElementById('physStreet').value,
+                suburb: document.getElementById('physSuburb').value,
+                province: document.getElementById('physProvince').value,
+                postalCode: document.getElementById('physPostalCode').value,
+                country: document.getElementById('physCountry').value
+            },
+            postalAddress: {
+                street: document.getElementById('postStreet').value,
+                suburb: document.getElementById('postSuburb').value,
+                province: document.getElementById('postProvince').value,
+                postalCode: document.getElementById('postPostalCode').value,
+                country: document.getElementById('postCountry').value
+            },
             race: document.getElementById('race').value,
             disability: document.getElementById('disability').value,
             disabilityDetails: document.getElementById('disability').value === 'Yes' 
