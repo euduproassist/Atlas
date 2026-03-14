@@ -66,34 +66,5 @@ mainForm.addEventListener('submit', async (e) => {
             alert("Error: " + error.message);
         }
 
-    } else if (currentStep === 2) {
-        // Collect Step 2 Data (School, Marks, Choices)
-        const step2Data = {
-            schoolName: document.getElementById('schoolName').value,
-            schoolLoc: document.getElementById('schoolLoc').value,
-            matricYear: document.getElementById('matricYear').value,
-            examBody: document.getElementById('examBody').value,
-            highestGrade: document.getElementById('highestGrade').value,
-            sub1: document.getElementById('sub1').value,
-            res1: document.getElementById('res1').value,
-            apsScore: document.getElementById('apsScore').value,
-            choice1: document.getElementById('choice1').value,
-            acadYear: document.getElementById('acadYear').value,
-            attendance: document.getElementById('attendance').value,
-            lastUpdated: new Date()
-        };
-
-        try {
-            await setDoc(doc(db, "applications", user.uid), {
-                step2: step2Data,
-                currentStep: 3
-            }, { merge: true });
-
-            alert("Step 2 Saved! Application is progressing.");
-            // You can now redirect or show Step 3
-        } catch (error) {
-            alert("Error: " + error.message);
-        }
-    }
 });
 
