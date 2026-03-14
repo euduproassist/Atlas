@@ -120,7 +120,7 @@ onAuthStateChanged(auth, async (user) => {
                 Object.keys(data.draft).forEach(key => {
                     const input = document.getElementById(key);
                     if (input) input.value = data.draft[key];
-                }
+                
             if (key === 'matricYear') {
                     document.getElementById('matricYear').value = data.draft[key];
                 }
