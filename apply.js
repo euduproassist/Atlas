@@ -70,6 +70,20 @@ window.addDisabilityBox = function() {
     }
 };
 
+window.toggleOtherQual = function(value) {
+    const otherGroup = document.getElementById('otherQualGroup');
+    const otherInput = document.getElementById('otherQual');
+    
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true;
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false; 
+        otherInput.value = ''; 
+    }
+};
+
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = "login.html";
@@ -93,6 +107,13 @@ onAuthStateChanged(auth, async (user) => {
                    document.getElementById('otherNationalityGroup').style.display = 'block';
                    document.getElementById('otherNationality').required = true;
                }
+                // Restore Qualification "Other" box
+                const savedQual = data.draft['examBody'];
+               if (savedQual === 'Other') {
+              document.getElementById('otherQualGroup').style.display = 'block';
+            document.getElementById('otherQual').required = true;
+         }
+
         // 2. NEW: Restore Disability boxes
         const savedDisability = data.draft['disability'];
         if (savedDisability === 'Yes') {
