@@ -137,6 +137,7 @@ onAuthStateChanged(auth, async (user) => {
 mainForm.addEventListener('input', (e) => {
     // ADDED: List of IDs to IGNORE for auto-saving
     const ignoreList = ['nationality', 'otherNationality']; 
+    const ignoreList = ['nationality', 'otherNationality', 'examBody', 'otherQual']; 
     
     if (e.target.id && e.target.type !== 'file' && !ignoreList.includes(e.target.id)) {
         clearTimeout(syncTimer);
