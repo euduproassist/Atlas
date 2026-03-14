@@ -56,6 +56,12 @@ onAuthStateChanged(auth, async (user) => {
                     const input = document.getElementById(key);
                     if (input) input.value = data.draft[key];
                 });
+              // NEW: Ensure the box shows up if 'Other' was previously saved
+              const savedNationality = data.draft['nationality'];
+                if (savedNationality === 'Other') {
+                   document.getElementById('otherNationalityGroup').style.display = 'block';
+                   document.getElementById('otherNationality').required = true;
+               }
             }
         }
     }
