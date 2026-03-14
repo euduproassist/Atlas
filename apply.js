@@ -153,8 +153,7 @@ mainForm.addEventListener('submit', async (e) => {
             email: document.getElementById('email').value,
             mobile: document.getElementById('mobile').value,
             altPhone: document.getElementById('altPhone').value,
-            address: document.getElementById('address').value,
-            postalAddress: document.getElementById('postalAddress').value,
+
             race: document.getElementById('race').value,
             disability: document.getElementById('disability').value,
             disabilityDetails: document.getElementById('disability').value === 'Yes' 
