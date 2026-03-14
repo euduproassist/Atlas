@@ -86,9 +86,7 @@ applyForm.addEventListener('submit', async (e) => {
             window.scrollTo(0, 0);
             return; // Stop here so it doesn't try to save Step 2 yet
         }
-
-        alert("Step 1 saved! Moving to Step 2.");
-        // window.location.href = "step2.html"; 
+ 
             if (currentStep === 2) {
         const step2Data = {
             schoolName: document.getElementById('schoolName').value,
@@ -96,13 +94,18 @@ applyForm.addEventListener('submit', async (e) => {
             matricYear: document.getElementById('matricYear').value,
             examBody: document.getElementById('examBody').value,
             highestGrade: document.getElementById('highestGrade').value,
+            sub1: document.getElementById('sub1').value,
+            res1: document.getElementById('res1').value,
+            sub2: document.getElementById('sub2').value,
+            res2: document.getElementById('res2').value,
             apsScore: document.getElementById('apsScore').value,
             choice1: document.getElementById('choice1').value,
             choice2: document.getElementById('choice2').value,
             acadYear: document.getElementById('acadYear').value,
             campus: document.getElementById('campus').value,
             attendance: document.getElementById('attendance').value,
-            nsfas: document.getElementById('housing').value,
+            housing: document.getElementById('housing').value,
+            nsfas: document.getElementById('nsfas').value,
             lastUpdated: new Date()
         };
 
