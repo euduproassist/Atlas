@@ -93,6 +93,20 @@ onAuthStateChanged(auth, async (user) => {
                    document.getElementById('otherNationalityGroup').style.display = 'block';
                    document.getElementById('otherNationality').required = true;
                }
+        // 2. NEW: Restore Disability boxes
+        const savedDisability = data.draft['disability'];
+        if (savedDisability === 'Yes') {
+            document.getElementById('disabilityDetailsContainer').style.display = 'block';
+            
+            // Show box 2 if it has data
+            if (data.draft['disability2']) {
+                document.getElementById('box2').style.display = 'block';
+            }
+            // Show box 3 if it has data
+            if (data.draft['disability3']) {
+                document.getElementById('box3').style.display = 'block';
+            }
+        }
             }
         }
     }
