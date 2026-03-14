@@ -42,12 +42,6 @@ onAuthStateChanged(auth, async (user) => {
                     if (input) input.value = data.draft[key];
                 });
             }
-
-            // Move to the last saved step
-            if (data.currentStep) {
-                currentStep = data.currentStep;
-                jumpToStep(currentStep); // Make sure you have a function to show the right step
-            }
         }
     }
 });
