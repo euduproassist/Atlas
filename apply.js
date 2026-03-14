@@ -84,6 +84,26 @@ window.toggleOtherQual = function(value) {
     }
 };
 
+// Function to populate the Matric Year dropdown
+function populateMatricYears() {
+    const yearSelect = document.getElementById('matricYear');
+    if (!yearSelect) return;
+
+    const currentYear = new Date().getFullYear();
+    const startYear = 1970;
+    const endYear = currentYear + 10; // Allows for future students
+
+    for (let year = endYear; year >= startYear; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.text = year;
+        yearSelect.appendChild(option);
+    }
+}
+
+// Run this immediately
+populateMatricYears();
+
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = "login.html";
@@ -113,6 +133,10 @@ onAuthStateChanged(auth, async (user) => {
               document.getElementById('otherQualGroup').style.display = 'block';
             document.getElementById('otherQual').required = true;
          }
+                // Inside your if (data.draft) loop:
+                if (key === 'matricYear') {
+                document.getElementById('matricYear').value = data.draft[key];
+                }
 
         // 2. NEW: Restore Disability boxes
         const savedDisability = data.draft['disability'];
