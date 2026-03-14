@@ -142,7 +142,16 @@ mainForm.addEventListener('submit', async (e) => {
             address: document.getElementById('address').value,
             postalAddress: document.getElementById('postalAddress').value,
             race: document.getElementById('race').value,
-            
+            // Inside step1Data object:
+disability: document.getElementById('disability').value,
+disabilityDetails: document.getElementById('disability').value === 'Yes' 
+    ? [
+        document.getElementById('disability1').value,
+        document.getElementById('disability2').value,
+        document.getElementById('disability3').value
+      ].filter(val => val !== "") 
+    : [],
+
             citizenship: document.getElementById('citizenship').value,
             nokName: document.getElementById('nokName').value,
             nokRelation: document.getElementById('nokRelation').value,
