@@ -119,8 +119,10 @@ mainForm.addEventListener('submit', async (e) => {
             
             // Logic to move to Step 3 would go here
             currentStep = 3; 
-            // document.getElementById('step2Container').style.display = 'none';
-            // document.getElementById('step3Container').style.display = 'block';
+            document.getElementById('step2Container').style.display = 'none';
+            document.getElementById('step3Container').style.display = 'block';
+            document.getElementById('dot3').classList.add('active');
+            document.getElementById('line2').classList.add('active');
 
         } catch (error) {
             alert("Error: " + error.message);
