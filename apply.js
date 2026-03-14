@@ -4,6 +4,8 @@ import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/f
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 const storage = getStorage();
 
+const mainForm = document.getElementById('mainApplyForm');
+let currentStep = 1;
 let syncTimer;
 
 // This saves data to the cloud only after 2 seconds of 'silence' (no typing)
@@ -21,27 +23,6 @@ async function syncFieldToCloud(fieldId, value) {
         console.error("Sync error:", e);
     }
 }
-
-// Save when they stop typing for 2 seconds
-mainForm.addEventListener('input', (e) => {
-    if (e.target.id && e.target.type !== 'file') {
-        clearTimeout(syncTimer);
-        syncTimer = setTimeout(() => {
-            syncFieldToCloud(e.target.id, e.target.value);
-        }, 2000); 
-    }
-});
-
-// Save IMMEDIATELY when they click or tab out of a field
-mainForm.addEventListener('focusout', (e) => {
-    if (e.target.id && e.target.type !== 'file') {
-        syncFieldToCloud(e.target.id, e.target.value);
-    }
-});
-
-
-const mainForm = document.getElementById('mainApplyForm');
-let currentStep = 1;
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -68,6 +49,23 @@ onAuthStateChanged(auth, async (user) => {
                 jumpToStep(currentStep); // Make sure you have a function to show the right step
             }
         }
+    }
+});
+
+// Save when they stop typing for 2 seconds
+mainForm.addEventListener('input', (e) => {
+    if (e.target.id && e.target.type !== 'file') {
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => {
+            syncFieldToCloud(e.target.id, e.target.value);
+        }, 2000); 
+    }
+});
+
+// Save IMMEDIATELY when they click or tab out of a field
+mainForm.addEventListener('focusout', (e) => {
+    if (e.target.id && e.target.type !== 'file') {
+        syncFieldToCloud(e.target.id, e.target.value);
     }
 });
 
