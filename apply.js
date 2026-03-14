@@ -8,6 +8,19 @@ const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
 let syncTimer;
 
+window.toggleOtherNationality = function(value) {
+    const otherGroup = document.getElementById('otherNationalityGroup');
+    const otherInput = document.getElementById('otherNationality');
+    
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true; // This forces the browser to wait for input
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false; 
+        otherInput.value = ''; // Clear it if they switch back to SA
+    }
+};
 
 
 // This saves data to the cloud only after 2 seconds of 'silence' (no typing)
