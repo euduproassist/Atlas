@@ -387,4 +387,35 @@ function populateMatricYears() {
 // Call this function when the script loads
 populateMatricYears();
 
+let subjectCount = 0;
+
+function addSubjectRow() {
+    subjectCount++;
+    const container = document.getElementById('subjectsContainer');
+    const row = document.createElement('div');
+    row.className = 'form-grid';
+    row.style.marginBottom = '10px';
+    row.id = `row${subjectCount}`;
+    row.innerHTML = `
+        <div class="input-group"><input type="text" placeholder="Subject Name" class="sub-name" oninput="validateRows()"></div>
+        <div class="input-group"><input type="number" placeholder="Percentage" class="sub-perc" oninput="validateRows()"></div>
+        <div class="input-group"><input type="number" placeholder="Level" class="sub-level" oninput="validateRows()"></div>
+    `;
+    container.appendChild(row);
+    document.getElementById('addSubjectRowBtn').style.display = 'none';
+}
+
+function validateRows() {
+    const rows = document.querySelectorAll('#subjectsContainer .form-grid');
+    const lastRow = rows[rows.length - 1];
+    const inputs = lastRow.querySelectorAll('input');
+    // Only show button if all 3 fields in the LAST row are filled
+    const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+    document.getElementById('addSubjectRowBtn').style.display = allFilled ? 'block' : 'none';
+}
+
+// Initialize the first row
+addSubjectRow();
+
+
 
