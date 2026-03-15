@@ -370,3 +370,20 @@ mainForm.addEventListener('submit', async (e) => {
 
 });
 
+function populateMatricYears() {
+    const select = document.getElementById('matricYear');
+    const currentYear = new Date().getFullYear();
+    
+    // Start 50 years ago, end 10 years into the future
+    for (let year = currentYear - 50; year <= currentYear + 10; year++) {
+        let option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        select.appendChild(option);
+    }
+}
+
+// Call this function when the script loads
+populateMatricYears();
+
+
