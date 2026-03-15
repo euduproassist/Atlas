@@ -277,7 +277,7 @@ mainForm.addEventListener('submit', async (e) => {
                 ? document.getElementById('otherQual').value
                 : document.getElementById('examBody').value,
                            
-            highestGrade: document.getElementById('highestGrade').value,
+            currentStatus: document.getElementById('currentStatus').value,
             
             // 2. Marks & APS
             subjects: subjectsList,
