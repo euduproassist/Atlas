@@ -257,10 +257,6 @@ mainForm.addEventListener('submit', async (e) => {
             APS: document.getElementById('APS').value,
             
             // 3. Post-School
-            prevInst: document.getElementById('prevInst').value,
-            prevQual: document.getElementById('prevQual').value,
-            prevStatus: document.getElementById('prevStatus').value,
-            prevStudentNum: document.getElementById('prevStudentNum').value,
             
             // 4. Choices
             choice1: document.getElementById('choice1').value,
