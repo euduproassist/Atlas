@@ -307,8 +307,6 @@ mainForm.addEventListener('submit', async (e) => {
                 progress: 50, // Updated progress
                 currentStep: 3
             }, { merge: true });
-
-            alert("Step 2 Saved! Moving to Step 3.");
             
             // Logic to move to Step 3 would go here
             currentStep = 3; 
