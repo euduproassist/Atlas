@@ -421,5 +421,54 @@ window.validateRows = function() {
 // Initialize the first row
 addSubjectRow();
 
+// Add this new logic to handle Discontinued status
+window.handleDiscontinued = function(selectElement) {
+    const row = selectElement.closest('.post-school-row');
+    const yearInput = row.querySelector('.ps-year');
+    if (selectElement.value === 'Discontinued') {
+        yearInput.disabled = true;
+        yearInput.value = '';
+    } else {
+        yearInput.disabled = false;
+    }
+};
+
+window.addPostSchoolRow = function() {
+    const container = document.getElementById('postSchoolContainer');
+    const row = document.createElement('div');
+    row.className = 'form-grid post-school-row';
+    row.style.cssText = "margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;";
+    row.innerHTML = `
+        <div class="input-group"><label>Institutional name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Qualification name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Status</label><select class="ps-status" onchange="validatePostSchool(); handleDiscontinued(this)"><option value="">Select</option><option value="Completed">Completed</option><option value="Registered">Currently Registered</option><option value="Discontinued">Discontinued</option></select></div>
+        <div class="input-group"><label>Student Number</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Module percentage average</label><input type="number" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Year Completed/to be completed</label><input type="number" class="ps-year" oninput="validatePostSchool()"></div>
+    `;
+    container.appendChild(row);
+    document.getElementById('addPostSchoolBtn').style.display = 'none';
+};
+
+window.validatePostSchool = function() {
+    const rows = document.querySelectorAll('.post-school-row');
+    const lastRow = rows[rows.length - 1];
+    const inputs = lastRow.querySelectorAll('.ps-input');
+    const status = lastRow.querySelector('.ps-status');
+    const year = lastRow.querySelector('.ps-year');
+    
+    let allFilled = true;
+    let anyFilled = false;
+    
+    // Check inputs
+    inputs.forEach(i => { if(i.value.trim() !== "") anyFilled = true; else allFilled = false; });
+    if(status.value === "") allFilled = false; else anyFilled = true;
+    if(status.value !== 'Discontinued' && year.value.trim() === "") allFilled = false;
+    
+    document.getElementById('addPostSchoolBtn').style.display = (allFilled) ? 'block' : 'none';
+    return { allFilled, anyFilled };
+};
+
+
 
 
