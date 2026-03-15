@@ -140,7 +140,7 @@ mainForm.addEventListener('input', (e) => {
     // ADDED: List of IDs to IGNORE for auto-saving
     const ignoreList = ['nationality', 'otherNationality']; 
     
-    if (e.target.id && e.target.type !== 'file') {
+     if (e.target.id && e.target.type !== 'file' && !ignoreList.includes(e.target.id)) {
         clearTimeout(syncTimer);
         syncTimer = setTimeout(() => {
             syncFieldToCloud(e.target.id, e.target.value);
