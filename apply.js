@@ -231,6 +231,15 @@ mainForm.addEventListener('submit', async (e) => {
 
             } else if (currentStep === 2) {
         // Collect ALL Step 2 Data from your list
+        // Collect dynamic subject rows
+            const subjectsList = [];
+            document.querySelectorAll('#subjectsContainer .form-grid').forEach(row => {
+                  subjectsList.push({
+            name: row.querySelector('.sub-name').value,
+            percentage: row.querySelector('.sub-perc').value,
+            level: row.querySelector('.sub-level').value
+               });
+            });
         const step2Data = {
             // 1. Matric Details
             schoolName: document.getElementById('schoolName').value,
@@ -244,6 +253,8 @@ mainForm.addEventListener('submit', async (e) => {
             highestGrade: document.getElementById('highestGrade').value,
             
             // 2. Marks & APS
+            subjects: subjectsList,
+            APS: document.getElementById('APS').value,
             
             // 3. Post-School
             prevInst: document.getElementById('prevInst').value,
