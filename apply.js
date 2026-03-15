@@ -104,6 +104,12 @@ onAuthStateChanged(auth, async (user) => {
                     const input = document.getElementById(key);
                     if (input) input.value = data.draft[key];
                 });
+                if (data.draft['examBody'] === 'Other') {
+                   document.getElementById('examBody').value = 'Other';
+                   document.getElementById('otherQualGroup').style.display = 'block';
+                   document.getElementById('otherQual').value = data.draft['otherQual'] || '';
+               }
+
               // NEW: Ensure the box shows up if 'Other' was previously saved
               const savedNationality = data.draft['nationality'];
                 if (savedNationality === 'Other') {
