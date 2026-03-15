@@ -244,13 +244,6 @@ mainForm.addEventListener('submit', async (e) => {
             highestGrade: document.getElementById('highestGrade').value,
             
             // 2. Marks & APS
-            sub1: document.getElementById('sub1').value,
-            res1: document.getElementById('res1').value,
-            aps1: document.getElementById('aps1').value,
-            sub2: document.getElementById('sub2').value,
-            res2: document.getElementById('res2').value,
-            aps2: document.getElementById('aps2').value,
-            apsScore: document.getElementById('apsScore').value,
             
             // 3. Post-School
             prevInst: document.getElementById('prevInst').value,
