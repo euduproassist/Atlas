@@ -393,7 +393,7 @@ populateMatricYears();
 
 let subjectCount = 0;
 
-function addSubjectRow() {
+window.addSubjectRow = function() {
     subjectCount++;
     const container = document.getElementById('subjectsContainer');
     const row = document.createElement('div');
@@ -409,7 +409,7 @@ function addSubjectRow() {
     document.getElementById('addSubjectRowBtn').style.display = 'none';
 }
 
-function validateRows() {
+window.validateRows = function() {
     const rows = document.querySelectorAll('#subjectsContainer .form-grid');
     const lastRow = rows[rows.length - 1];
     const inputs = lastRow.querySelectorAll('input');
