@@ -70,6 +70,23 @@ window.addDisabilityBox = function() {
     }
 };
 
+window.toggleOtherQual = function(value) {
+    const otherGroup = document.getElementById('otherQualGroup');
+    const otherInput = document.getElementById('otherQual');
+    
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true;
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false;
+        otherInput.value = ''; 
+    }
+    // Automatically save the selection to cloud
+    syncFieldToCloud('examBody', value);
+};
+
+
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = "login.html";
