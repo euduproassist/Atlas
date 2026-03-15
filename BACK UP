@@ -1,3 +1,1760 @@
+5apply.js:36 Field synced to cloud: uploadBtn
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FID_Passport_1773585553669 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FProof_of_Address_1773585553677 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FBirth_Certificate_1773585553673 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMatric_Certificate_1773585553676 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+apply.html:1  Access to XMLHttpRequest at 'https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674' from origin 'https://euduproassist.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+connection.ts:88   POST https://firebasestorage.googleapis.com/v0/b/atlas-c58f8.firebasestorage.app/o?name=applications%2FPlXVSfwCeAM3RWagYlGNkMPnrjD3%2FMarriage_Certificate_1773585553674 net::ERR_FAILED
+send @ connection.ts:88
+doTheRequest @ request.ts:114
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+responseHandler @ backoff.ts:116
+(anonymous) @ request.ts:134
+Promise.then
+doTheRequest @ request.ts:117
+(anonymous) @ backoff.ts:78
+setTimeout
+callWithDelay @ backoff.ts:74
+start @ backoff.ts:139
+start_ @ request.ts:189
+(anonymous) @ request.ts:90
+NetworkRequest @ request.ts:78
+makeRequest @ request.ts:278
+_makeRequest @ service.ts:316
+makeRequestWithTokens @ service.ts:344
+await in makeRequestWithTokens
+uploadBytes$1 @ reference.ts:267
+uploadBytes @ api.ts:139
+(anonymous) @ apply.js:360
+(anonymous) @ apply.js:355
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
