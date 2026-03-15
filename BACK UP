@@ -1,426 +1,371 @@
-examBody: document.getElementById('examBody').value === 'Other'
-           ? document.getElementById('otherQual').value
-           : document.getElementById('examBody').value,
-
-
-
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
+const storage = getStorage();
 
-const applyForm = document.getElementById('applyForm');
+const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
+let syncTimer;
 
-// 1. SECURE: Kick out if not logged in
+window.toggleOtherNationality = function(value) {
+    const otherGroup = document.getElementById('otherNationalityGroup');
+    const otherInput = document.getElementById('otherNationality');
+    
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true; // This forces the browser to wait for input
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false; 
+        otherInput.value = ''; // Clear it if they switch back to SA
+    }
+};
+
+
+// This saves data to the cloud only after 2 seconds of 'silence' (no typing)
+async function syncFieldToCloud(fieldId, value) {
+    const user = auth.currentUser;
+    if (!user || !fieldId) return;
+
+    try {
+        await setDoc(doc(db, "applications", user.uid), {
+            draft: { [fieldId]: value },
+            lastUpdated: new Date()
+        }, { merge: true });
+        console.log("Field synced to cloud:", fieldId);
+    } catch (e) {
+        console.error("Sync error:", e);
+    }
+}
+
+window.toggleDisability = function(value) {
+    const container = document.getElementById('disabilityDetailsContainer');
+    if (value === 'Yes') {
+        container.style.display = 'block';
+    } else {
+        container.style.display = 'none';
+        // Reset and hide extra boxes
+        document.getElementById('disability1').value = '';
+        document.getElementById('disability2').value = '';
+        document.getElementById('disability3').value = '';
+        document.getElementById('box2').style.display = 'none';
+        document.getElementById('box3').style.display = 'none';
+    }
+};
+
+window.checkAddButton = function() {
+    const d1 = document.getElementById('disability1').value;
+    const d2 = document.getElementById('disability2').value;
+    
+    document.getElementById('addBtn1').style.display = (d1.length > 0 && document.getElementById('box2').style.display === 'none') ? 'block' : 'none';
+};
+
+window.addDisabilityBox = function() {
+    if (document.getElementById('box2').style.display === 'none') {
+        document.getElementById('box2').style.display = 'block';
+        document.getElementById('addBtn1').style.display = 'none';
+    } else if (document.getElementById('box3').style.display === 'none') {
+        document.getElementById('box3').style.display = 'block';
+    }
+};
+
+window.toggleOtherQual = function(value) {
+    const otherGroup = document.getElementById('otherQualGroup');
+    const otherInput = document.getElementById('otherQual');
+    
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true;
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false; 
+        otherInput.value = ''; 
+    }
+};
+
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = "login.html";
     } else {
-        // Pre-fill email and name from auth if available to save time
         document.getElementById('email').value = user.email || '';
         
-        // Auto-load existing data if they previously started Step 1
-        const draftDoc = await getDoc(doc(db, "applications", user.uid));
-        if (draftDoc.exists()) {
-            const data = draftDoc.data().step1;
-            if (data) {
-                for (const key in data) {
-                    const el = document.getElementById(key);
-                    if (el) el.value = data[key];
-                }
+        // --- LOAD SAVED DATA FROM CLOUD ---
+        const docSnap = await getDoc(doc(db, "applications", user.uid));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            
+            // Fill inputs from the 'draft' object
+            if (data.draft) {
+                Object.keys(data.draft).forEach(key => {
+                    const input = document.getElementById(key);
+                    if (input) input.value = data.draft[key];
+                });
+              // NEW: Ensure the box shows up if 'Other' was previously saved
+              const savedNationality = data.draft['nationality'];
+                if (savedNationality === 'Other') {
+                   document.getElementById('otherNationalityGroup').style.display = 'block';
+                   document.getElementById('otherNationality').required = true;
+               }
+                // Restore Qualification "Other" box
+                const savedQual = data.draft['examBody'];
+               if (savedQual === 'Other') {
+              document.getElementById('otherQualGroup').style.display = 'block';
+            document.getElementById('otherQual').required = true;
+         }
+
+        // 2. NEW: Restore Disability boxes
+        const savedDisability = data.draft['disability'];
+        if (savedDisability === 'Yes') {
+            document.getElementById('disabilityDetailsContainer').style.display = 'block';
+            
+            // Show box 2 if it has data
+            if (data.draft['disability2']) {
+                document.getElementById('box2').style.display = 'block';
+            }
+            // Show box 3 if it has data
+            if (data.draft['disability3']) {
+                document.getElementById('box3').style.display = 'block';
+            }
+        }
             }
         }
     }
 });
 
-// 2. Handle Form Submission
-applyForm.addEventListener('submit', async (e) => {
+// Save when they stop typing for 2 seconds
+mainForm.addEventListener('input', (e) => {
+    // ADDED: List of IDs to IGNORE for auto-saving
+    const ignoreList = ['nationality', 'otherNationality', 'examBody', 'otherQual']; 
+    
+    if (e.target.id && e.target.type !== 'file' && !ignoreList.includes(e.target.id)) {
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => {
+            syncFieldToCloud(e.target.id, e.target.value);
+        }, 2000); 
+    }
+});
+
+// Save IMMEDIATELY when they click or tab out of a field
+mainForm.addEventListener('focusout', (e) => {
+    if (e.target.id && e.target.type !== 'file') {
+        syncFieldToCloud(e.target.id, e.target.value);
+    }
+});
+
+mainForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
-
     if (!user) return;
 
-    // Collect all data into an object
-    const step1Data = {
-        fullNames: document.getElementById('fullNames').value,
-        surname: document.getElementById('surname').value,
-        idNumber: document.getElementById('idNumber').value,
-        dob: document.getElementById('dob').value,
-        gender: document.getElementById('gender').value,
-        title: document.getElementById('title').value,
-        nationality: document.getElementById('nationality').value,
-        homeLanguage: document.getElementById('homeLanguage').value,
-        email: document.getElementById('email').value,
-        mobile: document.getElementById('mobile').value,
-        altPhone: document.getElementById('altPhone').value,
-        address: document.getElementById('address').value,
-        postalAddress: document.getElementById('postalAddress').value,
-        race: document.getElementById('race').value,
-        disability: document.getElementById('disability').value,
-        citizenship: document.getElementById('citizenship').value,
-        nokName: document.getElementById('nokName').value,
-        nokRelation: document.getElementById('nokRelation').value,
-        nokPhone: document.getElementById('nokPhone').value,
-        marital: document.getElementById('marital').value,
-        employment: document.getElementById('employment').value,
-        socialGrant: document.getElementById('socialGrant').value,
-        step1Complete: true,
-        progress: 25, // Step 1 is 25% of 4 steps
-        lastUpdated: new Date()
-    };
+    if (currentStep === 1) {
+        // Collect Step 1 Data (Identity, Contact, Address, Demographic, NOK, Socio)
+        const step1Data = {
+            fullNames: document.getElementById('fullNames').value,
+            surname: document.getElementById('surname').value,
+            idNumber: document.getElementById('idNumber').value,
+            dob: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            title: document.getElementById('title').value,
+            nationality: document.getElementById('nationality').value === 'Other'
+                         ? document.getElementById('otherNationality').value
+                         : document.getElementById('nationality').value,
+            homeLanguage: document.getElementById('homeLanguage').value,
+            email: document.getElementById('email').value,
+            mobile: document.getElementById('mobile').value,
+            altPhone: document.getElementById('altPhone').value,
+            address: {
+                street: document.getElementById('physStreet').value,
+                suburb: document.getElementById('physSuburb').value,
+                province: document.getElementById('physProvince').value,
+                postalCode: document.getElementById('physPostalCode').value,
+                country: document.getElementById('physCountry').value
+            },
+            postalAddress: {
+                street: document.getElementById('postStreet').value,
+                suburb: document.getElementById('postSuburb').value,
+                province: document.getElementById('postProvince').value,
+                postalCode: document.getElementById('postPostalCode').value,
+                country: document.getElementById('postCountry').value
+            },
+            race: document.getElementById('race').value,
+            disability: document.getElementById('disability').value,
+            disabilityDetails: document.getElementById('disability').value === 'Yes' 
+            ? [
+            document.getElementById('disability1').value,
+            document.getElementById('disability2').value,
+            document.getElementById('disability3').value
+            ].filter(val => val !== "") 
+            : [],
+            citizenship: document.getElementById('citizenship').value,
+            nokName: document.getElementById('nokName').value,
+            nokRelation: document.getElementById('nokRelation').value,
+            nokPhone: document.getElementById('nokPhone').value,
+            marital: document.getElementById('marital').value,
+            employment: document.getElementById('employment').value,
+            socialGrant: document.getElementById('socialGrant').value,
+            lastUpdated: new Date()
+        };
 
-    try {
-        // Save to applications collection using user UID
-        await setDoc(doc(db, "applications", user.uid), {
-            studentId: user.uid,
-            step1: step1Data,
-            currentStep: 2
-        }, { merge: true });
+        try {
+            await setDoc(doc(db, "applications", user.uid), {
+                step1: step1Data,
+                currentStep: 2
+            }, { merge: true });
 
-                if (currentStep === 1) {
-            currentStep = 2;
+            // SWITCH UI TO STEP 2
             document.getElementById('step1Container').style.display = 'none';
             document.getElementById('step2Container').style.display = 'block';
-            document.querySelector('h2').innerText = "Step 2 of 4: Course & Education";
             
             // Update Progress Bar
-            const dots = document.querySelectorAll('.step-dot');
-            const lines = document.querySelectorAll('.step-line');
-            dots[1].classList.add('active');
-            lines[1].classList.add('active');
+            document.getElementById('dot2').classList.add('active');
+            document.getElementById('line1').classList.add('active');
             
+            currentStep = 2;
             window.scrollTo(0, 0);
-            return; // Stop here so it doesn't try to save Step 2 yet
+        } catch (error) {
+            alert("Error: " + error.message);
         }
- 
-            if (currentStep === 2) {
+
+            } else if (currentStep === 2) {
+        // Collect ALL Step 2 Data from your list
         const step2Data = {
+            // 1. Matric Details
             schoolName: document.getElementById('schoolName').value,
             schoolLoc: document.getElementById('schoolLoc').value,
             matricYear: document.getElementById('matricYear').value,
-            examBody: document.getElementById('examBody').value,
+            examBody: document.getElementById('examBody').value === 'Other'
+                ? document.getElementById('otherQual').value
+                : document.getElementById('examBody').value,                
             highestGrade: document.getElementById('highestGrade').value,
+            
+            // 2. Marks & APS
             sub1: document.getElementById('sub1').value,
             res1: document.getElementById('res1').value,
+            aps1: document.getElementById('aps1').value,
             sub2: document.getElementById('sub2').value,
             res2: document.getElementById('res2').value,
+            aps2: document.getElementById('aps2').value,
             apsScore: document.getElementById('apsScore').value,
+            
+            // 3. Post-School
+            prevInst: document.getElementById('prevInst').value,
+            prevQual: document.getElementById('prevQual').value,
+            prevStatus: document.getElementById('prevStatus').value,
+            prevStudentNum: document.getElementById('prevStudentNum').value,
+            
+            // 4. Choices
             choice1: document.getElementById('choice1').value,
             choice2: document.getElementById('choice2').value,
             acadYear: document.getElementById('acadYear').value,
             campus: document.getElementById('campus').value,
             attendance: document.getElementById('attendance').value,
+            
+            // 5. Additional
+            nbtNum: document.getElementById('nbtNum').value,
             housing: document.getElementById('housing').value,
             nsfas: document.getElementById('nsfas').value,
+            
             lastUpdated: new Date()
         };
 
+        try {
+            await setDoc(doc(db, "applications", user.uid), {
+                step2: step2Data,
+                progress: 50, // Updated progress
+                currentStep: 3
+            }, { merge: true });
+
+            alert("Step 2 Saved! Moving to Step 3.");
+            
+            // Logic to move to Step 3 would go here
+            currentStep = 3; 
+            document.getElementById('step2Container').style.display = 'none';
+            document.getElementById('step3Container').style.display = 'block';
+            document.getElementById('dot3').classList.add('active');
+            document.getElementById('line2').classList.add('active');
+
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+
+        } else if (currentStep === 3) {
+    // 1. Manual Validation for required files
+    const requiredFiles = [
+        { id: 'file_id', label: 'ID / Passport' },
+        { id: 'file_matric', label: 'Matric Certificate' },
+        { id: 'file_address', label: 'Proof of Address' }
+    ];
+
+    for (let f of requiredFiles) {
+        if (!document.getElementById(f.id).files[0]) {
+            alert(`Please select your ${f.label} before continuing.`);
+            return; // Stops the upload if a file is missing
+        }
+    }
+
+    const uploadBtn = document.getElementById('uploadBtn');
+    uploadBtn.innerText = "Uploading... Please wait";
+    uploadBtn.disabled = true;
+
+    const filesToUpload = [
+        { id: 'file_id', name: 'ID_Passport' },
+        { id: 'file_birth', name: 'Birth_Certificate' },
+        { id: 'file_marriage', name: 'Marriage_Certificate' },
+        { id: 'file_matric', name: 'Matric_Certificate' },
+        { id: 'file_grade11', name: 'Grade_11_Results' },
+        { id: 'file_transcripts', name: 'Transcripts' },
+        { id: 'file_address', name: 'Proof_of_Address' },
+        { id: 'file_pop', name: 'Proof_of_Payment' },
+        { id: 'file_sponsor', name: 'Sponsor_ID' },
+        { id: 'file_motivation', name: 'Motivation_Letter' },
+        { id: 'file_cv', name: 'CV' }
+    ];
+
+    const uploadPromises = filesToUpload.map(async (f) => {
+        const fileInput = document.getElementById(f.id);
+        if (fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const storageRef = ref(storage, `applications/${user.uid}/${f.name}_${Date.now()}`);
+            await uploadBytes(storageRef, file);
+            return await getDownloadURL(storageRef);
+        }
+        return null;
+    });
+
+    try {
+        const urls = await Promise.all(uploadPromises);
+        const documentData = {};
+        filesToUpload.forEach((f, index) => {
+            if (urls[index]) documentData[f.name] = urls[index];
+        });
+
         await setDoc(doc(db, "applications", user.uid), {
-            step2: step2Data,
-            progress: 50,
-            currentStep: 3
+            documents: documentData,
+            currentStep: 4,
+            lastUpdated: new Date()
         }, { merge: true });
 
-        alert("Step 2 Saved! Proceed to Document Uploads.");
-    }
+        alert("Documents uploaded successfully!");
+        
+        document.getElementById('step3Container').style.display = 'none';
+        document.getElementById('step4Container').style.display = 'block'; 
+        document.getElementById('dot4').classList.add('active');
+        document.getElementById('line3').classList.add('active');
+        
+        if (typeof renderReviewSummary === "function") renderReviewSummary();
+        
+        currentStep = 4;
+        window.scrollTo(0, 0);
 
     } catch (error) {
-        alert("Error saving: " + error.message);
+        alert("Upload failed: " + error.message);
+        uploadBtn.innerText = "Upload & Continue";
+        uploadBtn.disabled = false;
     }
+}
+
 });
-
-
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apply - Student Application Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --primary: #4a90e2; --bg: #f8f9fa; --border: #e0e0e0; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg); padding-bottom: 50px; }
-
-        /* Progress Header */
-        .app-header { background: white; padding: 20px; border-bottom: 1px solid var(--border); text-align: center; }
-        .logo-text { display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 700; color: #556080; text-transform: uppercase; margin-bottom: 20px; }
-        .logo-text i { color: var(--primary); font-size: 1.5rem; }
-
-        .progress-container { display: flex; justify-content: center; align-items: center; max-width: 400px; margin: 0 auto; gap: 10px; }
-        .step-dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; position: relative; }
-        .step-dot.active { background: var(--primary); box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2); }
-        .step-line { flex-grow: 1; height: 2px; background: #ddd; }
-        .step-line.active { background: var(--primary); }
-
-        /* Form Styling */
-        .container { max-width: 700px; margin: 30px auto; padding: 0 15px; }
-        .form-card { background: white; border-radius: 8px; border: 1px solid var(--border); padding: 30px; }
-        .form-card h2 { font-size: 1.4rem; margin-bottom: 10px; }
-        .form-card p { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
-
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .full-width { grid-column: span 2; }
-
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #333; }
-        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.95rem; }
-        .input-group input:focus { outline: none; border-color: var(--primary); }
-
-        .section-title { margin: 25px 0 15px; padding-bottom: 5px; border-bottom: 1px solid #eee; font-size: 1rem; color: var(--primary); }
-
-        .btn-group { display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px; }
-        .btn { padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: 600; border: none; }
-        .btn-cancel { background: #f5f5f5; color: #666; }
-        .btn-next { background: var(--primary); color: white; }
-
-        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
-    </style>
-</head>
-<body>
-
-    <div class="app-header">
-        <div class="logo-text"><i class="fas fa-graduation-cap"></i> Student Application Portal</div>
-        <div class="progress-container">
-            <div class="step-dot active"></div>
-            <div class="step-line active"></div>
-            <div class="step-dot"></div>
-            <div class="step-line"></div>
-            <div class="step-dot"></div>
-            <div class="step-line"></div>
-            <div class="step-dot"></div>
-        </div>
-    </div>
-
-    <div id="step1Container">
-
-    <div class="container">
-        <form id="applyForm" class="form-card">
-            <h2>Step 1 of 4: Personal Details</h2>
-            <p>Please enter your identity and biographical details.</p>
-
-            <div class="section-title">1. Identity & Biographical Details</div>
-            <div class="form-grid">
-                <div class="input-group full-width">
-                    <label>Full Names *</label>
-                    <input type="text" id="fullNames" placeholder="As per ID/Passport" required>
-                </div>
-                <div class="input-group full-width">
-                    <label>Surname *</label>
-                    <input type="text" id="surname" required>
-                </div>
-                <div class="input-group full-width">
-                    <label>ID Number or Passport Number *</label>
-                    <input type="text" id="idNumber" required>
-                </div>
-                <div class="input-group">
-                    <label>Date of Birth *</label>
-                    <input type="date" id="dob" required>
-                </div>
-                <div class="input-group">
-                    <label>Gender *</label>
-                    <select id="gender" required>
-                        <option value="">Select</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Non-binary">Non-binary</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Title *</label>
-                    <select id="title" required>
-                        <option value="">Select</option>
-                        <option value="Mr">Mr</option>
-                        <option value="Ms">Ms</option>
-                        <option value="Mx">Mx</option>
-                        <option value="Dr">Dr</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Nationality *</label>
-                    <input type="text" id="nationality" required>
-                </div>
-                <div class="input-group full-width">
-                    <label>Home Language *</label>
-                    <input type="text" id="homeLanguage" required>
-                </div>
-            </div>
-
-            <div class="section-title">2. Contact Information</div>
-            <div class="form-grid">
-                <div class="input-group full-width">
-                    <label>Personal Email Address *</label>
-                    <input type="email" id="email" required>
-                </div>
-                <div class="input-group">
-                    <label>Mobile Phone Number *</label>
-                    <input type="tel" id="mobile" required>
-                </div>
-                <div class="input-group">
-                    <label>Alternative Phone Number</label>
-                    <input type="tel" id="altPhone">
-                </div>
-            </div>
-
-            <div class="section-title">3. Residential & Postal Address</div>
-            <div class="form-grid">
-                <div class="input-group full-width">
-                    <label>Physical Home Address *</label>
-                    <input type="text" id="address" placeholder="Street, Suburb, City, Province, Code" required>
-                </div>
-                <div class="input-group full-width">
-                    <label>Postal Address (If different)</label>
-                    <input type="text" id="postalAddress">
-                </div>
-            </div>
-
-            <div class="section-title">4. Demographic & Equity Information</div>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label>Population Group / Race *</label>
-                    <select id="race" required>
-                        <option value="">Select</option>
-                        <option value="Black">Black</option>
-                        <option value="White">White</option>
-                        <option value="Coloured">Coloured</option>
-                        <option value="Indian">Indian</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Disability Status *</label>
-                    <select id="disability" required>
-                        <option value="No">No Disability</option>
-                        <option value="Yes">Yes</option>
-                    </select>
-                </div>
-                <div class="input-group full-width">
-                    <label>Citizenship Status *</label>
-                    <select id="citizenship" required>
-                        <option value="Citizen">Citizen</option>
-                        <option value="Permanent Resident">Permanent Resident</option>
-                        <option value="Study Permit">Study Permit holder</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="section-title">5. Next of Kin / Emergency Contact</div>
-            <div class="form-grid">
-                <div class="input-group full-width">
-                    <label>Full Name *</label>
-                    <input type="text" id="nokName" required>
-                </div>
-                <div class="input-group">
-                    <label>Relationship *</label>
-                    <input type="text" id="nokRelation" placeholder="e.g. Father" required>
-                </div>
-                <div class="input-group">
-                    <label>Contact Number *</label>
-                    <input type="tel" id="nokPhone" required>
-                </div>
-            </div>
-
-            <div class="section-title">6. Socio-Economic Data</div>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label>Marital Status</label>
-                    <select id="marital">
-                        <option value="Single">Single</option>
-                        <option value="Married">Married</option>
-                        <option value="Divorced">Divorced</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Employment Status</label>
-                    <select id="employment">
-                        <option value="Unemployed">Unemployed</option>
-                        <option value="Student">Student</option>
-                        <option value="Employed">Employed</option>
-                    </select>
-                </div>
-                <div class="input-group full-width">
-                    <label>Social Grant Status</label>
-                    <select id="socialGrant">
-                        <option value="No">No</option>
-                        <option value="Yes">Yes</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button type="button" class="btn btn-cancel" onclick="history.back()">Cancel</button>
-                <button type="submit" class="btn btn-next">Next</button>
-            </div>
-        </form>
-    </div>
-    
-    <div id="step2Container">
-        <div class="container">
-            <form id="applyForm" class="form-card">
-                <h2>Step 2 of 4: Course & Education Qualifications</h2>
-                <p>Please enter your secondary school & your Post-School Qualifications. </p>
-                
-    <div class="section-title">1. Secondary School (Matric) Details</div>
-    <div class="form-grid">
-        <div class="input-group full-width"><label>School Name *</label><input type="text" id="schoolName"></div>
-        <div class="input-group"><label>School Province/Country *</label><input type="text" id="schoolLoc"></div>
-        <div class="input-group"><label>Matric Year *</label><input type="number" id="matricYear"></div>
-        <div class="input-group"><label>Exam Body *</label><select id="examBody"><option value="NSC">NSC</option><option value="IEB">IEB</option><option value="SACAI">SACAI</option></select></div>
-        <div class="input-group full-width"><label>Highest Grade Passed *</label><input type="text" id="highestGrade"></div>
-    </div>
-
-    <div class="section-title">2. Subject-Specific Marks & APS</div>
-    <div class="form-grid">
-        <div class="input-group"><label>Subject 1 Name</label><input type="text" id="sub1"></div>
-        <div class="input-group"><label>Level/Result (%)</label><input type="number" id="res1"></div>
-        <div class="input-group"><label>Subject 2 Name</label><input type="text" id="sub2"></div>
-        <div class="input-group"><label>Level/Result (%)</label><input type="number" id="res2"></div>
-        <div class="input-group full-width"><label>Total APS (Self-Calculated)</label><input type="number" id="apsScore"></div>
-    </div>
-
-    <div class="section-title">3. Post-School / Previous Qualifications</div>
-    <div class="form-grid">
-        <div class="input-group full-width"><label>Institution Name</label><input type="text" id="prevInst"></div>
-        <div class="input-group"><label>Qualification Name</label><input type="text" id="prevQual"></div>
-        <div class="input-group"><label>Status</label><select id="prevStatus"><option value="N/A">N/A</option><option value="Completed">Completed</option><option value="Currently Registered">Currently Registered</option></select></div>
-        <div class="input-group full-width"><label>Previous Student Number</label><input type="text" id="prevStudentNum"></div>
-    </div>
-
-    <div class="section-title">4. Programme Choices</div>
-    <div class="form-grid">
-        <div class="input-group full-width"><label>First Choice *</label><input type="text" id="choice1"></div>
-        <div class="input-group full-width"><label>Second/Third Choice</label><input type="text" id="choice2"></div>
-        <div class="input-group"><label>Academic Year *</label><input type="text" id="acadYear" value="2027"></div>
-        <div class="input-group"><label>Campus Selection *</label><input type="text" id="campus"></div>
-        <div class="input-group full-width"><label>Attendance Mode *</label><select id="attendance"><option value="Full-Time">Full-time (Contact)</option><option value="Distance">Distance Learning</option></select></div>
-    </div>
-
-    <div class="section-title">5. Additional Requirements (Checklist)</div>
-    <div class="form-grid">
-        <div class="input-group"><label>NBT Registration Number</label><input type="text" id="nbtNum"></div>
-        <div class="input-group"><label>Housing Preference *</label><select id="housing"><option value="No">No</option><option value="Yes">Yes</option></select></div>
-        <div class="input-group full-width"><label>Financial Aid Intent *</label><select id="nsfas"><option value="No">No</option><option value="Yes">Yes</option></select></div>
-    </div>
-</div>
-                        <div class="btn-group">
-                <button type="button" class="btn btn-cancel" onclick="history.back()">Cancel</button>
-                <button type="submit" class="btn btn-next">Next</button>
-            </div>
-        </form>
-    </div>
-        
-
-    <script type="module" src="apply.js"></script>
-</body>
-</html>
 
 
 
