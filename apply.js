@@ -84,26 +84,6 @@ window.toggleOtherQual = function(value) {
     }
 };
 
-// Function to populate the Matric Year dropdown
-function populateMatricYears() {
-    const yearSelect = document.getElementById('matricYear');
-    if (!yearSelect) return;
-
-    const currentYear = new Date().getFullYear();
-    const startYear = 1970;
-    const endYear = currentYear + 10; // Allows for future students
-
-    for (let year = endYear; year >= startYear; year--) {
-        const option = document.createElement('option');
-        option.value = year;
-        option.text = year;
-        yearSelect.appendChild(option);
-    }
-}
-
-// Run this immediately
-populateMatricYears();
-
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = "login.html";
@@ -120,9 +100,6 @@ onAuthStateChanged(auth, async (user) => {
                 Object.keys(data.draft).forEach(key => {
                     const input = document.getElementById(key);
                     if (input) input.value = data.draft[key];
-                
-            if (key === 'matricYear') {
-                    document.getElementById('matricYear').value = data.draft[key];
                 }
                 });
               // NEW: Ensure the box shows up if 'Other' was previously saved
