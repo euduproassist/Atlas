@@ -241,7 +241,7 @@ mainForm.addEventListener('submit', async (e) => {
                });
             });
 
-      // --- PASTE THE NEW POST-SCHOOL LOGIC HERE ---
+      // --- THE NEW POST-SCHOOL LOGIC HERE ---
         const postSchoolRows = document.querySelectorAll('.post-school-row');
         const val = validatePostSchool();
 
@@ -282,8 +282,7 @@ mainForm.addEventListener('submit', async (e) => {
             // 2. Marks & APS
             subjects: subjectsList,
             APS: document.getElementById('APS').value,
-            
-            // 3. Post-School
+
            // 3. NEW DYNAMIC POST-SCHOOL FIELD
             postSchoolQualifications: qualData,
             
