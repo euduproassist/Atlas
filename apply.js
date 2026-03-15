@@ -234,7 +234,7 @@ mainForm.addEventListener('submit', async (e) => {
         const step2Data = {
             // 1. Matric Details
             schoolName: document.getElementById('schoolName').value,
-            schoolLoc: document.getElementById('schoolLoc').value,
+            
             matricYear: document.getElementById('matricYear').value,
             examBody: document.getElementById('examBody').value === 'Other'
                 ? document.getElementById('otherQual').value
