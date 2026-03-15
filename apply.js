@@ -375,8 +375,6 @@ mainForm.addEventListener('submit', async (e) => {
             currentStep: 4,
             lastUpdated: new Date()
         }, { merge: true });
-
-        alert("Documents uploaded successfully!");
         
         document.getElementById('step3Container').style.display = 'none';
         document.getElementById('step4Container').style.display = 'block'; 
