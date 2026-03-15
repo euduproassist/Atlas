@@ -235,26 +235,25 @@
                 <p style="font-size: 0.8rem; color: #d9534f; margin-top: 8px;">* Note: Do not include Life Orientation in the total APS.</p>
                 </div>
                             <div class="section-title">Post-School / Previous Qualifications</div>
-<div id="postSchoolContainer">
-    <div class="form-grid post-school-row" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
-        <div class="input-group"><label>Institutional name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
-        <div class="input-group"><label>Qualification name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
-        <div class="input-group">
-            <label>Status</label>
+               <div id="postSchoolContainer">
+               <div class="form-grid post-school-row" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+               <div class="input-group"><label>Institutional name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+               <div class="input-group"><label>Qualification name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+               <div class="input-group">
+               <label>Status</label>
             <select class="ps-status" onchange="validatePostSchool(); handleDiscontinued(this)">
                 <option value="">Select</option>
                 <option value="Completed">Completed</option>
                 <option value="Registered">Currently Registered</option>
                 <option value="Discontinued">Discontinued</option>
             </select>
-        </div>
-        <div class="input-group"><label>Student Number</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
-        <div class="input-group"><label>Module percentage average</label><input type="number" class="ps-input" oninput="validatePostSchool()"></div>
-        <div class="input-group"><label>Year Completed/to be completed</label><input type="number" class="ps-year" oninput="validatePostSchool()"></div>
-    </div>
-</div>
-<button type="button" id="addPostSchoolBtn" style="display:none; margin-bottom:20px; padding: 10px 20px; background:#4a90e2; color:white; border:none; border-radius:4px; cursor:pointer;" onclick="addPostSchoolRow()">+ Add another qualification</button>
-
+                </div>
+                <div class="input-group"><label>Student Number</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+                <div class="input-group"><label>Module percentage average</label><input type="number" class="ps-input" oninput="validatePostSchool()"></div>
+                <div class="input-group"><label>Year Completed/to be completed</label><input type="number" class="ps-year" oninput="validatePostSchool()"></div>
+                 </div>
+                   </div>
+                <button type="button" id="addPostSchoolBtn" style="display:none; margin-bottom:20px; padding: 10px 20px; background:#4a90e2; color:white; border:none; border-radius:4px; cursor:pointer;" onclick="addPostSchoolRow()">+ Add another qualification</button>
 
                 <div class="section-title">4. Programme Choices</div>
                 <div class="form-grid">
