@@ -240,6 +240,33 @@ mainForm.addEventListener('submit', async (e) => {
             level: row.querySelector('.sub-level').value
                });
             });
+
+      // --- PASTE THE NEW POST-SCHOOL LOGIC HERE ---
+        const postSchoolRows = document.querySelectorAll('.post-school-row');
+        const val = validatePostSchool();
+
+        // If any part of the section has data, ensure the last row is fully valid
+        if (val.anyFilled && !val.allFilled) {
+            alert("Please ensure all 6 fields are filled in your last qualification entry, or clear them to proceed.");
+            return;
+        }
+
+        const qualData = [];
+        if (val.allFilled) {
+            postSchoolRows.forEach(row => {
+                const inputs = row.querySelectorAll('.ps-input');
+                const status = row.querySelector('.ps-status').value;
+                const year = row.querySelector('.ps-year').value;
+                qualData.push({
+                    institutionalName: inputs[0].value,
+                    qualificationName: inputs[1].value,
+                    status: status,
+                    studentNumber: inputs[2].value,
+                    modulePercentageAverage: inputs[3].value,
+                    yearCompleted: year
+                });
+            });
+        }
         const step2Data = {
             // 1. Matric Details
             schoolName: document.getElementById('schoolName').value,
@@ -257,6 +284,8 @@ mainForm.addEventListener('submit', async (e) => {
             APS: document.getElementById('APS').value,
             
             // 3. Post-School
+           // 3. NEW DYNAMIC POST-SCHOOL FIELD
+            postSchoolQualifications: qualData,
             
             // 4. Choices
             choice1: document.getElementById('choice1').value,
