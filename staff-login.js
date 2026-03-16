@@ -37,7 +37,7 @@ loginForm.addEventListener('submit', (e) => {
 
             console.log("Logged in as:", user.email);
             alert("Login Successful!");
-            window.location.href = "staff-welcome.html"; 
+            window.location.href = "staff.html"; 
         })
         .catch((error) => {
             alert("Error: " + error.message);
