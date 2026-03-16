@@ -24,7 +24,27 @@ function loadApplications() {
     // We order by lastUpdated to show newest first, matching your 'Sort: Newest' UI
     const q = query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 
-            
+    onSnapshot(q, (snapshot) => {
+    tableBody.innerHTML = ''; // Always clear the table first
+
+    if (snapshot.empty) {
+        // If Firebase is empty, show this message instead of a blank screen
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 50px; color: #999;">
+                    <i class="fas fa-inbox" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                    No student applications have been submitted yet.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    // If there IS data, loop through and build the rows
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+          
             // Map data from your Student Portal structure
             const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
             const studentNumber = data.step1?.idNumber || "N/A";
