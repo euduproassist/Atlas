@@ -24,12 +24,6 @@ function loadApplications() {
     // We order by lastUpdated to show newest first, matching your 'Sort: Newest' UI
     const q = query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 
-    onSnapshot(q, (snapshot) => {
-        tableBody.innerHTML = ''; // Clear table
-        
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            const id = doc.id;
             
             // Map data from your Student Portal structure
             const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
