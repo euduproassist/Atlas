@@ -21,8 +21,6 @@ registerForm.addEventListener('submit', async (e) => {
     const email = document.getElementById('regEmail').value;
     const password = document.getElementById('regPassword').value;
     const fullName = document.getElementById('fullName').value;
-    const phone = document.getElementById('phoneNumber').value;
-    const idNumber = document.getElementById('idNumber').value;
 
     try {
         // 1. Create the Auth User
@@ -33,8 +31,6 @@ registerForm.addEventListener('submit', async (e) => {
         await setDoc(doc(db, "users", user.uid), {
             fullName: fullName,
             email: email,
-            phoneNumber: phone,
-            idNumber: idNumber,
             createdAt: new Date()
         });
 
