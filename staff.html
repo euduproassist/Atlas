@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #4a90e2; --bg: #f4f7f9; --border: #e1e4e8; --text: #333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background-color: var(--bg); padding: 40px; color: var(--text); }
+
+        .dashboard-container { max-width: 1100px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 30px; }
+        h1 { margin-bottom: 25px; font-size: 1.8rem; font-weight: 700; color: #2c3e50; }
+
+        /* Toolbar / Filters */
+        .toolbar { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 15px; flex-wrap: wrap; }
+        .filters { display: flex; gap: 10px; }
+        select, .search-bar input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; background: white; font-size: 0.9rem; }
+        .search-bar { position: relative; flex-grow: 1; max-width: 400px; }
+        .search-bar input { width: 100%; padding-right: 35px; }
+        .search-bar i { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #999; }
+
+        /* Table Design */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); font-size: 0.85rem; text-transform: uppercase; color: #666; }
+        td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+        tr:hover { background-color: #fcfdfe; cursor: pointer; }
+
+        /* Status Pills */
+        .status { padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+        .status-pending { background: #e3f2fd; color: #1976d2; }
+        .status-resolved { background: #e8f5e9; color: #2e7d32; }
+
+        /* Ticket Details Section */
+        .ticket-details { margin-top: 30px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+        .details-header { background: #f8f9fa; padding: 12px 20px; font-weight: 600; border-bottom: 1px solid var(--border); }
+        .details-body { padding: 20px; display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .details-body p { font-size: 0.95rem; line-height: 1.6; }
+        .details-body strong { color: #555; width: 140px; display: inline-block; }
+
+        /* Note Section */
+        .note-footer { border-top: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; gap: 10px; background: #fcfcfc; }
+        .note-footer input { flex-grow: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; }
+        .btn-save { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+        .btn-save:hover { background: #357abd; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h1>Staff Portal</h1>
+
+    <div class="toolbar">
+        <div class="filters">
+            <select id="filterStatus">
+                <option value="All">Filter: All</option>
+                <option value="pending" selected>Filter: Pending</option>
+                <option value="resolved">Filter: Resolved</option>
+            </select>
+            <select id="sortDate">
+                <option value="newest">Sort: Newest</option>
+                <option value="oldest">Sort: Oldest</option>
+            </select>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by Student Number...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Application ID</th>
+                <th>Student Name</th>
+                <th>Student Number</th>
+                <th>Course</th>
+                <th>Status</th>
+                <th>Date Submitted</th>
+            </tr>
+        </thead>
+        <tbody id="applicationTableBody">
+            </tbody>
+    </table>
+
+    <div class="ticket-details" id="detailsSection" style="display:none;">
+        <div class="details-header">Ticket Details</div>
+        <div class="details-body" id="detailsContent">
+            </div>
+        <div class="note-footer">
+            <strong>Note Note</strong>
+            <input type="text" id="staffNote" placeholder="Type a message or internal note...">
+            <button class="btn-save" id="saveNoteBtn">Save Note</button>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="staff.js"></script>
+</body>
+</html>
 
