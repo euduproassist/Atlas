@@ -13,7 +13,7 @@ let selectedAppId = null;
 // 1. Security Check: Ensure user is logged in
 onAuthStateChanged(auth, (user) => {
     if (!user) {
-        window.location.href = "login.html";
+        window.location.href = "staff-login.html";
     } else {
         loadApplications();
     }
