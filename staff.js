@@ -128,3 +128,27 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     }
 });
 
+// NEW FILTER LOGIC (Checks both Status and Course)
+const applyFilters = () => {
+    const statusVal = document.getElementById('filterStatus').value.toLowerCase();
+    const courseVal = document.getElementById('filterCourse').value.toLowerCase();
+    const rows = tableBody.getElementsByTagName('tr');
+
+    for (let row of rows) {
+        // cells[2] is Course, cells[3] is Status
+        const rowCourse = row.cells[2]?.innerText.toLowerCase() || "";
+        const rowStatus = row.cells[3]?.innerText.toLowerCase().replace(/\s/g, '') || "";
+
+        const matchStatus = statusVal === "all" || rowStatus.includes(statusVal.replace('_', ''));
+        const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
+
+        // Only show the row if BOTH filters match
+        row.style.display = (matchStatus && matchCourse) ? '' : 'none';
+    }
+};
+
+// Add the listeners once at the bottom
+document.getElementById('filterStatus').addEventListener('change', applyFilters);
+document.getElementById('filterCourse').addEventListener('change', applyFilters);
+
+
