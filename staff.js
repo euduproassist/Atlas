@@ -21,12 +21,6 @@ onAuthStateChanged(auth, async (user) => {
     const staffRef = doc(db, "staff", user.uid);
     const staffSnap = await getDoc(staffRef);
 
-    if (staffSnap.exists()) {
-        loadApplications();
-    } else {
-        alert("Access Denied: You are not registered as staff.");
-        auth.signOut();
-    }
 });
 
 // 2. Real-time Listener for Applications (Connects to 'applications' collection)
