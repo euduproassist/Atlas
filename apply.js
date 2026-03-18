@@ -24,20 +24,7 @@ window.toggleOtherNationality = function(value) {
 
 
 // This saves data to the cloud only after 2 seconds of 'silence' (no typing)
-async function syncFieldToCloud(fieldId, value) {
-    const user = auth.currentUser;
-    if (!user || !fieldId) return;
 
-    try {
-        await setDoc(doc(db, "applications", user.uid), {
-            draft: { [fieldId]: value },
-            lastUpdated: new Date()
-        }, { merge: true });
-        console.log("Field synced to cloud:", fieldId);
-    } catch (e) {
-        console.error("Sync error:", e);
-    }
-}
 
 window.toggleDisability = function(value) {
     const container = document.getElementById('disabilityDetailsContainer');
