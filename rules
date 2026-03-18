@@ -17,7 +17,7 @@ service cloud.firestore {
       // ENTERPRISE ADDITION: Data Validation
       // This prevents someone from sending 1GB of text data to a single field to crash your Firebase
       allow update: if request.resource.data.diff(resource.data).affectedKeys()
-        .hasAny(['step1', 'step2', 'documents', 'draft', 'lastUpdated']);
+        .hasAny(['step1', 'step2', 'documents', 'draft', 'lastUpdated', 'status', 'adminNote']);
     }
 
     // 3. Document Vault (Metadata)
