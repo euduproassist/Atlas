@@ -53,6 +53,67 @@
 </head>
 <body>
 
+    <div class="dashboard-header">
+    <div class="logo-section">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Staff Management Portal</span>
+    </div>
+    <div class="toolbar">
+        <div class="filters">
+            <select id="filterStatus">
+                <option value="All">Filter: All</option>
+                <option value="pending" selected>Pending</option>
+                <option value="review">Under Review</option>
+                <option value="missing">Missing Info</option>
+                <option value="prov_accepted">Provisionally Accepted</option>
+                <option value="uncon_accepted">Unconditionally Accepted</option>
+                <option value="waiting">Waiting List</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            <select id="sortDate">
+                <option value="newest">Sort: Newest</option>
+                <option value="oldest">Sort: Oldest</option>
+            </select>
+            <select id="filterCourse">
+                <option value="All">Filter: All Courses</option>
+                <option value="Bachelor of Computer and Information Science">Degree</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Higher Certificate">Higher Certificate</option>
+            </select>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search Student or Course...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Student Name</th>
+                    <th>Course</th>
+                    <th>Status</th>
+                    <th class="hide-mobile">Date Submitted</th>
+                </tr>
+            </thead>
+            <tbody id="applicationTableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="ticket-details" id="detailsSection" style="display:none;">
+        <div class="details-header">Application Details</div>
+        <div id="detailsContent" class="details-body"></div>
+        <div class="note-footer">
+            <strong>Internal Note</strong>
+            <input type="text" id="staffNote" placeholder="Type a message...">
+            <button class="btn-save" id="saveNoteBtn">Save Note</button>
+        </div>
+    </div>
+</div>
 
 <script type="module" src="staff.js"></script>
 </body>
