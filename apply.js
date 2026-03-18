@@ -484,7 +484,7 @@ window.addSubjectRow = function() {
     const row = document.createElement('div');
     row.className = 'form-grid';
     row.style.marginBottom = '10px';
-    
+    row.id = `row${document.querySelectorAll('#subjectsContainer .form-grid').length + 1}`;
     row.innerHTML = `
         <div class="input-group"><input type="text" placeholder="Subject Name" class="sub-name" oninput="validateRows()"></div>
         <div class="input-group"><input type="number" placeholder="Percentage" class="sub-perc" oninput="validateRows()"></div>
