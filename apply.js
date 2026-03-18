@@ -378,22 +378,21 @@ mainForm.addEventListener('submit', async (e) => {
         }, { merge: true });
 
         // At the very end of your final step logic:
-const draftRef = doc(db, "drafts", user.uid);
-const draftSnap = await getDoc(draftRef);
+        const draftRef = doc(db, "drafts", user.uid);
+        const draftSnap = await getDoc(draftRef);
 
-if (draftSnap.exists()) {
-    const finalData = draftSnap.data();
+        if (draftSnap.exists()) {
+        const finalData = draftSnap.data();
     
-    // Move to "applications" collection where Staff can see it
-    await setDoc(doc(db, "applications", user.uid), {
+        // Move to "applications" collection where Staff can see it
+        await setDoc(doc(db, "applications", user.uid), {
         ...finalData,
         status: "pending",
         submittedAt: new Date()
-    });
+      });
     
-    alert("Application Submitted Successfully!");
-}
-
+      alert("Application Submitted Successfully!");
+       }
         
         document.getElementById('step3Container').style.display = 'none';
         document.getElementById('step4Container').style.display = 'block'; 
