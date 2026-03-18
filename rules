@@ -20,14 +20,14 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == adminId;
     }
 
-    // 6. DRAFTS (Only the student can see their own draft)
-match /drafts/{userId} {
-  allow read, write: if request.auth != null && request.auth.uid == userId;
-}
+    // 4. DRAFTS (Only the student can see their own draft)
+    match /drafts/{userId} {
+    allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
 
-// 4. APPLICATIONS (Staff can only see these once submitted)
-match /applications/{applicationId} {
-  allow read, list: if request.auth != null && (
+    // 5. APPLICATIONS (Staff can only see these once submitted)
+    match /applications/{applicationId} {
+    allow read, list: if request.auth != null && (
     request.auth.uid == applicationId || 
     exists(/databases/$(database)/documents/staff/$(request.auth.uid)) ||
     exists(/databases/$(database)/documents/admins/$(request.auth.uid))
@@ -45,7 +45,7 @@ match /applications/{applicationId} {
         .hasAny(['step1', 'step2', 'documents', 'draft', 'lastUpdated', 'status', 'adminNote']);
     }
 
-    // 5. DOCUMENT VAULT
+    // 6. DOCUMENT VAULT
     match /documentVault/{docId} {
       allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
       allow read, update, delete: if request.auth != null && (
