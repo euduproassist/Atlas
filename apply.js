@@ -107,6 +107,12 @@ onAuthStateChanged(auth, async (user) => {
                     if (input) { input.value = data.draft[key];
                         input.dispatchEvent(new Event('input'));
                                }
+                    // NEW: Auto-jump to the correct step on refresh
+                   if (data.currentStep === 2) {
+                   document.getElementById('step1Container').style.display = 'none';
+                   document.getElementById('step2Container').style.display = 'block';
+                   currentStep = 2; // Sync the internal counter
+                }
                 });
                 if (data.draft['examBody'] === 'Other') {
                    document.getElementById('examBody').value = 'Other';
