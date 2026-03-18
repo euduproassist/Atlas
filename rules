@@ -21,10 +21,6 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/staff/$(request.auth.uid))
       );
 
-      allow update: if request.resource.data.diff(resource.data).affectedKeys()
-        .hasAny(['step1', 'step2', 'documents', 'draft', 'lastUpdated', 'status', 'adminNote']);
-    }
-
       // Field Validation
       allow update: if request.resource.data.diff(resource.data).affectedKeys()
         .hasAny(['step1', 'step2', 'documents', 'draft', 'lastUpdated', 'status', 'adminNote']);
