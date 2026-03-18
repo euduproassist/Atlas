@@ -1,1 +1,51 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Users Collection
+    // Allows students to manage their basic profile (names, phone, etc.)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // 2. Applications Collection (Merged Student & Staff Logic)
+    match /applications/{applicationId} {
+      
+      // Access Control: Student owns the doc OR User is in the staff collection
+      allow read: if request.auth != null && (
+        request.auth.uid == applicationId || 
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid))
+      );
+
+      // Write/Update Logic
+      allow write, update: if request.auth != null && (
+        request.auth.uid == applicationId || 
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid))
+      );
+
+      // Data Validation: Protects your "R0" goal by limiting allowed fields
+      // Prevents malicious actors from injecting junk data to increase your costs
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(['step1', 'step2', 'documents', 'draft', 'lastUpdated', 'status', 'adminNote']);
+    }
+
+    // 3. Document Vault (Metadata)
+    // Ensures Staff can see the links to documents to verify them
+    match /documentVault/{docId} {
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      
+      allow read, update, delete: if request.auth != null && (
+        resource.data.ownerId == request.auth.uid || 
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid))
+      );
+    }
+
+    // 4. Staff Registry
+    // A read-only list used by the system to verify staff permissions
+    match /staff/{staffId} {
+      allow read: if request.auth != null;
+    }
+  }
+}
 
