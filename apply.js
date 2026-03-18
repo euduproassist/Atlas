@@ -31,9 +31,10 @@ async function syncFieldToCloud(fieldId, value) {
     try {
         // CHANGED: Save to "drafts" collection instead of "applications"
         await setDoc(doc(db, "drafts", user.uid), {
-            [fieldId]: value,
+            draft: { 
+                [fieldId]: value
+            },
             lastUpdated: new Date(),
-            isSubmitted: false // Explicit flag
         }, { merge: true });
     } catch (e) {
         console.error("Sync error:", e);
@@ -303,7 +304,7 @@ mainForm.addEventListener('submit', async (e) => {
         };
 
         try {
-            await setDoc(doc(db, "applications", user.uid), {
+            await setDoc(doc(db, "drafts", user.uid), {
                 step2: step2Data,
                 progress: 50, // Updated progress
                 currentStep: 3
@@ -373,20 +374,15 @@ mainForm.addEventListener('submit', async (e) => {
 
         await setDoc(doc(db, "drafts", user.uid), {
             documents: documentData,
-            currentStep: 4,
             lastUpdated: new Date()
         }, { merge: true });
 
         // At the very end of your final step logic:
-        const draftRef = doc(db, "drafts", user.uid);
-        const draftSnap = await getDoc(draftRef);
+        const draftSnap = await getDoc(doc(db, "drafts", user.uid));
 
         if (draftSnap.exists()) {
-        const finalData = draftSnap.data();
-    
-        // Move to "applications" collection where Staff can see it
         await setDoc(doc(db, "applications", user.uid), {
-        ...finalData,
+        ...draftSnap.data(),
         status: "pending",
         submittedAt: new Date()
       });
