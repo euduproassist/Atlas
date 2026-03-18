@@ -110,7 +110,7 @@ saveNoteBtn.onclick = async () => {
         const appRef = doc(db, "applications", selectedAppId);
         await updateDoc(appRef, {
             adminNote: note,
-            status: "resolved" // Automatically resolves when staff takes action
+            status: "review" // Automatically resolves when staff takes action
         });
         alert("Note saved and status updated to Resolved!");
     } catch (error) {
