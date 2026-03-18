@@ -89,6 +89,17 @@ function showDetails(id, data, displayId) {
     detailsSection.style.display = 'block';
     
     // Connects to the data fields from your apply.js
+        detailsContent.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <p><strong>Contact:</strong> ${data.step1?.email || 'N/A'}</p>
+            <p><strong>Mobile:</strong> ${data.step1?.mobile || 'N/A'}</p>
+            <p><strong>APS Score:</strong> ${data.step2?.APS || 'N/A'}</p>
+            <p><strong>Course Choice:</strong> ${data.step2?.choice1 || 'N/A'}</p>
+            <p><strong>Province:</strong> ${data.step1?.address?.province || 'N/A'}</p>
+            <p><strong>Gender:</strong> ${data.step1?.gender || 'N/A'}</p>
+        </div>
+    `;
+
     
     // Load existing note if it exists
     staffNoteInput.value = data.adminNote || "";
