@@ -20,6 +20,13 @@ onAuthStateChanged(auth, async (user) => {
     // CRITICAL FIX: Verify staff status in the UI before querying
     const staffRef = doc(db, "staff", user.uid);
     const staffSnap = await getDoc(staffRef);
+    
+    if (staffSnap.exists()) {
+    loadApplications();
+} else {
+    console.warn("Security: UID", user.uid, "not found in staff collection.");
+    auth.signOut();
+}
 
 });
 
