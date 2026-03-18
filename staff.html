@@ -53,7 +53,16 @@
 
     <div class="toolbar">
         <div class="filters">
-
+            <select id="filterStatus">
+            <option value="All">Filter: All</option>
+            <option value="pending" selected>Pending</option>
+            <option value="review">Under Review</option>
+            <option value="missing">Missing Info</option>
+            <option value="prov_accepted">Provisionally Accepted</option>
+            <option value="uncon_accepted">Unconditionally Accepted</option>
+            <option value="waiting">Waiting List</option>
+            <option value="rejected">Rejected</option>
+            </select>
             <select id="sortDate">
                 <option value="newest">Sort: Newest</option>
                 <option value="oldest">Sort: Oldest</option>
