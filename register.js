@@ -28,10 +28,10 @@ registerForm.addEventListener('submit', async (e) => {
         const user = userCredential.user;
 
         // 2. Save additional info to Firestore "users" collection
-        await setDoc(doc(db, "staff", user.uid), {
+        await setDoc(doc(db, "users", user.uid), {
             fullName: fullName,
             email: email,
-            role: "staff",
+            role: "student",
             createdAt: new Date()
         });
 
