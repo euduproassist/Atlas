@@ -371,7 +371,7 @@ mainForm.addEventListener('submit', async (e) => {
             if (urls[index]) documentData[f.name] = urls[index];
         });
 
-        await setDoc(doc(db, "applications", user.uid), {
+        await setDoc(doc(db, "drafts", user.uid), {
             documents: documentData,
             currentStep: 4,
             lastUpdated: new Date()
