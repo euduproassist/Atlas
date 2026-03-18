@@ -76,6 +76,17 @@ function loadApplications() {
 
             row.onclick = () => showDetails(id, data, displayId);
             tableBody.appendChild(row);
+        document.getElementById('filterStatus').addEventListener('change', () => {
+    const statusFilter = document.getElementById('filterStatus').value.toLowerCase();
+    const rows = tableBody.getElementsByTagName('tr');
+
+    for (let row of rows) {
+        const rowStatus = row.querySelector('.status').innerText.toLowerCase().replace(/\s/g, '');
+        const filterMatch = statusFilter === "all" || rowStatus.includes(statusFilter.replace('_', ''));
+        row.style.display = filterMatch ? '' : 'none';
+              }
+          });
+
         });
     });
 }
