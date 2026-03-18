@@ -32,7 +32,7 @@ async function syncFieldToCloud(fieldId, value) {
         // CHANGED: Save to "drafts" collection instead of "applications"
         await setDoc(doc(db, "drafts", user.uid), {
             draft: { 
-                [fieldId]: value
+                [`draft.${fieldId}`]: value
             },
             lastUpdated: new Date(),
         }, { merge: true });
@@ -212,7 +212,7 @@ mainForm.addEventListener('submit', async (e) => {
         };
 
         try {
-            await setDoc(doc(db, "applications", user.uid), {
+            await setDoc(doc(db, "drafts", user.uid), {
                 step1: step1Data,
                 currentStep: 2
             }, { merge: true });
@@ -385,7 +385,8 @@ mainForm.addEventListener('submit', async (e) => {
         ...draftSnap.data(),
         status: "pending",
         submittedAt: new Date()
-      });
+        },
+        { merge: true});  
     
       alert("Application Submitted Successfully!");
        }
