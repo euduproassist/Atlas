@@ -31,7 +31,7 @@ registerForm.addEventListener('submit', async (e) => {
         await setDoc(doc(db, "staff", user.uid), {
             fullName: fullName,
             email: email,
-            role: "staff";
+            role: "staff",
             createdAt: new Date()
         });
 
