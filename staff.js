@@ -89,13 +89,6 @@ function showDetails(id, data, displayId) {
     detailsSection.style.display = 'block';
     
     // Connects to the data fields from your apply.js
-    detailsContent.innerHTML = `
-        <p><strong>Contact:</strong> ${data.step1?.email || 'N/A'}</p>
-        <p><strong>Course:</strong> ${data.step2?.choice1 || 'N/A'}</p>
-        <p><strong>Application Note:</strong> Student from ${data.step1?.address?.province || 'Unknown Province'}</p>
-        <p><strong>Demographics:</strong> ${data.step1?.race || ''} | ${data.step1?.gender || ''}</p>
-        <p><strong>Internal ID:</strong> ${id}</p>
-    `;
     
     // Load existing note if it exists
     staffNoteInput.value = data.adminNote || "";
