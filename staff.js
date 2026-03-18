@@ -11,7 +11,23 @@ const saveNoteBtn = document.getElementById('saveNoteBtn');
 let selectedAppId = null;
 
 // 1. Security Check: Ensure user is logged in
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "staff-login.html";
+        return;
+    }
 
+    // CRITICAL FIX: Verify staff status in the UI before querying
+    const staffRef = doc(db, "staff", user.uid);
+    const staffSnap = await getDoc(staffRef);
+
+    if (staffSnap.exists()) {
+        loadApplications();
+    } else {
+        alert("Access Denied: You are not registered as staff.");
+        auth.signOut();
+    }
+});
 
 // 2. Real-time Listener for Applications (Connects to 'applications' collection)
 function loadApplications() {
