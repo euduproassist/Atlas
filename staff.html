@@ -53,63 +53,6 @@
 </head>
 <body>
 
-<div class="dashboard-container">
-    <h1>Staff Portal</h1>
-
-    <div class="toolbar">
-        <div class="filters">
-            <select id="filterStatus">
-            <option value="All">Filter: All</option>
-            <option value="pending" selected>Pending</option>
-            <option value="review">Under Review</option>
-            <option value="missing">Missing Info</option>
-            <option value="prov_accepted">Provisionally Accepted</option>
-            <option value="uncon_accepted">Unconditionally Accepted</option>
-            <option value="waiting">Waiting List</option>
-            <option value="rejected">Rejected</option>
-            </select>
-            <select id="sortDate">
-                <option value="newest">Sort: Newest</option>
-                <option value="oldest">Sort: Oldest</option>
-            </select>
-            <select id="filterCourse">
-            <option value="All">Filter: All Courses</option>
-            <option value="Bachelor of Computer and Information Science">Degree</option>
-            <option value="Diploma">Diploma</option>
-            <option value="Higher Certificate">Higher Certificate</option>
-            </select>
-        </div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search by Student Name or Course...">
-            <i class="fas fa-search"></i>
-        </div>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Application ID</th>
-                <th>Student Name</th>
-                <th>Course</th>
-                <th>Status</th>
-                <th>Date Submitted</th>
-            </tr>
-        </thead>
-        <tbody id="applicationTableBody">
-            </tbody>
-    </table>
-
-    <div class="ticket-details" id="detailsSection" style="display:none;">
-        <div class="details-header">Ticket Details</div>
-        <div class="details-body" id="detailsContent">
-            </div>
-        <div class="note-footer">
-            <strong>Note Note</strong>
-            <input type="text" id="staffNote" placeholder="Type a message or internal note...">
-            <button class="btn-save" id="saveNoteBtn">Save Note</button>
-        </div>
-    </div>
-</div>
 
 <script type="module" src="staff.js"></script>
 </body>
