@@ -6,6 +6,8 @@ const tableBody = document.getElementById('applicationTableBody');
 const detailsSection = document.getElementById('detailsSection');
 const detailsContent = document.getElementById('detailsContent');
 const staffNoteInput = document.getElementById('staffNote');
+const filterCourse = document.getElementById('filterCourse');
+
 const saveNoteBtn = document.getElementById('saveNoteBtn');
 
 let selectedAppId = null;
