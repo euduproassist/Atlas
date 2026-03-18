@@ -99,36 +99,7 @@ onAuthStateChanged(auth, async (user) => {
         const docSnap = await getDoc(doc(db, "drafts", user.uid));
         if (docSnap.exists()) {
             const data = docSnap.data();
-
-            // Add these lines to rebuild and fill Subject rows
-if (data.step2 && data.step2.subjects) {
-    document.getElementById('subjectsContainer').innerHTML = ''; // Clear default
-    data.step2.subjects.forEach((sub, i) => {
-        window.addSubjectRow();
-        const row = document.getElementById(`row${i + 1}`);
-        row.querySelector('.sub-name').value = sub.name;
-        row.querySelector('.sub-perc').value = sub.percentage;
-        row.querySelector('.sub-level').value = sub.level;
-    });
-}
-
-// Add these lines to rebuild and fill Post-School rows
-if (data.step2 && data.step2.postSchoolQualifications) {
-    document.getElementById('postSchoolContainer').innerHTML = ''; // Clear default
-    data.step2.postSchoolQualifications.forEach((qual, i) => {
-        window.addPostSchoolRow();
-        const rows = document.querySelectorAll('.post-school-row');
-        const lastRow = rows[rows.length - 1];
-        lastRow.querySelector('.ps-status').value = qual.status;
-        const inputs = lastRow.querySelectorAll('.ps-input');
-        inputs[0].value = qual.institutionalName;
-        inputs[1].value = qual.qualificationName;
-        inputs[2].value = qual.studentNumber;
-        inputs[3].value = qual.modulePercentageAverage;
-        lastRow.querySelector('.ps-year').value = qual.yearCompleted;
-    });
-}
-            
+      
             // Fill inputs from the 'draft' object
             if (data.draft) {
                 Object.keys(data.draft).forEach(key => {
