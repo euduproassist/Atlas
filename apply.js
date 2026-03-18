@@ -32,7 +32,7 @@ async function syncFieldToCloud(fieldId, value) {
         // CHANGED: Save to "drafts" collection instead of "applications"
         await setDoc(doc(db, "drafts", user.uid), {
             draft: { 
-                [`draft.${fieldId}`]: value
+                [fieldId]: value
             },
             lastUpdated: new Date(),
         }, { merge: true });
@@ -104,7 +104,9 @@ onAuthStateChanged(auth, async (user) => {
             if (data.draft) {
                 Object.keys(data.draft).forEach(key => {
                     const input = document.getElementById(key);
-                    if (input) input.value = data.draft[key];
+                    if (input) { input.value = data.draft[key];
+                        input.dispatchEvent(new Event('input'));
+                               }
                 });
                 if (data.draft['examBody'] === 'Other') {
                    document.getElementById('examBody').value = 'Other';
