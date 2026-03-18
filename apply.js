@@ -95,7 +95,7 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById('email').value = user.email || '';
         
         // --- LOAD SAVED DATA FROM CLOUD ---
-        const docSnap = await getDoc(doc(db, "applications", user.uid));
+        const docSnap = await getDoc(doc(db, "drafts", user.uid));
         if (docSnap.exists()) {
             const data = docSnap.data();
             
