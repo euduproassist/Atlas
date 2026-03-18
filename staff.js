@@ -58,7 +58,6 @@ function loadApplications() {
           
             // Map data from your Student Portal structure
             const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
-            const studentNumber = data.step1?.idNumber || "N/A";
             const course = data.step2?.choice1 || "Not Selected";
             const status = data.status || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
@@ -70,7 +69,6 @@ function loadApplications() {
             row.innerHTML = `
                 <td><strong>${displayId}</strong></td>
                 <td>${studentName}</td>
-                <td>${studentNumber}</td>
                 <td>${course}</td>
                 <td><span class="status status-${status}">${status.toUpperCase()}</span></td>
                 <td>${dateSub}</td>
