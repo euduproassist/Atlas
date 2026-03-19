@@ -557,6 +557,41 @@ window.addPostSchoolRow = function() {
     document.getElementById('addPostSchoolBtn').style.display = 'none';
 };
 
+window.validatePostSchool = function() {
+    const rows = document.querySelectorAll('.post-school-row');
+    const lastRow = rows[rows.length - 1];
+    const inputs = lastRow.querySelectorAll('.ps-input');
+    const status = lastRow.querySelector('.ps-status');
+    const year = lastRow.querySelector('.ps-year');
+    
+    let allFilled = true;
+    let anyFilled = false;
+    
+    inputs.forEach(i => { if(i.value.trim() !== "") anyFilled = true; else allFilled = false; });
+    if(status.value === "") allFilled = false; else anyFilled = true;
+    if(status.value !== 'Discontinued' && year.value.trim() === "") allFilled = false;
+    
+    document.getElementById('addPostSchoolBtn').style.display = (allFilled) ? 'block' : 'none';
+
+    // --- CRITICAL: MOVE THIS INSIDE THE BRACKETS ---
+    const qualData = [];
+    rows.forEach(row => {
+        const rowInputs = row.querySelectorAll('.ps-input');
+        qualData.push({
+            institutionalName: rowInputs[0].value,
+            qualificationName: rowInputs[1].value,
+            status: row.querySelector('.ps-status').value,
+            studentNumber: rowInputs[2].value,
+            modulePercentageAverage: rowInputs[3].value,
+            yearCompleted: row.querySelector('.ps-year').value
+        });
+    });
+    // This saves the qualification list to the cloud
+    syncFieldToCloud('postSchoolQualifications', qualData);
+
+    return { allFilled, anyFilled };
+};
+
 // Add this at the very end of apply.js
 window.goToStep = async function(stepNumber) {
     const user = auth.currentUser;
