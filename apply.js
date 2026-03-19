@@ -633,3 +633,12 @@ window.renderReviewSummary = async function() {
     }
 };
 
+// --- THE STARTUP CHECK ---
+setTimeout(() => {
+    const container = document.getElementById('subjectsContainer');
+    if (container && container.children.length === 0) {
+        window.addSubjectRow();
+    }
+}, 1000);
+
+
