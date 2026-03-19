@@ -239,6 +239,8 @@ mainForm.addEventListener('submit', async (e) => {
             }, { merge: true });
 
             // SWITCH UI TO STEP 2
+            goToStep(2);
+
 
         } catch (error) {
             alert("Error: " + error.message);
