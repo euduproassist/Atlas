@@ -110,6 +110,28 @@ if (docSnap.exists()) {
         }
     });
 
+// Restore document upload status in Step 3
+if (data.documents) {
+    Object.keys(data.documents).forEach(docKey => {
+        // Map database name back to input ID
+        const fileMap = {
+            'ID_Passport': 'file_id', 'Birth_Certificate': 'file_birth', 
+            'Marriage_Certificate': 'file_marriage', 'Matric_Certificate': 'file_matric',
+            'Grade_11_Results': 'file_grade11', 'Transcripts': 'file_transcripts',
+            'Proof_of_Address': 'file_address', 'Proof_of_Payment': 'file_pop',
+            'Sponsor_ID': 'file_sponsor', 'Motivation_Letter': 'file_motivation', 'CV': 'file_cv'
+        };
+        const inputId = fileMap[docKey];
+        const inputElement = document.getElementById(inputId);
+        if (inputElement) {
+            const statusLabel = document.createElement('span');
+            statusLabel.innerHTML = ' ✅ <small style="color:green">Already Uploaded</small>';
+            inputElement.parentNode.appendChild(statusLabel);
+            inputElement.required = false; // Disable required if already in cloud
+        }
+    });
+}
+
     // --- FIX: REBUILD SUBJECT ROWS ---
     if (draft.subjects && draft.subjects.length > 0) {
         const container = document.getElementById('subjectsContainer');
