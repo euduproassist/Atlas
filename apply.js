@@ -503,6 +503,28 @@ window.addSubjectRow = function() {
     document.getElementById('addSubjectRowBtn').style.display = 'none';
 }
 
+window.validateRows = function() {
+    const rows = document.querySelectorAll('#subjectsContainer .form-grid');
+    const lastRow = rows[rows.length - 1];
+    const inputs = lastRow.querySelectorAll('input');
+    
+    // Check if the "Add" button should show
+    const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+    document.getElementById('addSubjectRowBtn').style.display = allFilled ? 'block' : 'none';
+
+    // --- CRITICAL: MOVE THIS INSIDE THE BRACKETS ---
+    const subjectsList = [];
+    rows.forEach(row => {
+        subjectsList.push({
+            name: row.querySelector('.sub-name').value,
+            percentage: row.querySelector('.sub-perc').value,
+            level: row.querySelector('.sub-level').value
+        });
+    });
+    // Now it actually saves whenever you type
+    syncFieldToCloud('subjects', subjectsList); 
+};
+
 // Initialize the first row
 addSubjectRow();
 
