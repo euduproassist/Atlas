@@ -402,16 +402,6 @@ mainForm.addEventListener('submit', async (e) => {
     
       alert("Application Submitted Successfully!");
        }
-        
-        document.getElementById('step3Container').style.display = 'none';
-        document.getElementById('step4Container').style.display = 'block'; 
-        document.getElementById('dot4').classList.add('active');
-        document.getElementById('line3').classList.add('active');
-        
-        if (typeof renderReviewSummary === "function") renderReviewSummary();
-        
-        currentStep = 4;
-        window.scrollTo(0, 0);
 
     } catch (error) {
         alert("Upload failed: " + error.message);
