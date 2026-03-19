@@ -524,6 +524,17 @@ window.validateRows = function() {
     syncFieldToCloud('subjects', subjectsList); 
 };
 
+// --- THE STARTUP CHECK ---
+// We wait 1 second to let the "Load from Cloud" logic finish building rows.
+setTimeout(() => {
+    const container = document.getElementById('subjectsContainer');
+    // If the container is still empty after 1 second, the user is new.
+    if (container && container.children.length === 0) {
+        window.addSubjectRow();
+    }
+}, 1000);
+
+
 
 // Add this new logic to handle Discontinued status
 window.handleDiscontinued = function(selectElement) {
