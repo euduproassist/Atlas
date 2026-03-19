@@ -459,6 +459,25 @@ mainForm.addEventListener('submit', async (e) => {
             if (urls[index]) documentData[f.name] = urls[index];
         });
 
+  // Merge new uploads with existing document data in the draft
+const currentDraft = await getDoc(doc(db, "drafts", user.uid));
+const existingDocs = currentDraft.exists() ? (currentDraft.data().documents || {}) : {};
+
+await setDoc(doc(db, "drafts", user.uid), {
+    documents: { ...existingDocs, ...documentData },
+    lastUpdated: new Date()
+}, { merge: true });
+
+// Move to final review
+const finalSnap = await getDoc(doc(db, "drafts", user.uid));
+if (finalSnap.exists()) {
+    await setDoc(doc(db, "applications", user.uid), {
+        ...finalSnap.data(),
+        status: "pending",
+        submittedAt: new Date()
+    }, { merge: true });
+    alert("Documents Saved & Application Ready for Review!");
+}
 
        // PASTE THIS INSTEAD:
         goToStep(4);
