@@ -587,6 +587,10 @@ window.validatePostSchool = function() {
             yearCompleted: row.querySelector('.ps-year').value
         });
     });
+   // Explicitly pass the full array
+    if (qualData.length > 0) {
+        syncFieldToCloud('postSchoolQualifications', qualData);
+    }
 
     return { allFilled, anyFilled };
 };
