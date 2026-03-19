@@ -110,28 +110,6 @@ if (docSnap.exists()) {
         }
     });
 
-// Restore document upload status in Step 3
-if (data.documents) {
-    Object.keys(data.documents).forEach(docKey => {
-        // Map database name back to input ID
-        const fileMap = {
-            'ID_Passport': 'file_id', 'Birth_Certificate': 'file_birth', 
-            'Marriage_Certificate': 'file_marriage', 'Matric_Certificate': 'file_matric',
-            'Grade_11_Results': 'file_grade11', 'Transcripts': 'file_transcripts',
-            'Proof_of_Address': 'file_address', 'Proof_of_Payment': 'file_pop',
-            'Sponsor_ID': 'file_sponsor', 'Motivation_Letter': 'file_motivation', 'CV': 'file_cv'
-        };
-        const inputId = fileMap[docKey];
-        const inputElement = document.getElementById(inputId);
-        if (inputElement) {
-            const statusLabel = document.createElement('span');
-            statusLabel.innerHTML = ' ✅ <small style="color:green">Already Uploaded</small>';
-            inputElement.parentNode.appendChild(statusLabel);
-            inputElement.required = false; // Disable required if already in cloud
-        }
-    });
-}
-
     // --- FIX: REBUILD SUBJECT ROWS ---
     if (draft.subjects && draft.subjects.length > 0) {
         const container = document.getElementById('subjectsContainer');
@@ -459,25 +437,24 @@ mainForm.addEventListener('submit', async (e) => {
             if (urls[index]) documentData[f.name] = urls[index];
         });
 
-  // Merge new uploads with existing document data in the draft
-const currentDraft = await getDoc(doc(db, "drafts", user.uid));
-const existingDocs = currentDraft.exists() ? (currentDraft.data().documents || {}) : {};
+        await setDoc(doc(db, "drafts", user.uid), {
+            documents: documentData,
+            lastUpdated: new Date()
+        }, { merge: true });
 
-await setDoc(doc(db, "drafts", user.uid), {
-    documents: { ...existingDocs, ...documentData },
-    lastUpdated: new Date()
-}, { merge: true });
+        // At the very end of your final step logic:
+        const draftSnap = await getDoc(doc(db, "drafts", user.uid));
 
-// Move to final review
-const finalSnap = await getDoc(doc(db, "drafts", user.uid));
-if (finalSnap.exists()) {
-    await setDoc(doc(db, "applications", user.uid), {
-        ...finalSnap.data(),
+        if (draftSnap.exists()) {
+        await setDoc(doc(db, "applications", user.uid), {
+        ...draftSnap.data(),
         status: "pending",
         submittedAt: new Date()
-    }, { merge: true });
-    alert("Documents Saved & Application Ready for Review!");
-}
+        },
+        { merge: true});  
+    
+      alert("Application Submitted Successfully!");
+       }
 
        // PASTE THIS INSTEAD:
         goToStep(4);
