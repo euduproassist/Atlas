@@ -587,8 +587,6 @@ window.validatePostSchool = function() {
             yearCompleted: row.querySelector('.ps-year').value
         });
     });
-    // This saves the qualification list to the cloud
-    syncFieldToCloud('postSchoolQualifications', qualData);
 
     return { allFilled, anyFilled };
 };
