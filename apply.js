@@ -403,6 +403,10 @@ mainForm.addEventListener('submit', async (e) => {
       alert("Application Submitted Successfully!");
        }
 
+       // PASTE THIS INSTEAD:
+        goToStep(4);
+        if (typeof renderReviewSummary === "function") renderReviewSummary();
+
     } catch (error) {
         alert("Upload failed: " + error.message);
         uploadBtn.innerText = "Upload & Continue";
