@@ -112,6 +112,36 @@ onAuthStateChanged(auth, async (user) => {
                     }
                 });
 
+       // REBUILD SUBJECT ROWS
+        if (draft.subjects && draft.subjects.length > 0) {
+            document.getElementById('subjectsContainer').innerHTML = ''; 
+            draft.subjects.forEach((sub, index) => {
+                window.addSubjectRow();
+                const row = document.getElementById(`row${index + 1}`);
+                if (row) {
+                    row.querySelector('.sub-name').value = sub.name || '';
+                    row.querySelector('.sub-perc').value = sub.percentage || '';
+                    row.querySelector('.sub-level').value = sub.level || '';
+                }
+            });
+        }
+
+        // REBUILD POST-SCHOOL QUALIFICATIONS
+        if (draft.postSchoolQualifications && draft.postSchoolQualifications.length > 0) {
+            document.getElementById('postSchoolContainer').innerHTML = '';
+            draft.postSchoolQualifications.forEach((qual) => {
+                window.addPostSchoolRow();
+                const rows = document.querySelectorAll('.post-school-row');
+                const lastRow = rows[rows.length - 1];
+                const inputs = lastRow.querySelectorAll('.ps-input');
+                inputs[0].value = qual.institutionalName || '';
+                inputs[1].value = qual.qualificationName || '';
+                lastRow.querySelector('.ps-status').value = qual.status || '';
+                inputs[2].value = qual.studentNumber || '';
+                inputs[3].value = qual.modulePercentageAverage || '';
+                lastRow.querySelector('.ps-year').value = qual.yearCompleted || '';
+            });
+        }
 
              // 1. Restore the correct Step/Page
            if (data.currentStep) {
