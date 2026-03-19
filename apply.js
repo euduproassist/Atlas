@@ -524,8 +524,6 @@ window.validateRows = function() {
     syncFieldToCloud('subjects', subjectsList); 
 };
 
-// Initialize the first row
-addSubjectRow();
 
 // Add this new logic to handle Discontinued status
 window.handleDiscontinued = function(selectElement) {
