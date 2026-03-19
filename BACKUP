@@ -22,20 +22,21 @@ window.toggleOtherNationality = function(value) {
     }
 };
 
-
 // This saves data to the cloud only after 2 seconds of 'silence' (no typing)
 async function syncFieldToCloud(fieldId, value) {
     const user = auth.currentUser;
     if (!user || !fieldId) return;
 
     try {
-        // CHANGED: Save to "drafts" collection instead of "applications"
-        await setDoc(doc(db, "drafts", user.uid), {
-            draft: { 
-                [fieldId]: value
-            },
+        // We create a reference to the 'draft' object to ensure arrays overwrite correctly
+        const dataToSave = {
+            currentStep: currentStep,
             lastUpdated: new Date(),
-        }, { merge: true });
+            draft: {} 
+        };
+        dataToSave.draft[fieldId] = value;
+
+        await setDoc(doc(db, "drafts", user.uid), dataToSave, { merge: true });
     } catch (e) {
         console.error("Sync error:", e);
     }
@@ -94,26 +95,92 @@ onAuthStateChanged(auth, async (user) => {
         window.location.href = "login.html";
     } else {
         document.getElementById('email').value = user.email || '';
-        
-        // --- LOAD SAVED DATA FROM CLOUD ---
-        const docSnap = await getDoc(doc(db, "drafts", user.uid));
-        if (docSnap.exists()) {
-            const data = docSnap.data();
+
+ // --- LOAD SAVED DATA FROM CLOUD ---
+const docSnap = await getDoc(doc(db, "drafts", user.uid));
+if (docSnap.exists()) {
+    const data = docSnap.data();
+    const draft = data.draft || {};
+
+    // Fill standard inputs
+    Object.keys(draft).forEach(key => {
+        const input = document.getElementById(key);
+        if (input && input.type !== 'file') { 
+            input.value = draft[key];
+        }
+    });
+
+    // --- FIX: REBUILD SUBJECT ROWS ---
+    if (draft.subjects && draft.subjects.length > 0) {
+        const container = document.getElementById('subjectsContainer');
+        container.innerHTML = ''; // Clear the default empty row
+        subjectCount = 0; // Reset counter for clean rebuild
+
+        draft.subjects.forEach((sub, index) => {
+            window.addSubjectRow(); // This creates row1, row2, etc.
+            const row = document.getElementById(`row${index + 1}`);
+            if (row) {
+                row.querySelector('.sub-name').value = sub.name || '';
+                row.querySelector('.sub-perc').value = sub.percentage || '';
+                row.querySelector('.sub-level').value = sub.level || '';
+            }
+        });
+        // Ensure the "Add" button shows up if the last row is complete
+        window.validateRows(); 
+    }
+
+    // --- FIX: REBUILD POST-SCHOOL QUALIFICATIONS ---
+    if (draft.postSchoolQualifications && draft.postSchoolQualifications.length > 0) {
+        const psContainer = document.getElementById('postSchoolContainer');
+        psContainer.innerHTML = ''; // Clear default
+
+        draft.postSchoolQualifications.forEach((qual) => {
+            window.addPostSchoolRow();
+            const rows = document.querySelectorAll('.post-school-row');
+            const lastRow = rows[rows.length - 1];
+            const inputs = lastRow.querySelectorAll('.ps-input');
             
-            // Fill inputs from the 'draft' object
-            if (data.draft) {
-                Object.keys(data.draft).forEach(key => {
-                    const input = document.getElementById(key);
-                    if (input) { input.value = data.draft[key];
-                        input.dispatchEvent(new Event('input'));
-                               }
-                    // NEW: Auto-jump to the correct step on refresh
-                   if (data.currentStep === 2) {
-                   document.getElementById('step1Container').style.display = 'none';
-                   document.getElementById('step2Container').style.display = 'block';
-                   currentStep = 2; // Sync the internal counter
-                }
-                });
+            inputs[0].value = qual.institutionalName || '';
+            inputs[1].value = qual.qualificationName || '';
+            
+            const statusSelect = lastRow.querySelector('.ps-status');
+            statusSelect.value = qual.status || '';
+            
+            inputs[2].value = qual.studentNumber || '';
+            inputs[3].value = qual.modulePercentageAverage || '';
+            
+            const yearInput = lastRow.querySelector('.ps-year');
+            yearInput.value = qual.yearCompleted || '';
+            
+            // Trigger the disabled logic for 'Discontinued' status
+            window.handleDiscontinued(statusSelect);
+        });
+        window.validatePostSchool();
+    }
+
+             // 1. Restore the correct Step/Page
+           if (data.currentStep) {
+            currentStep = data.currentStep;
+            // Hide all steps first
+            document.getElementById('step1Container').style.display = 'none';
+            document.getElementById('step2Container').style.display = 'none';
+            document.getElementById('step3Container').style.display = 'none';
+            if(document.getElementById('step4Container')) document.getElementById('step4Container').style.display = 'none';
+
+            
+            // Show the saved step
+            document.getElementById(`step${currentStep}Container`).style.display = 'block';
+                           if(currentStep === 4 && typeof window.renderReviewSummary === "function") {
+                window.renderReviewSummary();
+            }
+            
+            // Update progress bar UI (dots)
+            for(let i=1; i<=currentStep; i++) {
+                document.getElementById(`dot${i}`).classList.add('active');
+                if(i < currentStep) document.getElementById(`line${i}`).classList.add('active');
+                  }
+               }
+
                 if (data.draft['examBody'] === 'Other') {
                    document.getElementById('examBody').value = 'Other';
                    document.getElementById('otherQualGroup').style.display = 'block';
@@ -142,7 +209,6 @@ onAuthStateChanged(auth, async (user) => {
         }
             }
         }
-    }
 });
 
 // Save when they stop typing for 2 seconds
@@ -226,15 +292,9 @@ mainForm.addEventListener('submit', async (e) => {
             }, { merge: true });
 
             // SWITCH UI TO STEP 2
-            document.getElementById('step1Container').style.display = 'none';
-            document.getElementById('step2Container').style.display = 'block';
-            
-            // Update Progress Bar
-            document.getElementById('dot2').classList.add('active');
-            document.getElementById('line1').classList.add('active');
-            
-            currentStep = 2;
-            window.scrollTo(0, 0);
+            goToStep(2);
+
+
         } catch (error) {
             alert("Error: " + error.message);
         }
@@ -319,11 +379,8 @@ mainForm.addEventListener('submit', async (e) => {
             }, { merge: true });
             
             // Logic to move to Step 3 would go here
-            currentStep = 3; 
-            document.getElementById('step2Container').style.display = 'none';
-            document.getElementById('step3Container').style.display = 'block';
-            document.getElementById('dot3').classList.add('active');
-            document.getElementById('line2').classList.add('active');
+            goToStep(3);
+
 
         } catch (error) {
             alert("Error: " + error.message);
@@ -398,16 +455,10 @@ mainForm.addEventListener('submit', async (e) => {
     
       alert("Application Submitted Successfully!");
        }
-        
-        document.getElementById('step3Container').style.display = 'none';
-        document.getElementById('step4Container').style.display = 'block'; 
-        document.getElementById('dot4').classList.add('active');
-        document.getElementById('line3').classList.add('active');
-        
+
+       // PASTE THIS INSTEAD:
+        goToStep(4);
         if (typeof renderReviewSummary === "function") renderReviewSummary();
-        
-        currentStep = 4;
-        window.scrollTo(0, 0);
 
     } catch (error) {
         alert("Upload failed: " + error.message);
@@ -456,13 +507,27 @@ window.validateRows = function() {
     const rows = document.querySelectorAll('#subjectsContainer .form-grid');
     const lastRow = rows[rows.length - 1];
     const inputs = lastRow.querySelectorAll('input');
-    // Only show button if all 3 fields in the LAST row are filled
+    
+    // Check if the "Add" button should show
     const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
     document.getElementById('addSubjectRowBtn').style.display = allFilled ? 'block' : 'none';
-}
 
-// Initialize the first row
-addSubjectRow();
+    // --- CRITICAL: MOVE THIS INSIDE THE BRACKETS ---
+    const subjectsList = [];
+    rows.forEach(row => {
+        subjectsList.push({
+            name: row.querySelector('.sub-name').value,
+            percentage: row.querySelector('.sub-perc').value,
+            level: row.querySelector('.sub-level').value
+        });
+    });
+     // Explicitly pass the full array to ensure the cloud matches the UI exactly
+    if (subjectsList.length > 0) {
+        syncFieldToCloud('subjects', subjectsList); 
+    }
+
+};
+
 
 // Add this new logic to handle Discontinued status
 window.handleDiscontinued = function(selectElement) {
@@ -503,14 +568,86 @@ window.validatePostSchool = function() {
     let allFilled = true;
     let anyFilled = false;
     
-    // Check inputs
     inputs.forEach(i => { if(i.value.trim() !== "") anyFilled = true; else allFilled = false; });
     if(status.value === "") allFilled = false; else anyFilled = true;
     if(status.value !== 'Discontinued' && year.value.trim() === "") allFilled = false;
     
     document.getElementById('addPostSchoolBtn').style.display = (allFilled) ? 'block' : 'none';
+
+    // --- CRITICAL: MOVE THIS INSIDE THE BRACKETS ---
+    const qualData = [];
+    rows.forEach(row => {
+        const rowInputs = row.querySelectorAll('.ps-input');
+        qualData.push({
+            institutionalName: rowInputs[0].value,
+            qualificationName: rowInputs[1].value,
+            status: row.querySelector('.ps-status').value,
+            studentNumber: rowInputs[2].value,
+            modulePercentageAverage: rowInputs[3].value,
+            yearCompleted: row.querySelector('.ps-year').value
+        });
+    });
+   // Explicitly pass the full array
+    if (qualData.length > 0) {
+        syncFieldToCloud('postSchoolQualifications', qualData);
+    }
+
     return { allFilled, anyFilled };
 };
+
+// Add this at the very end of apply.js
+window.goToStep = async function(stepNumber) {
+    const user = auth.currentUser;
+    
+    // Hide current step
+    document.getElementById(`step${currentStep}Container`).style.display = 'none';
+    
+    // Show new step
+    document.getElementById(`step${stepNumber}Container`).style.display = 'block';
+    
+    // Update the step counter
+    currentStep = stepNumber;
+
+    // Save the step progress to Firebase immediately (R0 cost - tiny string)
+    if (user) {
+        await setDoc(doc(db, "drafts", user.uid), { currentStep: currentStep }, { merge: true });
+    }
+    window.scrollTo(0, 0);
+};
+
+window.renderReviewSummary = async function() {
+    const user = auth.currentUser;
+    const docSnap = await getDoc(doc(db, "drafts", user.uid));
+    const summaryDiv = document.getElementById('reviewSummary');
+    
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        const s1 = data.step1 || {};
+        const s2 = data.step2 || {};
+
+        summaryDiv.innerHTML = `
+            <h3 style="color:var(--primary); border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:15px;">Application Summary</h3>
+            <p><strong>Full Name:</strong> ${s1.fullNames} ${s1.surname}</p>
+            <p><strong>Identity Number:</strong> ${s1.idNumber}</p>
+            <p><strong>Email:</strong> ${s1.email}</p>
+            <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+            <p><strong>1st Choice:</strong> ${s2.choice1}</p>
+            <p><strong>Academic Year:</strong> ${s2.acadYear}</p>
+            <p><strong>Total APS:</strong> ${s2.APS}</p>
+            <p style="margin-top:15px; color:#27ae60; font-weight:600;"><i class="fas fa-check-circle"></i> Documents have been uploaded to the vault.</p>
+        `;
+    }
+};
+
+// --- THE STARTUP CHECK ---
+setTimeout(() => {
+    const container = document.getElementById('subjectsContainer');
+    if (container && container.children.length === 0) {
+        window.addSubjectRow();
+    }
+}, 1000);
+
+
 
 
 
