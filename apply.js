@@ -102,6 +102,16 @@ onAuthStateChanged(auth, async (user) => {
             const data = docSnap.data();
             
             // Fill inputs from the 'draft' object
+            const draft = data.draft || {};
+            if (draft) {
+                Object.keys(draft).forEach(key => {
+                    const input = document.getElementById(key);
+                    // Only fill if it's a normal input (not a file upload)
+                    if (input && input.type !== 'file') { 
+                        input.value = draft[key];
+                    }
+                });
+
 
              // 1. Restore the correct Step/Page
            if (data.currentStep) {
