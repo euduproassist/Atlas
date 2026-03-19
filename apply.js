@@ -326,6 +326,8 @@ mainForm.addEventListener('submit', async (e) => {
             }, { merge: true });
             
             // Logic to move to Step 3 would go here
+            goToStep(3);
+
 
         } catch (error) {
             alert("Error: " + error.message);
