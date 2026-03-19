@@ -195,7 +195,6 @@ onAuthStateChanged(auth, async (user) => {
         }
             }
         }
-    }
 });
 
 // Save when they stop typing for 2 seconds
