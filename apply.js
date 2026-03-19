@@ -102,12 +102,7 @@ onAuthStateChanged(auth, async (user) => {
             const data = docSnap.data();
             
             // Fill inputs from the 'draft' object
-            if (data.draft) {
-                Object.keys(data.draft).forEach(key => {
-                    const input = document.getElementById(key);
-                    if (input) { input.value = data.draft[key];
-                        input.dispatchEvent(new Event('input'));
-                               }
+
              // 1. Restore the correct Step/Page
            if (data.currentStep) {
             currentStep = data.currentStep;
