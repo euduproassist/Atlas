@@ -521,8 +521,7 @@ window.validateRows = function() {
             level: row.querySelector('.sub-level').value
         });
     });
-    // Now it actually saves whenever you type
-    syncFieldToCloud('subjects', subjectsList); 
+
 };
 
 
