@@ -597,3 +597,27 @@ window.goToStep = async function(stepNumber) {
     window.scrollTo(0, 0);
 };
 
+window.renderReviewSummary = async function() {
+    const user = auth.currentUser;
+    const docSnap = await getDoc(doc(db, "drafts", user.uid));
+    const summaryDiv = document.getElementById('reviewSummary');
+    
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        const s1 = data.step1 || {};
+        const s2 = data.step2 || {};
+
+        summaryDiv.innerHTML = `
+            <h3 style="color:var(--primary); border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:15px;">Application Summary</h3>
+            <p><strong>Full Name:</strong> ${s1.fullNames} ${s1.surname}</p>
+            <p><strong>Identity Number:</strong> ${s1.idNumber}</p>
+            <p><strong>Email:</strong> ${s1.email}</p>
+            <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+            <p><strong>1st Choice:</strong> ${s2.choice1}</p>
+            <p><strong>Academic Year:</strong> ${s2.acadYear}</p>
+            <p><strong>Total APS:</strong> ${s2.APS}</p>
+            <p style="margin-top:15px; color:#27ae60; font-weight:600;"><i class="fas fa-check-circle"></i> Documents have been uploaded to the vault.</p>
+        `;
+    }
+};
+
