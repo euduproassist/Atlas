@@ -459,6 +459,17 @@ window.validateRows = function() {
     document.getElementById('addSubjectRowBtn').style.display = allFilled ? 'block' : 'none';
 }
 
+// Inside window.validateRows
+const subjectsList = [];
+document.querySelectorAll('#subjectsContainer .form-grid').forEach(row => {
+    subjectsList.push({
+        name: row.querySelector('.sub-name').value,
+        percentage: row.querySelector('.sub-perc').value,
+        level: row.querySelector('.sub-level').value
+    });
+});
+syncFieldToCloud('subjects', subjectsList);
+
 // Initialize the first row
 addSubjectRow();
 
@@ -508,6 +519,22 @@ window.validatePostSchool = function() {
     
     document.getElementById('addPostSchoolBtn').style.display = (allFilled) ? 'block' : 'none';
     return { allFilled, anyFilled };
+
+    // Inside window.validatePostSchool
+const qualData = [];
+document.querySelectorAll('.post-school-row').forEach(row => {
+    const inputs = row.querySelectorAll('.ps-input');
+    qualData.push({
+        institutionalName: inputs[0].value,
+        qualificationName: inputs[1].value,
+        status: row.querySelector('.ps-status').value,
+        studentNumber: inputs[2].value,
+        modulePercentageAverage: inputs[3].value,
+        yearCompleted: row.querySelector('.ps-year').value
+    });
+});
+syncFieldToCloud('postSchoolQualifications', qualData);
+
 };
 
 // Add this at the very end of apply.js
