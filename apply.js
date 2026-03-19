@@ -170,6 +170,22 @@ if (docSnap.exists()) {
             
             // Show the saved step
             document.getElementById(`step${currentStep}Container`).style.display = 'block';
+
+   // --- NEW: Restore Uploaded Document Status ---
+const savedDocs = data.documents || {};
+Object.keys(savedDocs).forEach(docName => {
+    // We find the input based on the 'name' used in the filesToUpload array
+    const fileId = filesToUpload.find(f => f.name === docName)?.id;
+    if (fileId) {
+        const input = document.getElementById(fileId);
+        const label = input.previousElementSibling;
+        if (label) {
+            label.innerHTML += ` <span style="color: #27ae60; font-size: 0.8rem;">(Already Uploaded ✅)</span>`;
+            input.required = false; // Remove requirement since it's already in the cloud
+        }
+    }
+});
+
                            if(currentStep === 4 && typeof window.renderReviewSummary === "function") {
                 window.renderReviewSummary();
             }
