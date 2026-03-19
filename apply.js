@@ -23,7 +23,24 @@ window.toggleOtherNationality = function(value) {
 };
 
 // This saves data to the cloud only after 2 seconds of 'silence' (no typing)
+async function syncFieldToCloud(fieldId, value) {
+    const user = auth.currentUser;
+    if (!user || !fieldId) return;
 
+    try {
+        // We create a reference to the 'draft' object to ensure arrays overwrite correctly
+        const dataToSave = {
+            currentStep: currentStep,
+            lastUpdated: new Date(),
+            draft: {} 
+        };
+        dataToSave.draft[fieldId] = value;
+
+        await setDoc(doc(db, "drafts", user.uid), dataToSave, { merge: true });
+    } catch (e) {
+        console.error("Sync error:", e);
+    }
+}
 
 window.toggleDisability = function(value) {
     const container = document.getElementById('disabilityDetailsContainer');
