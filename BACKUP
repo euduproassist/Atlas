@@ -927,7 +927,7 @@ setTimeout(() => {
                 <input type="number" id="APS" placeholder="Enter Total APS" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px;">
                 <p style="font-size: 0.8rem; color: #d9534f; margin-top: 8px;">* Note: Do not include Life Orientation in the total APS.</p>
                 </div>
-                            <div class="section-title">Post-School / Previous Qualifications</div>
+                            <div class="section-title">3. Post-School / Previous Qualifications</div>
                <div id="postSchoolContainer">
                <div class="form-grid post-school-row" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
                <div class="input-group"><label>Institutional name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
@@ -965,7 +965,7 @@ setTimeout(() => {
                 </div>
                             
                     <div class="btn-group">
-                    <button type="button" class="btn btn-cancel" onclick="location.reload()">Back</button>
+                    <button type="button" class="btn btn-cancel" onclick="goToStep(1)">Back</button>
                     <button type="submit" class="btn btn-next">Next</button>
                 </div>
             </div>
@@ -1027,9 +1027,21 @@ setTimeout(() => {
                     <input type="file" id="file_cv" accept=".pdf,.jpg,.png">
                 </div>
 
-                <div class="btn-group">
-                    <button type="button" class="btn btn-cancel" onclick="location.reload()">Back</button>
+                 <div class="btn-group">
+                    <button type="button" class="btn btn-cancel" onclick="goToStep(2)">Back</button>
                     <button type="submit" class="btn btn-next" id="uploadBtn">Upload & Continue</button>
+                </div>
+            </div>
+
+            <div id="step4Container" style="display: none;">
+                <h2>Step 4 of 4: Review & Confirm</h2>
+                <p>Please review your details below. Your application has been saved as a draft.</p>
+                
+                <div id="reviewSummary" style="background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; line-height: 1.6;">
+                    </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-next" onclick="location.href='dashboard.html'">Back to Dashboard</button>
                 </div>
             </div>
 
