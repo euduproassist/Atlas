@@ -166,7 +166,6 @@ onAuthStateChanged(auth, async (user) => {
                   }
                }
 
-                });
                 if (data.draft['examBody'] === 'Other') {
                    document.getElementById('examBody').value = 'Other';
                    document.getElementById('otherQualGroup').style.display = 'block';
