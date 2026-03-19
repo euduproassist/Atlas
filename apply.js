@@ -521,6 +521,10 @@ window.validateRows = function() {
             level: row.querySelector('.sub-level').value
         });
     });
+     // Explicitly pass the full array to ensure the cloud matches the UI exactly
+    if (subjectsList.length > 0) {
+        syncFieldToCloud('subjects', subjectsList); 
+    }
 
 };
 
