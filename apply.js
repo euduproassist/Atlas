@@ -503,26 +503,6 @@ window.addSubjectRow = function() {
     document.getElementById('addSubjectRowBtn').style.display = 'none';
 }
 
-window.validateRows = function() {
-    const rows = document.querySelectorAll('#subjectsContainer .form-grid');
-    const lastRow = rows[rows.length - 1];
-    const inputs = lastRow.querySelectorAll('input');
-    // Only show button if all 3 fields in the LAST row are filled
-    const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
-    document.getElementById('addSubjectRowBtn').style.display = allFilled ? 'block' : 'none';
-}
-
-// Inside window.validateRows
-const subjectsList = [];
-document.querySelectorAll('#subjectsContainer .form-grid').forEach(row => {
-    subjectsList.push({
-        name: row.querySelector('.sub-name').value,
-        percentage: row.querySelector('.sub-perc').value,
-        level: row.querySelector('.sub-level').value
-    });
-});
-syncFieldToCloud('subjects', subjectsList);
-
 // Initialize the first row
 addSubjectRow();
 
