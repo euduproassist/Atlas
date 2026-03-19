@@ -96,6 +96,68 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         document.getElementById('email').value = user.email || '';
 
+ // --- LOAD SAVED DATA FROM CLOUD ---
+const docSnap = await getDoc(doc(db, "drafts", user.uid));
+if (docSnap.exists()) {
+    const data = docSnap.data();
+    const draft = data.draft || {};
+
+    // Fill standard inputs
+    Object.keys(draft).forEach(key => {
+        const input = document.getElementById(key);
+        if (input && input.type !== 'file') { 
+            input.value = draft[key];
+        }
+    });
+
+    // --- FIX: REBUILD SUBJECT ROWS ---
+    if (draft.subjects && draft.subjects.length > 0) {
+        const container = document.getElementById('subjectsContainer');
+        container.innerHTML = ''; // Clear the default empty row
+        subjectCount = 0; // Reset counter for clean rebuild
+
+        draft.subjects.forEach((sub, index) => {
+            window.addSubjectRow(); // This creates row1, row2, etc.
+            const row = document.getElementById(`row${index + 1}`);
+            if (row) {
+                row.querySelector('.sub-name').value = sub.name || '';
+                row.querySelector('.sub-perc').value = sub.percentage || '';
+                row.querySelector('.sub-level').value = sub.level || '';
+            }
+        });
+        // Ensure the "Add" button shows up if the last row is complete
+        window.validateRows(); 
+    }
+
+    // --- FIX: REBUILD POST-SCHOOL QUALIFICATIONS ---
+    if (draft.postSchoolQualifications && draft.postSchoolQualifications.length > 0) {
+        const psContainer = document.getElementById('postSchoolContainer');
+        psContainer.innerHTML = ''; // Clear default
+
+        draft.postSchoolQualifications.forEach((qual) => {
+            window.addPostSchoolRow();
+            const rows = document.querySelectorAll('.post-school-row');
+            const lastRow = rows[rows.length - 1];
+            const inputs = lastRow.querySelectorAll('.ps-input');
+            
+            inputs[0].value = qual.institutionalName || '';
+            inputs[1].value = qual.qualificationName || '';
+            
+            const statusSelect = lastRow.querySelector('.ps-status');
+            statusSelect.value = qual.status || '';
+            
+            inputs[2].value = qual.studentNumber || '';
+            inputs[3].value = qual.modulePercentageAverage || '';
+            
+            const yearInput = lastRow.querySelector('.ps-year');
+            yearInput.value = qual.yearCompleted || '';
+            
+            // Trigger the disabled logic for 'Discontinued' status
+            window.handleDiscontinued(statusSelect);
+        });
+        window.validatePostSchool();
+    }
+
              // 1. Restore the correct Step/Page
            if (data.currentStep) {
             currentStep = data.currentStep;
