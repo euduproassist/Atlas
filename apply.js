@@ -150,9 +150,14 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById('step1Container').style.display = 'none';
             document.getElementById('step2Container').style.display = 'none';
             document.getElementById('step3Container').style.display = 'none';
+            if(document.getElementById('step4Container')) document.getElementById('step4Container').style.display = 'none';
+
             
             // Show the saved step
             document.getElementById(`step${currentStep}Container`).style.display = 'block';
+                           if(currentStep === 4 && typeof window.renderReviewSummary === "function") {
+                window.renderReviewSummary();
+            }
             
             // Update progress bar UI (dots)
             for(let i=1; i<=currentStep; i++) {
