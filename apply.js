@@ -239,15 +239,7 @@ mainForm.addEventListener('submit', async (e) => {
             }, { merge: true });
 
             // SWITCH UI TO STEP 2
-            document.getElementById('step1Container').style.display = 'none';
-            document.getElementById('step2Container').style.display = 'block';
-            
-            // Update Progress Bar
-            document.getElementById('dot2').classList.add('active');
-            document.getElementById('line1').classList.add('active');
-            
-            currentStep = 2;
-            window.scrollTo(0, 0);
+
         } catch (error) {
             alert("Error: " + error.message);
         }
