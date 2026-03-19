@@ -394,13 +394,6 @@ mainForm.addEventListener('submit', async (e) => {
         { id: 'file_address', label: 'Proof of Address' }
     ];
 
-    for (let f of requiredFiles) {
-        if (!document.getElementById(f.id).files[0]) {
-            alert(`Please select your ${f.label} before continuing.`);
-            return; // Stops the upload if a file is missing
-        }
-    }
-
     const uploadBtn = document.getElementById('uploadBtn');
     uploadBtn.innerText = "Uploading... Please wait";
     uploadBtn.disabled = true;
