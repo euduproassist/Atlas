@@ -8,6 +8,20 @@ const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
 let syncTimer;
 
+    const filesToUpload = [
+        { id: 'file_id', name: 'ID_Passport' },
+        { id: 'file_birth', name: 'Birth_Certificate' },
+        { id: 'file_marriage', name: 'Marriage_Certificate' },
+        { id: 'file_matric', name: 'Matric_Certificate' },
+        { id: 'file_grade11', name: 'Grade_11_Results' },
+        { id: 'file_transcripts', name: 'Transcripts' },
+        { id: 'file_address', name: 'Proof_of_Address' },
+        { id: 'file_pop', name: 'Proof_of_Payment' },
+        { id: 'file_sponsor', name: 'Sponsor_ID' },
+        { id: 'file_motivation', name: 'Motivation_Letter' },
+        { id: 'file_cv', name: 'CV' }
+    ];
+
 window.toggleOtherNationality = function(value) {
     const otherGroup = document.getElementById('otherNationalityGroup');
     const otherInput = document.getElementById('otherNationality');
@@ -427,20 +441,6 @@ for (let f of requiredFiles) {
     const uploadBtn = document.getElementById('uploadBtn');
     uploadBtn.innerText = "Uploading... Please wait";
     uploadBtn.disabled = true;
-
-    const filesToUpload = [
-        { id: 'file_id', name: 'ID_Passport' },
-        { id: 'file_birth', name: 'Birth_Certificate' },
-        { id: 'file_marriage', name: 'Marriage_Certificate' },
-        { id: 'file_matric', name: 'Matric_Certificate' },
-        { id: 'file_grade11', name: 'Grade_11_Results' },
-        { id: 'file_transcripts', name: 'Transcripts' },
-        { id: 'file_address', name: 'Proof_of_Address' },
-        { id: 'file_pop', name: 'Proof_of_Payment' },
-        { id: 'file_sponsor', name: 'Sponsor_ID' },
-        { id: 'file_motivation', name: 'Motivation_Letter' },
-        { id: 'file_cv', name: 'CV' }
-    ];
 
     const uploadPromises = filesToUpload.map(async (f) => {
         const fileInput = document.getElementById(f.id);
