@@ -111,6 +111,7 @@ onAuthStateChanged(auth, async (user) => {
                         input.value = draft[key];
                     }
                 });
+            }
 
        // REBUILD SUBJECT ROWS
         if (draft.subjects && draft.subjects.length > 0) {
