@@ -108,6 +108,23 @@ onAuthStateChanged(auth, async (user) => {
                     if (input) { input.value = data.draft[key];
                         input.dispatchEvent(new Event('input'));
                                }
+             // 1. Restore the correct Step/Page
+           if (data.currentStep) {
+            currentStep = data.currentStep;
+            // Hide all steps first
+            document.getElementById('step1Container').style.display = 'none';
+            document.getElementById('step2Container').style.display = 'none';
+            document.getElementById('step3Container').style.display = 'none';
+            
+            // Show the saved step
+            document.getElementById(`step${currentStep}Container`).style.display = 'block';
+            
+            // Update progress bar UI (dots)
+            for(let i=1; i<=currentStep; i++) {
+                document.getElementById(`dot${i}`).classList.add('active');
+                if(i < currentStep) document.getElementById(`line${i}`).classList.add('active');
+                  }
+               }
 
                 });
                 if (data.draft['examBody'] === 'Other') {
