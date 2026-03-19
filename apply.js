@@ -393,6 +393,20 @@ mainForm.addEventListener('submit', async (e) => {
         { id: 'file_matric', label: 'Matric Certificate' },
         { id: 'file_address', label: 'Proof of Address' }
     ];
+// 1. Improved Validation: Check Cloud + Local Input
+const docSnap = await getDoc(doc(db, "drafts", user.uid));
+const existingDocs = docSnap.exists() ? (docSnap.data().documents || {}) : {};
+
+for (let f of requiredFiles) {
+    const fileInput = document.getElementById(f.id);
+    const alreadyUploaded = existingDocs[filesToUpload.find(file => file.id === f.id).name];
+    
+    if (!fileInput.files[0] && !alreadyUploaded) {
+        alert(`Please select your ${f.label} before continuing.`);
+        return;
+    }
+}
+
 
     const uploadBtn = document.getElementById('uploadBtn');
     uploadBtn.innerText = "Uploading... Please wait";
