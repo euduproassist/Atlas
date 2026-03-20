@@ -272,6 +272,47 @@ function viewDocuments(docs) {
     alert(list + "\nTo view/download, use the main file links.");
 }
 
+window.downloadSummary = function(type) {
+    if(type === 'pdf') {
+        // This opens the browser print dialog
+        // Because your modal is already longitudinal (Top-to-bottom), 
+        // printing the 'modalBody' creates the professional document you need.
+        const printContent = document.getElementById('modalBody').innerHTML;
+        const originalContent = document.body.innerHTML;
+        
+        document.body.innerHTML = `
+            <div style="padding: 40px; font-family: Arial, sans-serif;">
+                <h1 style="text-align:center; border-bottom: 2px solid #333;">OFFICIAL STUDENT APPLICATION SUMMARY</h1>
+                ${printContent}
+            </div>`;
+            
+        window.print();
+        document.body.innerHTML = originalContent;
+        location.reload(); // Restore the dashboard
+    } else {
+        alert("Excel/Word export requires an external library (like SheetJS), but the PDF is ready!");
+    }
+};
+
+window.editDetails = async function() {
+    const newName = prompt("Enter corrected Full Names for this student:");
+    
+    if (newName && currentAppId) {
+        try {
+            const appRef = doc(db, "applications", currentAppId);
+            // This updates the 'step1' object inside Firestore so the student sees the fix
+            await updateDoc(appRef, {
+                "step1.fullNames": newName,
+                "lastUpdated": new Date()
+            });
+            alert("Success! The Student's portal has been updated with the new name.");
+            location.reload(); 
+        } catch (error) {
+            console.error("Sync Error:", error);
+            alert("Failed to sync change to student portal.");
+        }
+    }
+};
 
 
 
