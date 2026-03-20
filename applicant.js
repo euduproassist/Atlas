@@ -108,6 +108,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
                 </div>
             </div>
 
+            <div style="width: 100%; overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; text-align: left;">
                 <thead>
                     <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
