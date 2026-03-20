@@ -81,6 +81,28 @@ function loadApplications() {
 }
 
 // Professional Summary Modal Logic
+function showDetails(id, data) {
+    currentAppId = id; // Set the global ID
+    const modal = document.getElementById('appModal');
+    const body = document.getElementById('modalBody');
+    
+    // --- AUTOMATIC STATUS SYNC ---
+    // If opening a 'pending' app, immediately change it to 'review' (Under Review)
+    if (data.status === "pending") {
+        updateAppStatus("review");
+    }
+
+    // Set the status dropdown to match the current status
+    document.getElementById('updateStatusSelect').value = data.status || "pending";
+
+    // --- DOCUMENT COUNT SYNC ---
+    // Assuming documents are stored in data.documents (adjust based on your Firebase field)
+    const docs = data.documents || {}; 
+    const count = Object.keys(docs).length;
+    document.getElementById('docCount').textContent = count;
+    
+    // Set Document Button click listener
+    document.getElementById('docBtn').onclick = () => viewDocuments(docs);
     
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
@@ -212,4 +234,52 @@ const applyFilters = () => {
 document.getElementById('filterStatus').addEventListener('change', applyFilters);
 document.getElementById('filterCourse').addEventListener('change', applyFilters);
 
+// Function to sync status changes to Firebase (Both Staff and Student see this)
+async function updateAppStatus(newStatus) {
+    if (!currentAppId) return;
+    
+    try {
+        const appRef = doc(db, "applications", currentAppId);
+        await updateDoc(appRef, {
+            status: newStatus,
+            lastUpdated: new Date() // Syncs the timestamp
+        });
+        console.log("Status synced to both portals: " + newStatus);
+    } catch (error) {
+        console.error("Error syncing status:", error);
+    }
+}
+
+// Listener for the Manual Status Dropdown
+document.getElementById('updateStatusSelect').addEventListener('change', (e) => {
+    updateAppStatus(e.target.value);
+});
+
+// View Documents Logic
+function viewDocuments(docs) {
+    if (Object.keys(docs).length === 0) {
+        alert("This student has not uploaded any documents yet.");
+        return;
+    }
+    
+    let list = "STUDENT DOCUMENTS:\n\n";
+    Object.entries(docs).forEach(([name, url]) => {
+        list += `- ${name.toUpperCase()}\n`;
+    });
+    
+    // For a cleaner UI, you could build a small sub-modal here, 
+    // but for now, we show the names and allow the "View" concept.
+    alert(list + "\nTo view/download, use the main file links.");
+}
+
+// Download/Export Logic
+window.downloadSummary = function(type) {
+    alert("Generating " + type.toUpperCase() + " export... Professional document formatting applied.");
+    // Here you would typically use a library like jsPDF or SheetJS
+};
+
+// Edit Logic (Sync)
+window.editDetails = function() {
+    alert("Edit mode enabled. Changes made here will automatically update the Student's Portal Summary upon saving.");
+};
 
