@@ -147,3 +147,17 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
     }
 });
 
+let currentZoom = 1.0;
+
+window.changeZoom = function(amount) {
+    const body = document.getElementById('statusModalBody');
+    currentZoom += amount;
+    
+    // Limits: Don't let it get too small or too huge
+    if (currentZoom < 0.5) currentZoom = 0.5;
+    if (currentZoom > 1.5) currentZoom = 1.5;
+    
+    body.style.transform = `scale(${currentZoom})`;
+};
+
+
