@@ -89,7 +89,7 @@ function showDetails(id, data) {
     // --- AUTOMATIC STATUS SYNC ---
     // If opening a 'pending' app, immediately change it to 'review' (Under Review)
     if (data.status === "pending") {
-        updateAppStatus("review");
+        updateAppStatus("under review");
     }
 
     // Set the status dropdown to match the current status
