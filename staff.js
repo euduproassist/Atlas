@@ -272,14 +272,6 @@ function viewDocuments(docs) {
     alert(list + "\nTo view/download, use the main file links.");
 }
 
-// Download/Export Logic
-window.downloadSummary = function(type) {
-    alert("Generating " + type.toUpperCase() + " export... Professional document formatting applied.");
-    // Here you would typically use a library like jsPDF or SheetJS
-};
 
-// Edit Logic (Sync)
-window.editDetails = function() {
-    alert("Edit mode enabled. Changes made here will automatically update the Student's Portal Summary upon saving.");
-};
+
 
