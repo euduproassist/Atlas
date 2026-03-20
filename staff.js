@@ -69,7 +69,7 @@ function loadApplications() {
                 <td><strong>${displayId}</strong></td>
                 <td>${studentName}</td>
                 <td>${course}</td>
-                <td><span class="status status-${status}">${status.toUpperCase()}</span></td>
+                <td><span class="status status-${status.replace(/\s/g, '')}">${status.toUpperCase()}</span></td>
                 <td>${dateSub}</td>
             `;
 
