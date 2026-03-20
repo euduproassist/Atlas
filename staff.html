@@ -246,9 +246,7 @@
     <div style="display: flex; gap: 10px; align-items: center;">
         <!-- 1. Action Dropdown -->
         <div style="position: relative; display: inline-block;">
-            <button class="btn-save" style="padding: 8px 15px; font-size: 0.8rem;" onclick="document.getElementById('actionDrop').classList.toggle('show')">
-                <i class="fas fa-tools"></i> Actions <i class="fas fa-caret-down"></i>
-            </button>
+
             <div id="actionDrop" style="display:none; position: absolute; right: 0; background: white; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 4px; width: 160px; z-index: 100;">
                 <a href="#" onclick="editDetails()" style="display: block; padding: 10px; color: #333; text-decoration: none; font-size: 0.85rem; border-bottom: 1px solid #eee;"><i class="fas fa-edit"></i> Edit Details</a>
                 <a href="#" onclick="downloadSummary('pdf')" style="display: block; padding: 10px; color: #333; text-decoration: none; font-size: 0.85rem;"><i class="fas fa-file-pdf"></i> Download PDF</a>
