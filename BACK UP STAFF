@@ -5,107 +5,234 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Portal - Management Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --primary: #4a90e2; --bg: #f4f7f9; --border: #e1e4e8; --text: #333; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background-color: var(--bg); padding: 40px; color: var(--text); }
+<style>
+    :root { 
+        --primary: #4a90e2; 
+        --bg: #f4f7f9; 
+        --border: #e1e4e8; 
+        --text: #333; 
+    }
 
-        .dashboard-container { max-width: 1100px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 30px; }
-        h1 { margin-bottom: 25px; font-size: 1.8rem; font-weight: 700; color: #2c3e50; }
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* Toolbar / Filters */
-        .toolbar { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 15px; flex-wrap: wrap; }
-        .filters { display: flex; gap: 10px; }
-        select, .search-bar input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; background: white; font-size: 0.9rem; }
-        .search-bar { position: relative; flex-grow: 1; max-width: 400px; }
-        .search-bar input { width: 100%; padding-right: 35px; }
-        .search-bar i { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #999; }
+    /* 1. Dashboard Header - Full Width & Clean */
+    .dashboard-header {
+        background: white;
+        padding: 12px 25px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between; /* Pushes Logo to left, Toolbar to right */
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
 
-        /* Table Design */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); font-size: 0.85rem; text-transform: uppercase; color: #666; }
-        td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
-        tr:hover { background-color: #fcfdfe; cursor: pointer; }
+    .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2c3e50;
+        white-space: nowrap; /* Prevents logo text from wrapping */
+    }
 
-        /* Status Pills */
-        .status { padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
-        .status-pending { background: #e3f2fd; color: #1976d2; }
-        .status-review { background: #f3e5f5; color: #7b1fa2; }
-        .status-missing { background: #fff3e0; color: #ef6c00; }
-        .status-prov_accepted { background: #e8f5e9; color: #2e7d32; }
-        .status-uncon_accepted { background: #dcedc8; color: #33691e; border: 1px solid #aece90; }
-        .status-waiting { background: #eceff1; color: #546e7a; }
-        .status-rejected { background: #ffebee; color: #c62828; }
+    .logo-section i { color: var(--primary); }
 
-        /* Ticket Details Section */
-        .ticket-details { margin-top: 30px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-        .details-header { background: #f8f9fa; padding: 12px 20px; font-weight: 600; border-bottom: 1px solid var(--border); }
-        .details-body { padding: 20px; display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .details-body p { font-size: 0.95rem; line-height: 1.6; }
-        .details-body strong { color: #555; width: 140px; display: inline-block; }
+    /* 2. Toolbar (Filters + Search) */
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Spacing between filters and search */
+    }
 
-        /* Note Section */
-        .note-footer { border-top: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; gap: 10px; background: #fcfcfc; }
-        .note-footer input { flex-grow: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; }
-        .btn-save { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; }
-        .btn-save:hover { background: #357abd; }
-    </style>
+    .filters {
+        display: flex;
+        gap: 8px;
+    }
+
+    select, .search-bar input {
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: #fff;
+        font-size: 0.85rem;
+        outline: none;
+        transition: border 0.2s;
+    }
+
+    select:focus, .search-bar input:focus { border-color: var(--primary); }
+
+    .search-bar {
+        position: relative;
+        min-width: 240px;
+    }
+
+    .search-bar input { width: 100%; padding-right: 35px; }
+
+    .search-bar i {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+    }
+
+    /* 3. Main Table Content - Full Screen */
+    .main-content {
+        width: 100%;
+        padding: 0;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto; /* Allows horizontal swipe on small phones */
+        background: white;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px; /* Prevents text squashing on mobile */
+    }
+
+    th {
+        text-align: left;
+        padding: 16px 20px;
+        background: #f8f9fa;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #666;
+        border-bottom: 2px solid var(--border);
+        letter-spacing: 0.5px;
+    }
+
+    td {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.92rem;
+        color: #444;
+    }
+
+    tr:hover { background-color: #fcfdfe; cursor: pointer; }
+
+    /* 4. Status Pills */
+    .status { padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .status-pending { background: #e3f2fd; color: #1976d2; }
+    .status-review { background: #f3e5f5; color: #7b1fa2; }
+    .status-missing { background: #fff3e0; color: #ef6c00; }
+    .status-prov_accepted { background: #e8f5e9; color: #2e7d32; }
+    .status-uncon_accepted { background: #dcedc8; color: #33691e; border: 1px solid #aece90; }
+    .status-waiting { background: #eceff1; color: #546e7a; }
+    .status-rejected { background: #ffebee; color: #c62828; }
+
+    /* 5. Ticket Details Popup */
+    .ticket-details {
+        margin: 25px;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .details-header { background: #f8f9fa; padding: 15px 20px; font-weight: 700; border-bottom: 1px solid var(--border); }
+    .details-body { 
+        padding: 25px; 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+        gap: 20px; 
+    }
+    .details-body p { font-size: 0.95rem; line-height: 1.5; }
+    .details-body strong { color: #666; width: 130px; display: inline-block; }
+
+    /* Note Section */
+    .note-footer { border-top: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; gap: 15px; background: #fcfcfc; }
+    .note-footer input { flex-grow: 1; padding: 12px; border: 1px solid var(--border); border-radius: 6px; }
+    .btn-save { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .btn-save:hover { background: #357abd; }
+
+    /* 6. UNIVERSAL RESPONSIVENESS */
+    @media (max-width: 1024px) {
+        .dashboard-header { flex-direction: column; align-items: flex-start; padding: 15px; }
+        .toolbar { width: 100%; justify-content: space-between; margin-top: 10px; }
+        .search-bar { flex-grow: 1; }
+    }
+
+    @media (max-width: 768px) {
+        .hide-mobile { display: none; }
+        .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+        .filters { justify-content: space-between; }
+        .filters select { flex: 1; }
+        .search-bar { width: 100%; }
+        .ticket-details { margin: 10px; }
+    }
+</style>
+
 </head>
 <body>
 
-<div class="dashboard-container">
-    <h1>Staff Portal</h1>
-
+    <div class="dashboard-header">
+    <div class="logo-section">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Staff Management Portal</span>
+    </div>
     <div class="toolbar">
         <div class="filters">
             <select id="filterStatus">
-            <option value="All">Filter: All</option>
-            <option value="pending" selected>Pending</option>
-            <option value="review">Under Review</option>
-            <option value="missing">Missing Info</option>
-            <option value="prov_accepted">Provisionally Accepted</option>
-            <option value="uncon_accepted">Unconditionally Accepted</option>
-            <option value="waiting">Waiting List</option>
-            <option value="rejected">Rejected</option>
+                <option value="All">Filter: All</option>
+                <option value="pending" selected>Pending</option>
+                <option value="review">Under Review</option>
+                <option value="missing">Missing Info</option>
+                <option value="prov_accepted">Provisionally Accepted</option>
+                <option value="uncon_accepted">Unconditionally Accepted</option>
+                <option value="waiting">Waiting List</option>
+                <option value="rejected">Rejected</option>
             </select>
             <select id="sortDate">
                 <option value="newest">Sort: Newest</option>
                 <option value="oldest">Sort: Oldest</option>
             </select>
             <select id="filterCourse">
-            <option value="All">Filter: All Courses</option>
-            <option value="Bachelor of Computer and Information Science">Degree</option>
-            <option value="Diploma">Diploma</option>
-            <option value="Higher Certificate">Higher Certificate</option>
+                <option value="All">Filter: All Courses</option>
+                <option value="Bachelor of Computer and Information Science">Degree</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Higher Certificate">Higher Certificate</option>
             </select>
         </div>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search by Student Name or Course...">
+            <input type="text" id="searchInput" placeholder="Search Student or Course...">
             <i class="fas fa-search"></i>
         </div>
     </div>
+</div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Application ID</th>
-                <th>Student Name</th>
-                <th>Course</th>
-                <th>Status</th>
-                <th>Date Submitted</th>
-            </tr>
-        </thead>
-        <tbody id="applicationTableBody">
-            </tbody>
-    </table>
+<div class="main-content">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Student Name</th>
+                    <th>Course</th>
+                    <th>Status</th>
+                    <th class="hide-mobile">Date Submitted</th>
+                </tr>
+            </thead>
+            <tbody id="applicationTableBody"></tbody>
+        </table>
+    </div>
 
     <div class="ticket-details" id="detailsSection" style="display:none;">
-        <div class="details-header">Ticket Details</div>
-        <div class="details-body" id="detailsContent">
-            </div>
+        <div class="details-header">Application Details</div>
+        <div id="detailsContent" class="details-body"></div>
         <div class="note-footer">
-            <strong>Note Note</strong>
-            <input type="text" id="staffNote" placeholder="Type a message or internal note...">
+            <strong>Internal Note</strong>
+            <input type="text" id="staffNote" placeholder="Type a message...">
             <button class="btn-save" id="saveNoteBtn">Save Note</button>
         </div>
     </div>
@@ -114,6 +241,7 @@
 <script type="module" src="staff.js"></script>
 </body>
 </html>
+
 
 
 
