@@ -3,12 +3,7 @@ import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc } from "
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 const tableBody = document.getElementById('applicationTableBody');
-const detailsSection = document.getElementById('detailsSection');
-const detailsContent = document.getElementById('detailsContent');
-const staffNoteInput = document.getElementById('staffNote');
 const filterCourse = document.getElementById('filterCourse');
-
-const saveNoteBtn = document.getElementById('saveNoteBtn');
 
 let selectedAppId = null;
 
@@ -76,7 +71,7 @@ function loadApplications() {
                 <td>${dateSub}</td>
             `;
 
-            row.onclick = () => showDetails(id, data, displayId);
+            row.onclick = () => showDetails(id, data);
             tableBody.appendChild(row);
 
         });
