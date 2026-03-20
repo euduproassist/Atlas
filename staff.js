@@ -81,9 +81,6 @@ function loadApplications() {
 }
 
 // Professional Summary Modal Logic
-function showDetails(id, data) {
-    const modal = document.getElementById('appModal');
-    const body = document.getElementById('modalBody');
     
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
