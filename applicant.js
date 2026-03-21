@@ -42,7 +42,48 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
+// New Modern Profile Card UI
+const triggerProfileActions = async () => {
+    const user = auth.currentUser;
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+    
+    // Fetch latest user data for the card
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const userData = userDoc.data();
 
+    body.innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+            <div style="width: 80px; height: 80px; background: #e3f2fd; color: #4a90e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 2rem;">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 style="margin-bottom: 5px;">${userData.fullName}</h2>
+            <p style="color: #666; margin-bottom: 25px;">${user.email}</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 0 auto;">
+                <button id="modalChangePass" style="padding: 12px; background: white; border: 1px solid #4a90e2; color: #4a90e2; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    <i class="fas fa-key"></i> Change Password
+                </button>
+                <button id="modalLogout" style="padding: 12px; background: #ff4d4d; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+
+    // Button Logic inside the Card
+    document.getElementById('modalChangePass').onclick = () => {
+        sendPasswordResetEmail(auth, user.email).then(() => alert("Reset link sent to " + user.email));
+    };
+    document.getElementById('modalLogout').onclick = () => {
+        if(confirm("Log out now?")) signOut(auth).then(() => window.location.href = "index.html");
+    };
+};
+
+// Re-bind the listeners to the new function
+logoutBtn.onclick = (e) => { e.stopPropagation(); triggerProfileActions(); };
+document.getElementById('updateProfileBtn').onclick = (e) => { e.preventDefault(); triggerProfileActions(); };
 
 // Function to show the Tracking Modal
 document.getElementById('trackStatusBtn').addEventListener('click', async () => {
