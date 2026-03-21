@@ -174,7 +174,6 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
                     </tr>
                 </tbody>
             </table>
-            </div>
         `;
 
     } catch (error) {
