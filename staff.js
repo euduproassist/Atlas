@@ -164,9 +164,13 @@ function showDetails(id, data) {
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">2. Education History</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
                     ${row("School Name", s2.schoolName)}
+                    ${row("Qualification Type", s2.examBody)}
                     ${row("Matric Year", s2.matricYear)}
-                    ${row("Qualification Type", s2.qualType)}
+                    ${row("Year Complete / To be Completed", s2.yearCompleted)}
                     ${row("Total APS Score", s2.APS)}
+                    ${row("Current Status", s2.matricStatus)}
+                    ${row("Province", s2.schoolProvince)}
+                    ${row("Country", s2.schoolCountry)}
                 </div>
 
                 <div style="background: #f9f9f9; padding: 15px; border-radius: 6px;">
