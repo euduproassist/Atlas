@@ -195,6 +195,59 @@ window.changeZoom = function(amount) {
     body.style.transform = `scale(${currentZoom})`;
 };
 
+// Contact Support Modal for TUT Arcadia
+document.querySelector('a.q-link[href="#"]:nth-child(2)').addEventListener('click', (e) => {
+    e.preventDefault();
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+
+    body.innerHTML = `
+        <div style="text-align: center; padding: 10px;">
+            <div style="margin-bottom: 20px;">
+                <i class="fas fa-graduation-cap" style="font-size: 2rem; color: #4a90e2;"></i>
+                <i class="fas fa-headset" style="font-size: 1.5rem; color: #556080; margin-left: -10px;"></i>
+                <h2 style="margin-top: 10px; color: #333;">Student Support</h2>
+                <p style="color: #666;">TUT Arcadia Campus Admissions & Technical Help</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
+                <!-- Admissions Support -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-university"></i> Admissions</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Course info, status updates, and academic requirements.</p>
+                    <a href="mailto:arcadiaadmissions@tut.ac.za" style="color: #333; font-weight: 600; text-decoration: none; font-size: 0.9rem;">arcadiaadmissions@tut.ac.za</a>
+                </div>
+
+                <!-- Document Vault Help -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-file-invoice"></i> Vault Support</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Issues with uploading IDs, certificates, or file sizes.</p>
+                    <a href="mailto:arcadiasupport@tut.ac.za" style="color: #333; font-weight: 600; text-decoration: none; font-size: 0.9rem;">arcadiasupport@tut.ac.za</a>
+                </div>
+
+                <!-- Technical Assistance -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-tools"></i> System Help</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Login issues, password resets, or portal bugs.</p>
+                    <button onclick="window.location.href='mailto:techsupport@tut.ac.za'" style="background: none; border: none; color: #4a90e2; font-weight: 600; cursor: pointer; padding: 0;">Report a Bug →</button>
+                </div>
+
+                <!-- Instant Help -->
+                <div style="padding: 15px; border: 1px solid #25D366; border-radius: 8px; background: #f0fdf4;">
+                    <h4 style="color: #25D366; margin-bottom: 8px;"><i class="fab fa-whatsapp"></i> Instant Chat</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Quick chat with an advisor during office hours.</p>
+                    <a href="https://wa.me/27123825911" target="_blank" style="color: #128C7E; font-weight: 700; text-decoration: none;">Chat via WhatsApp</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.8rem; color: #999;">
+                <p><i class="fas fa-clock"></i> Office Hours: Mon - Fri (08:00 - 15:30)</p>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+});
+
 
 
 
