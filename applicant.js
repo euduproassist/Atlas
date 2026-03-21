@@ -205,7 +205,6 @@ document.querySelector('a.q-link[href="#"]:nth-child(2)').addEventListener('clic
         <div style="text-align: center; padding: 10px;">
             <div style="margin-bottom: 20px;">
                 <i class="fas fa-graduation-cap" style="font-size: 2rem; color: #4a90e2;"></i>
-                <i class="fas fa-headset" style="font-size: 1.5rem; color: #556080; margin-left: -10px;"></i>
                 <h2 style="margin-top: 10px; color: #333;">Student Support</h2>
                 <p style="color: #666;">TUT Arcadia Campus Admissions & Technical Help</p>
             </div>
