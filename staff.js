@@ -144,7 +144,8 @@ function showDetails(id, data) {
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; mt: 10px;">
                     ${row("Email", s1.email)}
                     ${row("Mobile Number", s1.mobile)}
-
+                    ${row("Physical Address", s1.address ? `${s1.address.street}, ${s1.address.suburb}, ${s1.address.province}, ${s1.address.postalCode}` : '')}
+                    ${s1.postalAddress ? row("Postal Address", `${s1.postalAddress.street}, ${s1.postalAddress.suburb}, ${s1.postalAddress.province}, ${s1.postalAddress.postalCode}`) : ''}
                     ${row("Next of Kin", `${s1.nextOfKinName} (${s1.nextOfKinContact})`)}
                 </div>
 
