@@ -42,15 +42,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Logout Functionality
-logoutBtn.addEventListener('click', () => {
-    if(confirm("Do you want to log out?")) {
-        signOut(auth).then(() => {
-            window.location.href = "index.html";
-        });
-    }
-});
-
 // Function to show the Tracking Modal
 document.getElementById('trackStatusBtn').addEventListener('click', async () => {
     const user = auth.currentUser;
