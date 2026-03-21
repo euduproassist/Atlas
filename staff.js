@@ -147,9 +147,16 @@ function showDetails(id, data) {
                     ${row("Alternative Number", s1.altPhone)}
                     ${row("Physical Address", s1.address ? `${s1.address.street}, ${s1.address.suburb}, ${s1.address.province}, ${s1.address.postalCode}, ${s1.address.country}` : '')}
                     ${s1.postalAddress ? row("Postal Address", `${s1.postalAddress.street}, ${s1.postalAddress.suburb}, ${s1.postalAddress.province}, ${s1.postalAddress.postalCode}`) : ''}
-                    
+                    ${row("Next of Kin", s1.nokName ? `${s1.nokName} (${s1.nokRelation}) - ${s1.nokPhone}` : '')}
                 </div>
 
+           ${s1.disability === 'Yes' ? `
+           <div style="margin-top: 15px; padding: 10px; background: #fff5f5; border-radius: 4px; border-left: 4px solid #e74c3c;">
+           <strong style="font-size: 0.75rem; color: #c0392b; text-transform: uppercase;">Disability Information:</strong>
+           <p style="font-size: 0.92rem; color: #333; margin-top: 5px;">
+            ${s1.disabilityDetails && s1.disabilityDetails.length > 0 ? s1.disabilityDetails.join(', ') : 'Yes - Details not specified'}
+            </p>
+            </div>` : ''}
             </div>
 
             <!-- 2. Academic History (Matric) -->
