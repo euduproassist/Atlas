@@ -170,7 +170,6 @@ function showDetails(id, data) {
                     ${row("Current Status", s2.currentStatus)}
                     ${row("Province", s2.schoolProvince)}
                     ${row("Country", s2.schoolCountry)}
-                    ${row("Total APS Score", s2.APS)}
                     ${row("NBT Registration Number", s2.nbtNum)} 
                 </div>
 
