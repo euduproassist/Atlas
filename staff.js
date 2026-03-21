@@ -130,6 +130,15 @@ function showDetails(id, data) {
                     ${row("Nationality", s1.nationality)}
                     ${row("Home Language", s1.language)}
                 </div>
+
+                 <h4 style="font-size: 0.8rem; color: #999; margin-top: 20px; text-transform: uppercase;">Equity & Status</h4>
+                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px;">
+                 ${row("Race", s1.race)}
+                 ${row("Marital Status", s1.marital)}
+                 ${row("Employment", s1.employment)}
+                 ${row("Social Grant", s1.socialGrant)}
+                 ${row("Citizenship Status", s1.citizenship)}
+                </div>
                 
                 <h4 style="font-size: 0.8rem; color: #999; margin-top: 20px; text-transform: uppercase;">Contact & Address</h4>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; mt: 10px;">
