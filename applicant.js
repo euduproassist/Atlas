@@ -248,3 +248,96 @@ document.querySelector('a.q-link[href="#"]:nth-child(2)').addEventListener('clic
     modal.style.display = 'flex';
 });
 
+// --- STUDENT PORTAL MASTER GUIDELINE DATA ---
+const guideSections = [
+    {
+        title: "1. Introduction to the Unified Student Portal",
+        content: "Welcome to the official Student Application Portal. This system is designed as a high-efficiency, R0-cost architecture powered by Firebase. It combines a dynamic multi-step application form with a secure Document Vault. The portal ensures that your data is never lost, even if your internet disconnects, using our proprietary 'Silent Cloud Sync' technology."
+    },
+    {
+        title: "2. The Authentication & Security Layer",
+        content: "Your security is our priority. The portal uses Firebase Authentication. Users must verify their email addresses before accessing the dashboard. If you attempt to log in without verification, the system will automatically redirect you. You can manage your security via the Profile Card, where you can trigger a Password Reset Email directly to your inbox."
+    },
+    {
+        title: "3. Understanding 'Silent Cloud Sync'",
+        content: "Unlike traditional forms where you lose data if you refresh, this portal saves every keystroke. We have implemented a 2-second 'Debounce' timer. When you stop typing for 2000ms, the system automatically pushes your progress to the 'drafts' collection in Firestore. This ensures a seamless experience across different devices."
+    },
+    {
+        title: "4. Step 1: Personal & Demographic Information",
+        content: "In this section, you must provide your legal identity details. Note: Our system has been updated to no longer store sensitive ID or Phone numbers permanently until final submission for your privacy. You must specify your nationality; selecting 'Other' will dynamically generate an additional input field for country specification."
+    },
+    {
+        title: "5. Disability & Support Requirements",
+        content: "We are committed to inclusivity. If you indicate a disability, the system expands to allow up to three specific declarations. Use the 'Add' buttons to reveal additional input rows. This data is used to ensure the campus can provide the necessary physical or academic support upon your arrival."
+    },
+    {
+        title: "6. Step 2: Academic History & Matriculation",
+        content: "You are required to select your matriculation year and examination body. If your exam body is not listed, select 'Other' to provide manual details. The system uses a 'Populate' loop to generate years ranging from 50 years ago to 10 years into the future, ensuring all applicants are covered."
+    },
+    {
+        title: "7. The Dynamic Subject & APS Tracker",
+        content: "The Subject Marks section is completely dynamic. You must enter your subject name, percentage, and level. The system will only allow you to add a new row once the current row is fully completed. This ensures data integrity. Your APS (Admission Point Score) is calculated based on these entries."
+    },
+    {
+        title: "8. Post-School Qualifications (Advanced)",
+        content: "For transfer students or post-graduates, the Post-School section tracks previous institutional history. If you select 'Discontinued' as a status, the 'Year Completed' field will automatically disable, as the system logic understands no completion date exists for discontinued studies."
+    },
+    {
+        title: "9. Programme Choices & Campus Selection",
+        content: "You are allowed two choices. Your 1st choice is your primary goal. The system logic is programmed to only evaluate your 2nd choice if the 1st choice is 'Rejected' by the admissions office. You must also select your preferred campus (e.g., Arcadia) and your mode of attendance (Full-time/Part-time)."
+    },
+    {
+        title: "10. Step 3: The Document Vault (Secure Uploads)",
+        content: "The Document Vault utilizes Firebase Storage. You must upload clear PDF or Image scans of your ID, Matric results, and Proof of Payment. Once a file is successfully uploaded, the system marks it with a green 'Already Uploaded ✅' badge. This prevents redundant uploads and saves you data costs."
+    },
+    {
+        title: "11. Step 4: Final Review & Submission",
+        content: "The final step generates a 'Review Summary'. This is a read-only snapshot of your entire application. Before hitting 'Submit', ensure all details are correct. Upon submission, your 'Draft' is converted into a formal 'Application' document, and your status is set to 'Pending'."
+    },
+    {
+        title: "12. Tracking Your Application Status",
+        content: "On your dashboard, use the 'Track Status' button. This opens a real-time modal showing your Application ID and the specific status of both your 1st and 2nd choices. You can use the Zoom (+/-) buttons at the top of the tracker to adjust the text size for better readability on mobile devices."
+    },
+    {
+        title: "13. Contacting Campus Support",
+        content: "If you encounter technical bugs or academic queries, the 'Contact Support' link provides direct access to Arcadia Campus Admissions, Vault Technical Help, and a 24/7 WhatsApp Instant Chat link for quick resolutions during office hours (08:00 - 15:30)."
+    },
+    {
+        title: "14. Troubleshooting Login Issues",
+        content: "If the loader spins indefinitely, check your internet connection. The portal requires an active connection to Firebase. If you forget your password, use the 'Help Center' or the 'Update Profile' link to trigger a recovery email."
+    },
+    {
+        title: "15. Final Declaration & Legalities",
+        content: "By using this portal, you agree that the information provided is truthful. Fraudulent document uploads will lead to immediate disqualification and potential legal action. Your data is stored securely and handled according to institutional privacy policies."
+    }
+];
+
+// --- LOGIC TO OPEN THE GUIDE ---
+document.querySelector('a.q-link:last-child').addEventListener('click', (e) => {
+    e.preventDefault();
+    const overlay = document.getElementById('guideOverlay');
+    const content = document.getElementById('guideScrollContent');
+
+    // Generate the massive list of instructions
+    content.innerHTML = guideSections.map(section => `
+        <div style="margin-bottom: 50px;">
+            <h2 style="color: #4a90e2; font-size: 1.4rem; margin-bottom: 15px; border-left: 4px solid #4a90e2; padding-left: 15px;">
+                ${section.title}
+            </h2>
+            <p style="font-size: 1.05rem; line-height: 1.8; color: #444; text-align: justify;">
+                ${section.content}
+            </p>
+        </div>
+    `).join('');
+
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Stop background scroll
+});
+
+// --- CLOSE LOGIC ---
+document.getElementById('closeGuide').onclick = () => {
+    document.getElementById('guideOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Re-enable scroll
+};
+
+
