@@ -1,5 +1,6 @@
 import { auth } from './firebase-config.js';
-import { signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
 
 const loginForm = document.getElementById('loginForm');
 const togglePassword = document.querySelector('.password-toggle');
@@ -44,10 +45,6 @@ loginForm.addEventListener('submit', (e) => {
         });
 });
 
-// 1. Add this to your top import line
-import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-
-// 2. Add this at the bottom of login.js
 document.getElementById('forgotPass').addEventListener('click', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value || prompt("Please enter your email address:");
