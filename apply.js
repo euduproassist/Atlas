@@ -634,9 +634,10 @@ window.renderReviewSummary = async function() {
             <p><strong>Identity Number:</strong> ${s1.idNumber}</p>
             <p><strong>Email:</strong> ${s1.email}</p>
             <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
-            <p><strong>1st Choice:</strong> ${s2.choice1}</p>
+            <p><strong>1st Choice:</strong> ${s2.choice1 || 'None'}</p>
+            <p><strong>2nd Choice:</strong> ${s2.choice2 || 'None'}</p>
             <p><strong>Academic Year:</strong> ${s2.acadYear}</p>
-            <p><strong>Total APS:</strong> ${s2.APS}</p>
+            <p><strong>Total APS:</strong> ${s2.APS || 'N/A'}</p>
             <p style="margin-top:15px; color:#27ae60; font-weight:600;"><i class="fas fa-check-circle"></i> Documents have been uploaded to the vault.</p>
         `;
     }
