@@ -195,4 +195,61 @@ window.changeZoom = function(amount) {
     body.style.transform = `scale(${currentZoom})`;
 };
 
+// Contact Support Modal for TUT Arcadia
+document.querySelector('.links-grid .q-link:nth-child(2)').onclick = (e) => {
+    e.preventDefault();
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+
+    body.innerHTML = `
+        <div style="text-align: center; padding: 10px;">
+            <div style="margin-bottom: 25px;">
+                <i class="fas fa-graduation-cap" style="font-size: 2.5rem; color: #4a90e2;"></i>
+                <i class="fas fa-headset" style="font-size: 1.8rem; color: #556080; margin-left: 10px;"></i>
+                <h2 style="margin-top: 15px; color: #333; font-weight: 600;">Student Support</h2>
+                <p style="color: #666; font-size: 0.95rem;">Official help desk for TUT Arcadia Campus applicants</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; text-align: left;">
+                
+                <!-- Admissions Support -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-university"></i> Admissions & Status</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 12px;">For queries regarding course requirements, status updates, or selection outcomes.</p>
+                    <a href="mailto:arcadiaadmissions@tut.ac.za" style="color: #4a90e2; font-weight: 600; text-decoration: none; font-size: 0.9rem;">arcadiaadmissions@tut.ac.za</a>
+                </div>
+
+                <!-- Document Vault Help -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-file-invoice"></i> Document Vault Assistance</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 12px;">Difficulty uploading certified IDs, results, or data correction requests.</p>
+                    <a href="mailto:arcadiavault@tut.ac.za" style="color: #4a90e2; font-weight: 600; text-decoration: none; font-size: 0.9rem;">arcadiavault@tut.ac.za</a>
+                </div>
+
+                <!-- Technical Portal Help -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-tools"></i> Technical Support</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 12px;">Report bugs, login failures, or system errors on the student portal.</p>
+                    <button onclick="window.location.href='mailto:portalhelp@tut.ac.za'" style="background: #f8f9fa; border: 1px solid #ddd; color: #555; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Open Support Ticket</button>
+                </div>
+
+                <!-- WhatsApp Channel -->
+                <div style="padding: 15px; border: 1px solid #25D366; border-radius: 8px; background: #f0fdf4;">
+                    <h4 style="color: #25D366; margin-bottom: 8px;"><i class="fab fa-whatsapp"></i> Instant Chat (Admissions)</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 12px;">Quick inquiries regarding your 4-step process during office hours.</p>
+                    <a href="https://wa.me/27123825911" target="_blank" style="color: #128C7E; font-weight: 700; text-decoration: none; font-size: 0.95rem;">Chat via WhatsApp →</a>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 30px; padding: 15px; border-top: 1px solid #eee; font-size: 0.85rem; color: #888;">
+                <p><i class="far fa-clock"></i> <strong>Office Hours:</strong> Monday - Friday | 08:00 - 15:30</p>
+                <p style="margin-top: 5px;">Response time: Within 24-48 working hours</p>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+};
+
+
 
