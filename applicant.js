@@ -42,6 +42,32 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
+import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+// Unified Action Menu (Center Screen JOptionPane Style)
+const triggerProfileActions = () => {
+    const user = auth.currentUser;
+    const choice = prompt(`ACCOUNT SETTINGS - ${user.email}\n\n1. Change Password\n2. Logout\n\nEnter choice (1 or 2):`);
+
+    if (choice === "1") {
+        if (confirm("Send a password reset link to your email?")) {
+            sendPasswordResetEmail(auth, user.email)
+                .then(() => alert("Reset email sent! Please check your inbox."))
+                .catch(err => alert("Error: " + err.message));
+        }
+    } else if (choice === "2") {
+        if (confirm("Do you want to log out?")) {
+            signOut(auth).then(() => window.location.href = "index.html");
+        }
+    }
+};
+
+// Listener 1: Top Right User Menu
+logoutBtn.onclick = (e) => { e.stopPropagation(); triggerProfileActions(); };
+
+// Listener 2: Quick Link Update Profile
+document.getElementById('updateProfileBtn').onclick = (e) => { e.preventDefault(); triggerProfileActions(); };
+
 // Function to show the Tracking Modal
 document.getElementById('trackStatusBtn').addEventListener('click', async () => {
     const user = auth.currentUser;
