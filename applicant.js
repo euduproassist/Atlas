@@ -247,6 +247,104 @@ document.querySelector('a.q-link[href="#"]:nth-child(2)').addEventListener('clic
     modal.style.display = 'flex';
 });
 
+const guideOverlay = document.getElementById('guideOverlay');
+const guideContent = document.getElementById('guidePageContent');
+const pageIndicator = document.getElementById('pageNumber');
+let currentPage = 0;
+
+const guidePages = [
+    {
+        title: "1. Introduction & Security",
+        content: `<h3>Welcome to the Student Portal</h3>
+                  <p>This portal is designed to streamline your application to TUT Arcadia. We use secure Firebase Authentication to ensure your data is protected.</p>
+                  <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #4a90e2; margin: 20px 0;">
+                    <strong>Note:</strong> Your session is monitored. If you are not logged in, the system will automatically redirect you to the login page for security.
+                  </div>`
+    },
+    {
+        title: "2. Real-Time Auto-Save (The Cloud Sync)",
+        content: `<h3>Never Lose Your Progress</h3>
+                  <p>Our system uses a <strong>'Silent Sync'</strong> technology. When you type in the application form, the portal waits for 2 seconds of inactivity and automatically pushes your data to the cloud.</p>
+                  <ul>
+                    <li>If your internet cuts out, your data is safe.</li>
+                    <li>If you close the browser, you can continue exactly where you left off.</li>
+                    <li>Look for the 'Already Uploaded' checkmarks in Step 3 to see what we've saved.</li>
+                  </ul>`
+    },
+    {
+        title: "3. Step 1: Personal Information",
+        content: `<h3>Completing your Profile</h3>
+                  <p>In this section, you provide your identity and contact details. We have removed the collection of sensitive ID numbers from visible fields for your safety.</p>
+                  <p><strong>Nationality:</strong> If you select 'Other', a mandatory field will appear. You must specify your country to proceed to Step 2.</p>`
+    },
+    {
+        title: "4. Step 2: Academic History",
+        content: `<h3>School Results & APS</h3>
+                  <p>This is the most critical part of your application. You must enter your matric subjects one by one.</p>
+                  <p>The <strong>'Add Subject'</strong> button only appears once the current row is fully completed (Subject Name, Percentage, and Level). This ensures your APS calculation is accurate.</p>`
+    },
+    {
+        title: "5. Post-School Qualifications",
+        content: `<h3>Previous Studies</h3>
+                  <p>If you have studied before, use this section. If you mark a qualification as <strong>'Discontinued'</strong>, the system will intelligently disable the 'Year Completed' field as it is no longer applicable.</p>`
+    },
+    {
+        title: "6. Step 3: The Document Vault",
+        content: `<h3>Secure File Storage</h3>
+                  <p>The Vault handles 11 specific document types (ID, Matric Results, etc.).</p>
+                  <p>Once a file is uploaded, the cloud generates a unique URL. In the portal, these files will be marked with a green ✅. You do not need to re-upload files that are already marked as saved.</p>`
+    },
+    {
+        title: "7. Step 4: Final Review",
+        content: `<h3>Verification before Submission</h3>
+                  <p>Before final submission, the system generates a <strong>Summary Card</strong>. It pulls your Choice 1 preference, your calculated APS, and verifies your Document Vault status. Review this carefully; once submitted, the data moves from 'Draft' to 'Final Application'.</p>`
+    },
+    {
+        title: "8. Tracking Status",
+        content: `<h3>Outcome Logic</h3>
+                  <p>When you click 'Track Status', the portal interprets your results:</p>
+                  <ul>
+                    <li><strong>Accepted:</strong> Your 1st choice is successful.</li>
+                    <li><strong>Rejected:</strong> The system automatically activates your 2nd choice for review.</li>
+                    <li><strong>Pending:</strong> Staff are still evaluating your primary choice.</li>
+                  </ul>`
+    }
+    // You can add up to 15-20 pages here following the same format
+];
+
+function renderPage() {
+    const page = guidePages[currentPage];
+    guideContent.innerHTML = `<h2 style="color:#4a90e2; margin-bottom:10px;">${page.title}</h2>${page.content}`;
+    pageIndicator.innerText = `Page ${currentPage + 1} of ${guidePages.length}`;
+    
+    // Scroll to top of guide
+    guideOverlay.scrollTop = 0;
+}
+
+// Event Listeners
+document.querySelector('a.q-link:nth-child(3)').onclick = (e) => {
+    e.preventDefault();
+    guideOverlay.style.display = 'block';
+    renderPage();
+};
+
+document.getElementById('closeGuide').onclick = () => guideOverlay.style.display = 'none';
+
+document.getElementById('nextPage').onclick = () => {
+    if (currentPage < guidePages.length - 1) {
+        currentPage++;
+        renderPage();
+    }
+};
+
+document.getElementById('prevPage').onclick = () => {
+    if (currentPage > 0) {
+        currentPage--;
+        renderPage();
+    }
+};
+
+
 
 
 
