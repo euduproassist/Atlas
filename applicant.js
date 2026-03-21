@@ -322,7 +322,18 @@ function renderPage() {
 }
 
 // Event Listeners
-
+const helpBtn = document.getElementById('openHelpGuide');
+if (helpBtn) {
+    helpBtn.onclick = (e) => {
+        e.preventDefault();
+        const guideOverlay = document.getElementById('guideOverlay');
+        if (guideOverlay) {
+            guideOverlay.style.display = 'block';
+            currentPage = 0; 
+            renderPage();
+        }
+    };
+}
 
 document.getElementById('closeGuide').onclick = () => guideOverlay.style.display = 'none';
 
