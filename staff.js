@@ -185,6 +185,23 @@ function showDetails(id, data) {
                 </div>
             </div>
 
+<!-- 3. Post-School Qualifications -->
+${s2.prevQuals && s2.prevQuals.length > 0 ? `
+<div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
+    <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">3. Previous Qualifications</h3>
+    ${s2.prevQuals.map((q, index) => `
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px; ${index > 0 ? 'border-top: 1px dashed #eee; padding-top: 15px;' : ''}">
+            ${row("Institutional Name", q.institutionName)}
+            ${row("Qualification Name", q.qualName)}
+            ${row("Status", q.status)}
+            ${row("Student Number", q.studentNum)}
+            ${row("Module Percentage Average", q.average)}
+            ${row("Year Completed / To be Completed", q.year)}
+        </div>
+    `).join('')}
+</div>` : ''}
+
+
             <!-- 4. Programme Choices Section -->
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px; background: #fafcfe;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">4. Programme Choices</h3>
