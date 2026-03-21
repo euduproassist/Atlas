@@ -134,12 +134,6 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
                     <span style="color: #888; font-size: 0.85rem;">Name:</span>
                     <strong style="display: block;">${s1.fullNames} ${s1.surname}</strong>
                 </div>
-                <div>
-                    <span style="color: #888; font-size: 0.85rem;">Overall Status:</span>
-                    <span style="display: block; background: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-top: 5px;">
-                        ${firstChoiceStatus.toUpperCase()}
-                    </span>
-                </div>
             </div>
 
             <div style="width: 100%; overflow-x: auto;">
