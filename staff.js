@@ -167,7 +167,7 @@ function showDetails(id, data) {
                     ${row("Qualification Type", s2.examBody)}
                     ${row("Year Complete / To be Completed", s2.matricYear)}
                     ${row("Total APS Score", s2.APS)}
-                    ${row("Current Status", s2.matricStatus)}
+                    ${row("Current Status", s2.currentStatus)}
                     ${row("Province", s2.schoolProvince)}
                     ${row("Country", s2.schoolCountry)}
                     ${row("Total APS Score", s2.APS)}
