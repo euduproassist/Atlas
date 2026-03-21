@@ -149,11 +149,6 @@ function showDetails(id, data) {
                     ${row("Next of Kin", `${s1.nextOfKinName} (${s1.nextOfKinRelation}) - ${s1.nextOfKinContact}`)}
                 </div>
 
-                ${s1.hasDisability === 'yes' ? `
-                <div style="margin-top: 15px; padding: 10px; background: #fff5f5; border-radius: 4px;">
-                    <strong style="font-size: 0.75rem; color: #c0392b;">DISABILITY INFO:</strong>
-                    <p style="font-size: 0.9rem;">${s1.disabilities?.filter(d => d).join(', ')}</p>
-                </div>` : ''}
             </div>
 
             <!-- 2. Academic History (Matric) -->
