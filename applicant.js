@@ -322,11 +322,7 @@ function renderPage() {
 }
 
 // Event Listeners
-document.querySelector('a.q-link:nth-child(3)').onclick = (e) => {
-    e.preventDefault();
-    guideOverlay.style.display = 'block';
-    renderPage();
-};
+
 
 document.getElementById('closeGuide').onclick = () => guideOverlay.style.display = 'none';
 
