@@ -171,6 +171,8 @@ function showDetails(id, data) {
                     ${row("Current Status", s2.matricStatus)}
                     ${row("Province", s2.schoolProvince)}
                     ${row("Country", s2.schoolCountry)}
+                    ${row("Total APS Score", s2.APS)}
+                    ${row("NBT Registration Number", s2.nbtRef)} 
                 </div>
 
                 <div style="background: #f9f9f9; padding: 15px; border-radius: 6px;">
