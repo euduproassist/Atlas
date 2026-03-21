@@ -248,3 +248,117 @@ document.querySelector('a.q-link[href="#"]:nth-child(2)').addEventListener('clic
     modal.style.display = 'flex';
 });
 
+const guideOverlay = document.getElementById('guideOverlay');
+const guideContent = document.getElementById('guidePageContent');
+const pageIndicator = document.getElementById('pageNumber');
+let currentGuidePage = 0;
+
+const guidePages = [
+    {
+        title: "1. Portal Overview & Security",
+        content: `<p>Welcome to the TUT Arcadia Student Portal. This system is designed to be a high-speed, secure gateway for your academic journey.</p>
+                  <p><strong>Security First:</strong> Your account is protected by Firebase Authentication. If the system detects you are not logged in, or if your email is not verified, you will be automatically redirected to the login page to protect your personal information.</p>`
+    },
+    {
+        title: "2. The 'Silent Sync' Technology",
+        content: `<p>We use a <strong>2-second Inactivity Sync</strong>. While you are filling out your application, the portal watches your typing. Once you stop for 2 seconds, your progress is automatically pushed to the cloud.</p>
+                  <ul>
+                    <li><strong>Safety:</strong> If your computer dies or your internet cuts out, you will not lose your work.</li>
+                    <li><strong>Persistence:</strong> When you log back in, the portal recalls exactly which step you were on and restores all text fields.</li>
+                  </ul>`
+    },
+    {
+        title: "3. Step 1: Identity & Profile",
+        content: `<p>In Step 1, you provide your core details. Note the specialized logic for <strong>Nationality</strong>: If you select 'Other', the system dynamically generates a mandatory field. You must provide your specific country to proceed.</p>
+                  <p><strong>Sensitive Data:</strong> For your privacy, we have permanently removed the visible collection of government ID numbers from this section.</p>`
+    },
+    {
+        title: "4. Disability Declarations",
+        content: `<p>If you select 'Yes' for a disability, the system opens a specific container. We have programmed an <strong>Incremental Disclosure</strong> logic here:</p>
+                  <ul>
+                    <li>You start with one box.</li>
+                    <li>An 'Add' button only appears once you have typed in the current box.</li>
+                    <li>This keeps the interface clean while allowing you to list up to three specific conditions.</li>
+                  </ul>`
+    },
+    {
+        title: "5. Step 2: Academic History",
+        content: `<p>This section captures your school background. The <strong>Matric Year</strong> dropdown is automatically generated to show 50 years of history up to 10 years into the future, ensuring accuracy for all applicant ages.</p>
+                  <p>If your examination body is not listed, selecting 'Other' will trigger a manual input box.</p>`
+    },
+    {
+        title: "6. The Subject & Marks Matrix",
+        content: `<p>To calculate your <strong>APS (Admission Point Score)</strong>, you must add your subjects one by one. The 'Add Subject' button is hidden until the current row (Name, Percentage, and Level) is completely filled.</p>
+                  <p>This ensures the system never processes a partial or empty mark, keeping your academic profile 100% valid.</p>`
+    },
+    {
+        title: "7. Post-School Qualifications",
+        content: `<p>For students who have studied previously, the portal provides a dynamic table. If you mark a qualification as <strong>'Discontinued'</strong>, the system intelligently disables the 'Year Completed' field, as a completion date is no longer logically required.</p>`
+    },
+    {
+        title: "8. Course Choices & Campus",
+        content: `<p>You are allowed two choices. The system captures your preferred campus and attendance mode (Full-time/Part-time). Note that your 1st Choice is prioritized by the Admissions Staff; your 2nd Choice only becomes active if the first is unsuccessful.</p>`
+    },
+    {
+        title: "9. Step 3: The Document Vault",
+        content: `<p>The Vault handles 11 specific document types, including ID, Matric Results, and Proof of Residence. When you upload a file, it is sent to Firebase Storage with a unique timestamp to prevent file overwriting.</p>
+                  <p><strong>Already Uploaded:</strong> If you return to this page, look for the green ✅ icon. This means the file is already safe in our cloud and you do not need to upload it again.</p>`
+    },
+    {
+        title: "10. Step 4: Final Review Summary",
+        content: `<p>Before the final submission, the portal generates a <strong>Live Summary Card</strong>. It pulls data from all previous steps into one view. You must verify your Choice 1, your APS, and your contact details here. Once you click 'Submit', your 'Draft' becomes a 'Final Application'.</p>`
+    },
+    {
+        title: "11. Tracking Your Status",
+        content: `<p>The 'Track Status' button opens a detailed summary of your progress. It pulls live updates from the Staff Portal.</p>
+                  <ul>
+                    <li><strong>Pending:</strong> Your application is in the queue.</li>
+                    <li><strong>Accepted:</strong> Your 1st Choice is successful.</li>
+                    <li><strong>Rejected:</strong> Your 1st Choice was unsuccessful, and the system is now reviewing your 2nd Choice.</li>
+                  </ul>`
+    },
+    {
+        title: "12. The Zoom & Accessibility Tools",
+        content: `<p>Within the Status and Profile modals, we have included <strong>Zoom Controls</strong> (+ / -). This allows you to scale the text and tables for better readability without affecting the rest of the portal's layout.</p>`
+    },
+    {
+        title: "13. Password & Profile Management",
+        content: `<p>By clicking your username in the top right, you can trigger your Profile Card. From here, you can initiate a <strong>Password Reset Email</strong>. Firebase will send a secure link directly to your inbox to allow you to update your credentials safely.</p>`
+    },
+    {
+        title: "14. Troubleshooting Sync Issues",
+        content: `<p>If you notice the 'Already Uploaded' checkmarks aren't appearing after a fresh upload, simply refresh the page. The system performs a startup check on every load to verify the integrity of your Cloud Draft.</p>`
+    },
+    {
+        title: "15. Contacting Support",
+        content: `<p>If you encounter technical bugs or have admissions questions, use the 'Contact Support' link. We provide direct email links to Admissions, the Document Vault team, and a WhatsApp link for instant office-hour assistance.</p>`
+    }
+];
+
+function renderGuide() {
+    const page = guidePages[currentGuidePage];
+    guideContent.innerHTML = `<h2 style="color:#4a90e2; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">${page.title}</h2>${page.content}`;
+    pageIndicator.innerText = `Page ${currentGuidePage + 1} of ${guidePages.length}`;
+    guideOverlay.scrollTop = 0;
+}
+
+// Event Listeners for the Navigation
+document.getElementById('nextPage').onclick = () => {
+    if (currentGuidePage < guidePages.length - 1) {
+        currentGuidePage++;
+        renderGuide();
+    }
+};
+
+document.getElementById('prevPage').onclick = () => {
+    if (currentGuidePage > 0) {
+        currentGuidePage--;
+        renderGuide();
+    }
+};
+
+document.getElementById('closeGuide').onclick = () => {
+    guideOverlay.style.display = 'none';
+};
+
+
