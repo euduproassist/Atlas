@@ -248,6 +248,14 @@ document.querySelector('a.q-link[href="#"]:nth-child(2)').addEventListener('clic
     modal.style.display = 'flex';
 });
 
+// Help Center Link Click Logic
+document.querySelector('a.q-link[href="#"]:nth-child(3)').onclick = (e) => {
+    e.preventDefault();
+    guideOverlay.style.display = 'block';
+    currentGuidePage = 0; // Always start at page 1
+    renderGuide();
+};
+
 const guideOverlay = document.getElementById('guideOverlay');
 const guideContent = document.getElementById('guidePageContent');
 const pageIndicator = document.getElementById('pageNumber');
