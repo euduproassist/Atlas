@@ -155,26 +155,6 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
                </tr>
                </thead>
 
-                <tbody style="font-size: 0.9rem;">
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 15px 10px;">${s2.acadYear || '2027'}</td>
-                        <td style="padding: 15px 10px;">1st Choice</td>
-                        <td style="padding: 15px 10px;">${s2.choice1}</td>
-                        <td style="padding: 15px 10px;">${s2.campus}</td>
-                        <td style="padding: 15px 10px;">
-                            ${data.adminDocs ? `<a href="${data.adminDocs.acceptanceLetter}" target="_blank" style="color:#4a90e2;">View Letter</a>` : 'N/A'}
-                        </td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 15px 10px;">${s2.acadYear || '2027'}</td>
-                        <td style="padding: 15px 10px;">2nd Choice</td>
-                        <td style="padding: 15px 10px;">${s2.choice2 || 'None'}</td>
-                        <td style="padding: 15px 10px;">${s2.campus}</td>
-                        <td style="padding: 15px 10px; color: #999; font-style: italic;">
-                            ${secondChoiceStatusDisplay}
-                        </td>
-                    </tr>
-                </tbody>
             </table>
         `;
 
