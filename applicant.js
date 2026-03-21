@@ -144,6 +144,16 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
 
             <div style="width: 100%; overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+            <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
+           <th style="padding: 10px;">Year</th>
+                <th style="padding: 10px;">Choice</th>
+               <th style="padding: 10px;">Qualification</th>
+               <th style="padding: 10px;">Campus</th>
+               <th style="padding: 10px;">Status</th> <!-- New Column -->
+               <th style="padding: 10px;">Documents</th>
+               </tr>
+               </thead>
 
                 <tbody style="font-size: 0.9rem;">
                     <tr style="border-bottom: 1px solid #eee;">
