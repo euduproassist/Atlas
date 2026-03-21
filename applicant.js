@@ -196,7 +196,7 @@ window.changeZoom = function(amount) {
 };
 
 // Contact Support Modal for TUT Arcadia
-
+    document.querySelector('.links-grid .q-link:nth-child(2)').onclick = (e) => {
     e.preventDefault();
     const modal = document.getElementById('statusModal');
     const body = document.getElementById('statusModalBody');
