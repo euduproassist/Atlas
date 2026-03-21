@@ -154,7 +154,35 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
                <th style="padding: 10px;">Documents</th>
                </tr>
                </thead>
+               <tbody style="font-size: 0.9rem;">
+    <!-- 1st Choice Row -->
+    <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 15px 10px;">${s2.acadYear || '2027'}</td>
+        <td style="padding: 15px 10px;">1st Choice</td>
+        <td style="padding: 15px 10px;">${s2.choice1}</td>
+        <td style="padding: 15px 10px;">${s2.campus}</td>
+        <td style="padding: 15px 10px; font-weight: 700; color: #1976d2;">
+            ${firstChoiceStatus.toUpperCase()}
+        </td>
+        <td style="padding: 15px 10px;">
+            ${data.adminDocs && data.adminDocs.acceptanceLetter ? `<a href="${data.adminDocs.acceptanceLetter}" target="_blank" style="color:#4a90e2; text-decoration: none;"><i class="fas fa-file-download"></i> View Letter</a>` : '<span style="color:#ccc;">None</span>'}
+        </td>
+    </tr>
 
+    <!-- 2nd Choice Row -->
+    <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 15px 10px;">${s2.acadYear || '2027'}</td>
+        <td style="padding: 15px 10px;">2nd Choice</td>
+        <td style="padding: 15px 10px;">${s2.choice2 || 'None'}</td>
+        <td style="padding: 15px 10px;">${s2.campus}</td>
+        <td style="padding: 15px 10px; font-weight: 600; color: #666;">
+            ${secondChoiceStatusDisplay}
+        </td>
+        <td style="padding: 15px 10px;">
+            ${data.adminDocs && data.adminDocs.secondChoiceLetter ? `<a href="${data.adminDocs.secondChoiceLetter}" target="_blank" style="color:#4a90e2; text-decoration: none;"><i class="fas fa-file-download"></i> View Letter</a>` : '<span style="color:#ccc;">None</span>'}
+        </td>
+    </tr>
+</tbody>
             </table>
         `;
 
