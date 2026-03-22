@@ -244,34 +244,6 @@
     <h2 style="font-size: 1rem; font-weight: 700; color: #333; margin: 0;">APPLICATION SUMMARY</h2>
     
     <div style="display: flex; gap: 10px; align-items: center;">
-        <!-- 1. Action Dropdown -->
-        <div style="position: relative; display: inline-block;">
-             <button class="btn-save" style="padding: 8px 15px; font-size: 0.8rem;" 
-            onclick="event.stopPropagation(); document.getElementById('actionDrop').classList.toggle('show')">
-            <i class="fas fa-tools"></i> Actions <i class="fas fa-caret-down"></i>
-            </button>
-            <div id="actionDrop" style="display:none; position: absolute; right: 0; background: white; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 4px; width: 160px; z-index: 100;">
-                <a href="#" onclick="editDetails()" style="display: block; padding: 10px; color: #333; text-decoration: none; font-size: 0.85rem; border-bottom: 1px solid #eee;"><i class="fas fa-edit"></i> Edit Details</a>
-                <a href="#" onclick="downloadSummary('pdf')" style="display: block; padding: 10px; color: #333; text-decoration: none; font-size: 0.85rem;"><i class="fas fa-file-pdf"></i> Download PDF</a>
-                <a href="#" onclick="downloadSummary('excel')" style="display: block; padding: 10px; color: #333; text-decoration: none; font-size: 0.85rem;"><i class="fas fa-file-excel"></i> Download Excel</a>
-            </div>
-        </div>
-
-        <!-- 2. Documents Button -->
-        <button id="docBtn" style="padding: 8px 15px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">
-            <i class="fas fa-file-alt"></i> Documents <span id="docCount" style="background: #4a90e2; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem;">0</span>
-        </button>
-
-        <!-- 3. Status Change Select -->
-        <select id="updateStatusSelect" style="padding: 8px; border-radius: 4px; border: 1px solid #4a90e2; font-weight: 600; font-size: 0.8rem; cursor: pointer;">
-            <option value="pending">PENDING</option>
-            <option value="review">UNDER REVIEW</option>
-            <option value="missing">MISSING INFO</option>
-            <option value="prov_accepted">PROV. ACCEPTED</option>
-            <option value="uncon_accepted">UNCON. ACCEPTED</option>
-            <option value="waiting">WAITING LIST</option>
-            <option value="rejected">REJECTED</option>
-        </select>
 
         <button onclick="document.getElementById('appModal').style.display='none'" style="background:none; border:none; font-size: 24px; cursor:pointer; color:#999; margin-left:10px;">&times;</button>
     </div>
