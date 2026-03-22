@@ -237,21 +237,5 @@ const applyFilters = () => {
     }
 };
 
-// Add the listeners once at the bottom
-document.getElementById('filterStatus').addEventListener('change', applyFilters);
-document.getElementById('filterCourse').addEventListener('change', applyFilters);
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.btn-save')) {
-        var dropdowns = document.getElementsByClassName("show");
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.id === "actionDrop") {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
-}
 
 
