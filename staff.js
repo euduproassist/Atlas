@@ -91,18 +91,6 @@ function showDetails(id, data) {
     if (data.status === "pending") {
         updateAppStatus("review");
     }
-
-    // Set the status dropdown to match the current status
-    document.getElementById('updateStatusSelect').value = data.status || "pending";
-
-    // --- DOCUMENT COUNT SYNC ---
-    // Assuming documents are stored in data.documents (adjust based on your Firebase field)
-    const docs = data.documents || {}; 
-    const count = Object.keys(docs).length;
-    document.getElementById('docCount').textContent = count;
-    
-    // Set Document Button click listener
-    document.getElementById('docBtn').onclick = () => viewDocuments(docs);
     
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
@@ -252,86 +240,6 @@ const applyFilters = () => {
 // Add the listeners once at the bottom
 document.getElementById('filterStatus').addEventListener('change', applyFilters);
 document.getElementById('filterCourse').addEventListener('change', applyFilters);
-
-// Function to sync status changes to Firebase (Both Staff and Student see this)
-async function updateAppStatus(newStatus) {
-    if (!currentAppId) return;
-    
-    try {
-        const appRef = doc(db, "applications", currentAppId);
-        await updateDoc(appRef, {
-            status: newStatus,
-            lastUpdated: new Date() // Syncs the timestamp
-        });
-        console.log("Status synced to both portals: " + newStatus);
-    } catch (error) {
-        console.error("Error syncing status:", error);
-    }
-}
-
-// Listener for the Manual Status Dropdown
-document.getElementById('updateStatusSelect').addEventListener('change', (e) => {
-    updateAppStatus(e.target.value);
-});
-
-// View Documents Logic
-function viewDocuments(docs) {
-    if (Object.keys(docs).length === 0) {
-        alert("This student has not uploaded any documents yet.");
-        return;
-    }
-    
-    let list = "STUDENT DOCUMENTS:\n\n";
-    Object.entries(docs).forEach(([name, url]) => {
-        list += `- ${name.toUpperCase()}\n`;
-    });
-    
-    // For a cleaner UI, you could build a small sub-modal here, 
-    // but for now, we show the names and allow the "View" concept.
-    alert(list + "\nTo view/download, use the main file links.");
-}
-
-window.downloadSummary = function(type) {
-    if(type === 'pdf') {
-        // This opens the browser print dialog
-        // Because your modal is already longitudinal (Top-to-bottom), 
-        // printing the 'modalBody' creates the professional document you need.
-        const printContent = document.getElementById('modalBody').innerHTML;
-        const originalContent = document.body.innerHTML;
-        
-        document.body.innerHTML = `
-            <div style="padding: 40px; font-family: Arial, sans-serif;">
-                <h1 style="text-align:center; border-bottom: 2px solid #333;">OFFICIAL STUDENT APPLICATION SUMMARY</h1>
-                ${printContent}
-            </div>`;
-            
-        window.print();
-        document.body.innerHTML = originalContent;
-        location.reload(); // Restore the dashboard
-    } else {
-        alert("Excel/Word export requires an external library (like SheetJS), but the PDF is ready!");
-    }
-};
-
-window.editDetails = async function() {
-    const newName = prompt("Enter corrected Full Names for this student:");
-    
-    if (newName && currentAppId) {
-        try {
-            const appRef = doc(db, "applications", currentAppId);
-            // This updates the 'step1' object inside Firestore so the student sees the fix
-            await updateDoc(appRef, {
-                "step1.fullNames": newName,
-                "lastUpdated": new Date()
-            });
-            alert("Success! The Student's portal has been updated with the new name.");
-            location.reload(); 
-        } catch (error) {
-            console.error("Sync Error:", error);
-            alert("Failed to sync change to student portal.");
-        }
-    }
-};
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
