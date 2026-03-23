@@ -110,6 +110,8 @@ function loadApplications() {
     });
 }
 
+window.showDetails = showDetails;
+
 // Professional Summary Modal Logic
 function showDetails(id, data) {
     currentAppId = id;
@@ -118,6 +120,7 @@ function showDetails(id, data) {
     const header = document.getElementById('modalStudentHeader'); // Make sure you added this ID in the HTML above
     
     const s1 = data.step1 || {};
+    const s2 = data.step2 || {};
     const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
     // Inject the Student Header (The line with ID, Name, Email from your photo)
@@ -273,134 +276,7 @@ const applyFilters = () => {
 };
 
 
-window.showDetails = showDetails;
 
-// Add this at the very top of staff.js so the HTML can see the function
-window.showDetails = showDetails;
 
-function showDetails(id, data) {
-    currentAppId = id;
-    const modal = document.getElementById('appModal');
-    const body = document.getElementById('modalBody');
-    const header = document.getElementById('modalStudentHeader');
-    
-    // CRITICAL: Define both steps immediately so the rest of your code doesn't crash
-    const s1 = data.step1 || {};
-    const s2 = data.step2 || {}; 
-    const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
-
-    // 1. Inject the Student Header (ID, Name, Email, etc.)
-    header.innerHTML = `
-        <h2 style="font-size: 1.5rem; font-weight: 600;">${displayId} &nbsp; ${s1.fullNames} ${s1.surname}</h2>
-        <div style="display:flex; gap:20px; color: #555; font-size: 0.9rem;">
-            <span><strong>ID Number</strong> ${s1.idNumber || 'N/A'}</span>
-            <span><strong>Cell Number</strong> ${s1.mobile || 'N/A'}</span>
-            <span><strong>Email</strong> ${s1.email || 'N/A'}</span>
-            <span><strong>Date Submitted</strong> ${data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : 'N/A'}</span>
-        </div>
-    `;
-
-    // 2. Your Helper Row Function
-    const row = (label, value) => value ? `
-        <div>
-            <span style="color:#666; font-size: 0.75rem; display:block; text-transform: uppercase;">${label}</span>
-            <span style="color:#333; font-weight: 500;">${value}</span>
-        </div>` : '';
-
-    // 3. Injecting all 4 of your requested sections
-    body.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 30px;">
-            
-            <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
-                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">1. Personal Details</h3>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                    ${row("Full Names", s1.fullNames)}
-                    ${row("Gender", s1.gender)}
-                    ${row("Surname", s1.surname)}
-                    ${row("Title", s1.title)}
-                    ${row("ID / Passport Number", s1.idNumber)}
-                    ${row("Date of Birth", s1.dob)}
-                    ${row("Nationality", s1.nationality)}
-                    ${row("Home Language", s1.homeLanguage)}
-                </div>
-
-                 <h4 style="font-size: 0.8rem; color: #999; margin-top: 20px; text-transform: uppercase;">Equity & Status</h4>
-                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px;">
-                 ${row("Race", s1.race)}
-                 ${row("Marital Status", s1.marital)}
-                 ${row("Employment", s1.employment)}
-                 ${row("Social Grant", s1.socialGrant)}
-                 ${row("Citizenship Status", s1.citizenship)}
-                </div>
-                
-                <h4 style="font-size: 0.8rem; color: #999; margin-top: 20px; text-transform: uppercase;">Contact & Address</h4>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px;">
-                    ${row("Email", s1.email)}
-                    ${row("Mobile Number", s1.mobile)}
-                    ${row("Alternative Number", s1.altPhone)}
-                    ${row("Physical Address", s1.address ? `${s1.address.street}, ${s1.address.suburb}, ${s1.address.province}, ${s1.address.postalCode}` : '')}
-                    ${row("Next of Kin", s1.nokName ? `${s1.nokName} (${s1.nokRelation}) - ${s1.nokPhone}` : '')}
-                </div>
-
-                ${s1.disability === 'Yes' ? `
-                <div style="margin-top: 15px; padding: 10px; background: #fff5f5; border-radius: 4px; border-left: 4px solid #e74c3c;">
-                    <strong style="font-size: 0.75rem; color: #c0392b; text-transform: uppercase;">Disability Information:</strong>
-                    <p style="font-size: 0.92rem; color: #333; margin-top: 5px;">
-                        ${s1.disabilityDetails && s1.disabilityDetails.length > 0 ? s1.disabilityDetails.join(', ') : 'Yes - Details not specified'}
-                    </p>
-                </div>` : ''}
-            </div>
-
-            <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
-                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">2. Education History</h3>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
-                    ${row("School Name", s2.schoolName)}
-                    ${row("Qualification Type", s2.examBody)}
-                    ${row("Year Complete", s2.matricYear)}
-                    ${row("Total APS Score", s2.APS)}
-                    ${row("Current Status", s2.currentStatus)}
-                </div>
-
-                <div style="background: #f9f9f9; padding: 15px; border-radius: 6px;">
-                    <span style="color:#666; font-size: 0.75rem; display:block; margin-bottom: 10px; text-transform: uppercase;">Matric Subjects</span>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                        ${s2.subjects ? s2.subjects.map(s => `
-                            <div style="font-size: 0.85rem; border-left: 3px solid #4a90e2; padding-left: 8px;">
-                                <strong>${s.name}</strong><br>${s.percentage}% (Level ${s.level})
-                            </div>
-                        `).join('') : '<p>No subjects entered</p>'}
-                    </div>
-                </div>
-            </div>
-
-            ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
-            <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
-                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">3. Previous Qualifications</h3>
-                ${s2.postSchoolQualifications.map((q, index) => `
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px; ${index > 0 ? 'border-top: 1px dashed #eee; padding-top: 15px;' : ''}">
-                        ${row("Institutional Name", q.institutionalName)}
-                        ${row("Qualification Name", q.qualificationName)}
-                        ${row("Status", q.status)}
-                        ${row("Avg Percentage", q.modulePercentageAverage + '%')}
-                    </div>
-                `).join('')}
-            </div>` : ''}
-
-            <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px; background: #fafcfe;">
-                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">4. Programme Choices</h3>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                    ${row("Academic Year", s2.acadYear)}
-                    ${row("Campus Selection", s2.campus)}
-                    ${row("First Choice", s2.choice1)}
-                    ${row("Second/Third Choice", s2.choice2)}
-                    ${row("Need Student Accommodation", s2.housing)}
-                    ${row("Need Financial Support", s2.nsfas)}
-                </div>
-            </div>
-        </div>
-    `;
-
-    modal.style.display = 'flex';
-}
 
 
