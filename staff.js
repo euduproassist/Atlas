@@ -269,6 +269,8 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
         activeSec.style.display = 'block';
         activeTab.style.borderBottom = "3px solid #4a90e2";
         activeTab.style.color = "#4a90e2";
+
+        document.getElementById('breadcrumbActive').innerText = activeTab.innerText;
     };
 
     tPers.onclick = () => switchTab(tPers, personalSection);
