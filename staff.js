@@ -66,14 +66,7 @@ function loadApplications() {
             // Format ID like the photo (APP23-001) using last 4 digits of UID
             const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><strong>${displayId}</strong></td>
-                <td>${course}</td>
-                <td>${course2}</td>
-                <td><span class="status status-${status}">${status.toUpperCase()}</span></td>
-                <td>${dateSub}</td>
-            `;
+
 
             row.onclick = () => showDetails(id, data);
             tableBody.appendChild(row);
