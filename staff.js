@@ -237,8 +237,8 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
 </div>` : ''}
 
 
-
-            <!-- 4. Programme Choices Section -->
+            appDetailsSection.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 30px;"> 
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px; background: #fafcfe;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">4. Programme Choices</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
