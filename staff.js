@@ -253,7 +253,25 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
         </div>
     `;
   // Tab Switching Logic
+    const tPers = document.getElementById('tabPersonal');
+    const tAcad = document.getElementById('tabAcademic');
+    const tApp = document.getElementById('tabAppDetails');
 
+    const switchTab = (activeTab, activeSec) => {
+        [personalSection, academicSection, appDetailsSection].forEach(s => s.style.display = 'none');
+        [tPers, tAcad, tApp].forEach(t => { t.style.borderBottom = "none"; t.style.color = "#999"; });
+        
+        activeSec.style.display = 'block';
+        activeTab.style.borderBottom = "3px solid #4a90e2";
+        activeTab.style.color = "#4a90e2";
+    };
+
+    tPers.onclick = () => switchTab(tPers, personalSection);
+    tAcad.onclick = () => switchTab(tAcad, academicSection);
+    tApp.onclick = () => switchTab(tApp, appDetailsSection);
+
+    tPers.click(); 
+    modal.style.display = 'flex';
 }
 
 // 5. Simple Search Implementation
