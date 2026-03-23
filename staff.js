@@ -86,23 +86,7 @@ function loadApplications() {
             }
 
             const row = document.createElement('tr');
-             row.innerHTML = `
-            <td><strong>${displayId}</strong></td>
-            <td>${course}</td>
-            <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
-            <td>${course2}</td>
-            <td>${status2HTML}</td>
-            <td>${dateSub}</td>
-            <td>
-            <div style="display: flex; align-items: center; gap: 8px;">
-            <button onclick='event.stopPropagation(); showDetails("${id}", ${JSON.stringify(data).replace(/'/g, "&apos;")})' 
-                style="padding: 6px 12px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 0.8rem; ${btnClass}">
-                VIEW
-            </button>
-            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
-            </div>
-            </td>
-            `;
+
             tableBody.appendChild(row);
         });
     });
