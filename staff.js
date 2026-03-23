@@ -66,6 +66,34 @@ function loadApplications() {
             // Format ID like the photo (APP23-001) using last 4 digits of UID
             const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
+            // staff.js: Inside loadApplications() loop
+const status1 = data.status1 || "pending";
+const status2 = data.status2 || "pending";
+
+// Status 2 Logic: If Status 1 isn't 'rejected', Status 2 is inactive (Grey)
+let status2HTML;
+const isStatus1Accepted = ["prov_accepted", "uncon_accepted"].includes(status1);
+
+if (status1 !== "rejected") {
+    const reason = isStatus1Accepted ? "ST1 ACCEPTED" : "WAITING FOR ST1";
+    status2HTML = `<span style="color: #999; font-size: 0.7rem; font-weight: 600; border: 1px solid #ddd; padding: 3px 6px; border-radius: 4px;">
+                    <i class="fas fa-clock"></i> ${reason}</span>`;
+} else {
+    // If Status 1 IS rejected, Status 2 becomes active and colored
+    status2HTML = `<span class="status status-${status2}">${status2.toUpperCase()}</span>`;
+}
+
+const row = document.createElement('tr');
+row.innerHTML = `
+    <td><strong>${displayId}</strong></td>
+    <td>${course}</td>
+    <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
+    <td>${course2}</td>
+    <td>${status2HTML}</td>
+    <td>${dateSub}</td>
+`;
+
+
 
 
             row.onclick = () => showDetails(id, data);
