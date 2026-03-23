@@ -116,7 +116,8 @@ window.showDetails = showDetails;
 function showDetails(id, data) {
     currentAppId = id;
     const modal = document.getElementById('appModal');
-    const body = document.getElementById('modalBody');
+    const personalSection = document.getElementById('personalSection');
+    const academicSection = document.getElementById('academicSection');
     const header = document.getElementById('modalStudentHeader'); // Make sure you added this ID in the HTML above
     
     const s1 = data.step1 || {};
@@ -141,10 +142,8 @@ function showDetails(id, data) {
             <span style="color:#333; font-weight: 500;">${value}</span>
         </div>` : '';
 
-    body.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 30px;">
-            
-            <!-- 1. Personal Details Section -->
+    personalSection.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 30px;">          
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">1. Personal Details</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
@@ -187,6 +186,8 @@ function showDetails(id, data) {
             </div>
 
             <!-- 2. Academic History (Matric) -->
+            academicSection.innerHTML = `
+               <div style="display: flex; flex-direction: column; gap: 30px;"> 
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">2. Education History</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
