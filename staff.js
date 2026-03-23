@@ -119,6 +119,12 @@ function showDetails(id, data) {
     const personalSection = document.getElementById('personalSection');
     const academicSection = document.getElementById('academicSection');
     const header = document.getElementById('modalStudentHeader'); // Make sure you added this ID in the HTML above
+    const appDetailsSection = document.getElementById('appDetailsSection') || document.createElement('div');
+    appDetailsSection.id = "appDetailsSection";
+    appDetailsSection.style.display = "none";
+   // Ensure this is appended to your modal body if it's a new element
+   if(!document.getElementById('appDetailsSection')) personalSection.parentNode.appendChild(appDetailsSection);
+
     
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
