@@ -253,29 +253,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
         </div>
     `;
   // Tab Switching Logic
-    const tPers = document.getElementById('tabPersonal');
-    const tAcad = document.getElementById('tabAcademic');
 
-    tPers.onclick = () => {
-        personalSection.style.display = 'block';
-        academicSection.style.display = 'none';
-        tPers.style.borderBottom = "3px solid #4a90e2";
-        tPers.style.color = "#4a90e2";
-        tAcad.style.borderBottom = "none";
-        tAcad.style.color = "#999";
-    };
-
-    tAcad.onclick = () => {
-        personalSection.style.display = 'none';
-        academicSection.style.display = 'block';
-        tAcad.style.borderBottom = "3px solid #4a90e2";
-        tAcad.style.color = "#4a90e2";
-        tPers.style.borderBottom = "none";
-        tPers.style.color = "#999";
-    };
-
-    tPers.click(); // Default to Personal view
-    modal.style.display = 'flex';
 }
 
 // 5. Simple Search Implementation
