@@ -67,7 +67,6 @@ function loadApplications() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><strong>${displayId}</strong></td>
-                <td>${studentName}</td>
                 <td>${course}</td>
                 <td><span class="status status-${status}">${status.toUpperCase()}</span></td>
                 <td>${dateSub}</td>
