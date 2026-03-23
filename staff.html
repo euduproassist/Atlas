@@ -18,7 +18,12 @@
     body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
     /* 1. Dashboard Header - Full Width & Clean */
-
+    .dashboard-header {
+    background: transparent; /* Colorless header card */
+    padding: 20px 25px;
+    border-bottom: none;
+    box-shadow: none;
+    }
 
     .logo-section {
         display: flex;
@@ -33,7 +38,16 @@
     .logo-section i { color: var(--primary); }
 
     /* 2. Toolbar (Filters + Search) */
-
+    .toolbar {
+    background: rgba(74, 144, 226, 0.05); /* Very light transparent blue */
+    padding: 15px 25px;
+    margin: 0 25px 20px 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(74, 144, 226, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
 
     .filters {
         display: flex;
