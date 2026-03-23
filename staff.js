@@ -61,7 +61,12 @@ function loadApplications() {
         const isComplete = uploadedCount >= requiredDocs.length; 
           
             // Map data from your Student Portal structure
+            const s1 = data.step1 || {};
+            const s2 = data.step2 || {}; 
 
+            const studentName = s1.fullNames + " " + (s1.surname || "");
+            const course = s2.choice1 || "Not Selected";
+            const course2 = s2.choice2 || "Not Selected"; 
             const status1 = data.status1 || "pending";
             const status2 = data.status2 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
