@@ -108,18 +108,6 @@ function loadApplications() {
 }
 
 // Professional Summary Modal Logic
-function showDetails(id, data) {
-    currentAppId = id; // Set the global ID
-    const modal = document.getElementById('appModal');
-    const body = document.getElementById('modalBody');
-    
-    // --- AUTOMATIC STATUS SYNC ---
-    // If opening a 'pending' app, immediately change it to 'review' (Under Review)
-    if (data.status === "pending") {
-    }
-    
-    const s1 = data.step1 || {};
-    const s2 = data.step2 || {};
 
     // Helper to hide empty fields - if value is missing, it returns empty string
     const row = (label, value) => value ? `
