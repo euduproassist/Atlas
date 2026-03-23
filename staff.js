@@ -103,9 +103,7 @@ function loadApplications() {
             </div>
             </td>
             `;
-            row.onclick = () => showDetails(id, data);
             tableBody.appendChild(row);
-
         });
     });
 }
