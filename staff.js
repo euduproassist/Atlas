@@ -54,6 +54,10 @@ function loadApplications() {
     snapshot.forEach((doc) => {
         const data = doc.data();
         const id = doc.id;
+        const docs = data.documents || {};
+        const requiredDocs = ['idCopy', 'matricResults', 'proofOfAddress']; // Add your specific requirements here
+        const uploadedCount = Object.keys(docs).length;
+        const isComplete = uploadedCount >= requiredDocs.length; 
           
             // Map data from your Student Portal structure
             const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
@@ -62,6 +66,8 @@ function loadApplications() {
             const status1 = data.status1 || "pending";
             const status2 = data.status2 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
+            const docLabel = isComplete ? "CD" : "MD";
+            const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;";
             
             // Format ID like the photo (APP23-001) using last 4 digits of UID
             const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
@@ -87,6 +93,15 @@ function loadApplications() {
             <td>${course2}</td>
             <td>${status2HTML}</td>
             <td>${dateSub}</td>
+            <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+            <button onclick='event.stopPropagation(); showDetails("${id}", ${JSON.stringify(data).replace(/'/g, "&apos;")})' 
+                style="padding: 6px 12px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 0.8rem; ${btnClass}">
+                VIEW
+            </button>
+            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
+            </div>
+            </td>
             `;
             row.onclick = () => showDetails(id, data);
             tableBody.appendChild(row);
