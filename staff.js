@@ -131,15 +131,6 @@ function showDetails(id, data) {
     const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
     // Inject the Student Header (The line with ID, Name, Email from your photo)
-    header.innerHTML = `
-        <h2 style="font-size: 1.5rem; font-weight: 600;">${displayId} &nbsp; ${s1.fullNames} ${s1.surname}</h2>
-        <div style="display:flex; gap:20px; color: #555; font-size: 0.9rem;">
-            <span><strong>ID Number</strong> ${s1.idNumber || 'N/A'}</span>
-            <span><strong>Cell Number</strong> ${s1.mobile || 'N/A'}</span>
-            <span><strong>Email</strong> ${s1.email || 'N/A'}</span>
-            <span><strong>Date Submitted</strong> ${data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : 'N/A'}</span>
-        </div>
-    `;
 
     // Helper to hide empty fields - if value is missing, it returns empty string
     const row = (label, value) => value ? `
