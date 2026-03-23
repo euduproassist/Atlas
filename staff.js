@@ -262,4 +262,8 @@ const applyFilters = () => {
     }
 };
 
+// Add this at the end of staff.js
+window.showDetails = showDetails;
+
+
 
