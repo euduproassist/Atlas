@@ -243,5 +243,8 @@ const applyFilters = () => {
     }
 };
 
+window.showDetails = showDetails;
+
+
 
 
