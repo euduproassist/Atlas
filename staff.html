@@ -37,6 +37,21 @@
 
     .logo-section i { color: var(--primary); }
 
+     /* 2. Toolbar (Filters + Search) */
+    .toolbar {
+        background: rgba(74, 144, 226, 0.05);
+        padding: 15px 25px;
+        margin: 20px 0 20px 0; /* Changed side margins from 25px to 0 */
+        border-radius: 0;      /* Removed border-radius so it sits flush with the screen edges */
+        border-left: none;     /* Optional: remove side borders for a seamless full-width look */
+        border-right: none;
+        border-top: 1px solid rgba(74, 144, 226, 0.1);
+        border-bottom: 1px solid rgba(74, 144, 226, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .filters {
         display: flex;
         gap: 8px;
