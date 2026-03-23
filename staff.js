@@ -184,8 +184,9 @@ function showDetails(id, data) {
             </p>
             </div>` : ''}
             </div>
-
-            <!-- 2. Academic History (Matric) -->
+            </div>
+            `;
+            
             academicSection.innerHTML = `
                <div style="display: flex; flex-direction: column; gap: 30px;"> 
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
