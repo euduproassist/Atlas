@@ -240,7 +240,7 @@ const applyFilters = () => {
 
     for (let row of rows) {
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
-        const rowStatus = row.cells[3]?.innerText.toLowerCase().replace(/\s/g, '') || "";
+        const rowStatus = row.cells[2]?.innerText.toLowerCase().replace(/\s/g, '') || "";
 
         const matchStatus = statusVal === "all" || rowStatus.includes(statusVal.replace('_', ''));
         const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
