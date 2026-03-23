@@ -58,6 +58,7 @@ function loadApplications() {
             // Map data from your Student Portal structure
             const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
             const course = data.step2?.choice1 || "Not Selected";
+             const course2 = data.step2?.choice2 || "Not Selected";
             const status = data.status || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
             
