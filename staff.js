@@ -51,7 +51,39 @@ function loadApplications() {
     }
 
     // If there IS data, loop through and build the rows
+    snapshot.forEach((doc) => {
+    const data = doc.data();
+    const id = doc.id;
+    const s1 = data.step1 || {};
+    const s2 = data.step2 || {};
+    const docs = data.documents || {};
 
+    // 1. Check if all required documents exist
+    // (Defining the list here to match your applicant portal requirements)
+    const requiredFields = ['ID_Passport', 'Matric_Certificate', 'Proof_of_Address'];
+    const uploadedCount = requiredFields.filter(name => docs[name]).length;
+    const isComplete = uploadedCount === requiredFields.length;
+
+    const docStatus = isComplete 
+        ? `<span style="color: #27ae60; font-weight: bold;">Complete</span>` 
+        : `<span style="color: #e74c3c; font-weight: bold;">Missing (${requiredFields.length - uploadedCount})</span>`;
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td><strong>APP-${id.substring(0, 5).toUpperCase()}</strong></td>
+        <td>${s2.choice1 || 'N/A'}</td>
+        <td><span class="status status-${data.status || 'pending'}">${(data.status || 'pending').toUpperCase()}</span></td>
+        <td>${s2.choice2 || 'None'}</td>
+        <td><span class="status status-waiting">PENDING</span></td>
+        <td>${s2.APS || '0'}</td>
+        <td>${data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+        <td>${docStatus}</td>
+        <td><button class="btn-save" style="padding: 5px 12px; font-size: 0.8rem;" onclick="showDetails('${id}', ${JSON.stringify(data).replace(/"/g, '&quot;')})">View</button></td>
+    `;
+
+    // Remove the row.onclick so only the button triggers the modal
+    tableBody.appendChild(row);
+});
     });
 }
 
