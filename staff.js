@@ -68,6 +68,7 @@ function loadApplications() {
             row.innerHTML = `
                 <td><strong>${displayId}</strong></td>
                 <td>${course}</td>
+                <td>${course2}</td>
                 <td><span class="status status-${status}">${status.toUpperCase()}</span></td>
                 <td>${dateSub}</td>
             `;
