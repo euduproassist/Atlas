@@ -51,32 +51,7 @@ function loadApplications() {
     }
 
     // If there IS data, loop through and build the rows
-    snapshot.forEach((doc) => {
-        const data = doc.data();
-        const id = doc.id;
-          
-            // Map data from your Student Portal structure
-            const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
-            const course = data.step2?.choice1 || "Not Selected";
-            const status = data.status || "pending";
-            const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
-            
-            // Format ID like the photo (APP23-001) using last 4 digits of UID
-            const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><strong>${displayId}</strong></td>
-                <td>${studentName}</td>
-                <td>${course}</td>
-                <td><span class="status status-${status}">${status.toUpperCase()}</span></td>
-                <td>${dateSub}</td>
-            `;
-
-            row.onclick = () => showDetails(id, data);
-            tableBody.appendChild(row);
-
-        });
     });
 }
 
