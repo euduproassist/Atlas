@@ -416,9 +416,12 @@ function loadApplications() {
         const isComplete = uploadedCount >= requiredDocs.length; 
           
             // Map data from your Student Portal structure
-            const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
-            const course = data.step2?.choice1 || "Not Selected";
-            const course2 = data.step2?.choice2 || "Not Selected";
+            const s1 = data.step1 || {};
+            const s2 = data.step2 || {}; 
+
+            const studentName = s1.fullNames + " " + (s1.surname || "");
+            const course = s2.choice1 || "Not Selected";
+            const course2 = s2.choice2 || "Not Selected"; 
             const status1 = data.status1 || "pending";
             const status2 = data.status2 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
@@ -463,19 +466,40 @@ function loadApplications() {
     });
 }
 
+window.showDetails = showDetails;
+
 // Professional Summary Modal Logic
 function showDetails(id, data) {
-    currentAppId = id; // Set the global ID
+    currentAppId = id;
     const modal = document.getElementById('appModal');
-    const body = document.getElementById('modalBody');
-    
-    // --- AUTOMATIC STATUS SYNC ---
-    // If opening a 'pending' app, immediately change it to 'review' (Under Review)
-    if (data.status === "pending") {
-    }
+    const personalSection = document.getElementById('personalSection');
+    const academicSection = document.getElementById('academicSection');
+    const header = document.getElementById('modalStudentHeader'); // Make sure you added this ID in the HTML above
+    const appDetailsSection = document.getElementById('appDetailsSection') || document.createElement('div');
+    appDetailsSection.id = "appDetailsSection";
+    appDetailsSection.style.display = "none";
+   // Ensure this is appended to your modal body if it's a new element
+   if(!document.getElementById('appDetailsSection')) personalSection.parentNode.appendChild(appDetailsSection);
+
     
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
+    const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
+
+    // Inject the Student Header (ID and Name on top, details on a new line below)
+    header.innerHTML = `
+    <div style="width: 100%;">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 10px;">
+            ${displayId} &nbsp; ${s1.fullNames} ${s1.surname}
+        </h2>
+        <div style="display: flex; gap: 30px; color: #666; font-size: 0.9rem; flex-wrap: wrap;">
+            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">ID Number</strong><br>${s1.idNumber || 'N/A'}</span>
+            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">Cell Number</strong><br>${s1.mobile || 'N/A'}</span>
+            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">Email</strong><br>${s1.email || 'N/A'}</span>
+            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">Date Submitted</strong><br>${data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : 'N/A'}</span>
+        </div>
+    </div>
+`;
 
     // Helper to hide empty fields - if value is missing, it returns empty string
     const row = (label, value) => value ? `
@@ -484,12 +508,10 @@ function showDetails(id, data) {
             <span style="color:#333; font-weight: 500;">${value}</span>
         </div>` : '';
 
-    body.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 30px;">
-            
-            <!-- 1. Personal Details Section -->
+    personalSection.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 30px;">          
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
-                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">1. Personal Details</h3>
+                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Personal Details</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
                     ${row("Full Names", s1.fullNames)}
                     ${row("Gender", s1.gender)}
@@ -528,10 +550,13 @@ function showDetails(id, data) {
             </p>
             </div>` : ''}
             </div>
-
-            <!-- 2. Academic History (Matric) -->
+            </div>
+            `;
+            
+            academicSection.innerHTML = `
+               <div style="display: flex; flex-direction: column; gap: 30px;"> 
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
-                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">2. Education History</h3>
+                <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">1. Education History</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
                     ${row("School Name", s2.schoolName)}
                     ${row("Qualification Type", s2.examBody)}
@@ -558,7 +583,7 @@ function showDetails(id, data) {
             <!-- 3. Post-School Qualifications -->
 ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
 <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
-    <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">3. Previous Qualifications</h3>
+    <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">2. Previous Qualifications</h3>
     ${s2.postSchoolQualifications.map((q, index) => `
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px; ${index > 0 ? 'border-top: 1px dashed #eee; padding-top: 15px;' : ''}">
             ${row("Institutional Name", q.institutionalName)}
@@ -570,10 +595,11 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
         </div>
     `).join('')}
 </div>` : ''}
+</div>`;
 
 
-
-            <!-- 4. Programme Choices Section -->
+            appDetailsSection.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 30px;"> 
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px; background: #fafcfe;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">4. Programme Choices</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
@@ -587,7 +613,27 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
             </div>
         </div>
     `;
+  // Tab Switching Logic
+    const tPers = document.getElementById('tabPersonal');
+    const tAcad = document.getElementById('tabAcademic');
+    const tApp = document.getElementById('tabAppDetails');
 
+    const switchTab = (activeTab, activeSec) => {
+        [personalSection, academicSection, appDetailsSection].forEach(s => s.style.display = 'none');
+        [tPers, tAcad, tApp].forEach(t => { t.style.borderBottom = "none"; t.style.color = "#999"; });
+        
+        activeSec.style.display = 'block';
+        activeTab.style.borderBottom = "3px solid #4a90e2";
+        activeTab.style.color = "#4a90e2";
+
+        document.getElementById('breadcrumbActive').innerText = activeTab.innerText;
+    };
+
+    tPers.onclick = () => switchTab(tPers, personalSection);
+    tAcad.onclick = () => switchTab(tAcad, academicSection);
+    tApp.onclick = () => switchTab(tApp, appDetailsSection);
+
+    tPers.click(); 
     modal.style.display = 'flex';
 }
 
@@ -617,12 +663,6 @@ const applyFilters = () => {
         row.style.display = (matchStatus && matchCourse) ? '' : 'none';
     }
 };
-
-// Add this at the end of staff.js
-window.showDetails = showDetails;
-
-
-
 
 
 
