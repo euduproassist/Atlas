@@ -86,16 +86,15 @@ function loadApplications() {
             }
 
             const row = document.createElement('tr');
-            // Replace the row.innerHTML section in staff.js with this:
-row.innerHTML = `
-    <td><strong>${displayId}</strong></td>
-    <td>${course}</td>
-    <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
-    <td>${course2}</td>
-    <td>${status2HTML}</td>
-    <td class="hide-mobile">${dateSub}</td>
-    <td>
-        <div style="display: flex; align-items: center; gap: 8px;">
+            row.innerHTML = `
+            <td><strong>${displayId}</strong></td>
+            <td>${course}</td>
+            <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
+            <td>${course2}</td>
+            <td>${status2HTML}</td>
+            <td class="hide-mobile">${dateSub}</td>
+             <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
             <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
                 VIEW
             </button>
@@ -103,8 +102,6 @@ row.innerHTML = `
         </div>
     </td>
 `;
-
-
             tableBody.appendChild(row);
         });
     });
