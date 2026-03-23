@@ -235,6 +235,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
         </div>
     `).join('')}
 </div>` : ''}
+</div>`;
 
 
             appDetailsSection.innerHTML = `
