@@ -347,12 +347,6 @@
 
 
 
-
-
-
-
-
-
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
@@ -409,28 +403,55 @@ function loadApplications() {
     snapshot.forEach((doc) => {
         const data = doc.data();
         const id = doc.id;
+        const docs = data.documents || {};
+        const requiredDocs = ['idCopy', 'matricResults', 'proofOfAddress']; // Add your specific requirements here
+        const uploadedCount = Object.keys(docs).length;
+        const isComplete = uploadedCount >= requiredDocs.length; 
           
             // Map data from your Student Portal structure
             const studentName = data.step1?.fullNames + " " + (data.step1?.surname || "");
             const course = data.step2?.choice1 || "Not Selected";
-            const status = data.status || "pending";
+            const course2 = data.step2?.choice2 || "Not Selected";
+            const status1 = data.status1 || "pending";
+            const status2 = data.status2 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
+            const docLabel = isComplete ? "CD" : "MD";
+            const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;";
             
             // Format ID like the photo (APP23-001) using last 4 digits of UID
             const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
+            // Status 2 Logic: If Status 1 isn't 'rejected', Status 2 is inactive (Grey)
+            let status2HTML;
+            const isStatus1Accepted = ["prov_accepted", "uncon_accepted"].includes(status1);
+
+            if (status1 !== "rejected") {
+            const reason = isStatus1Accepted ? "ST1 ACCEPTED" : "WAITING FOR ST1";
+            status2HTML = `<span style="color: #999; font-size: 0.7rem; font-weight: 600; border: 1px solid #ddd; padding: 3px 6px; border-radius: 4px;">
+                    <i class="fas fa-clock"></i> ${reason}</span>`;
+            } else {
+            // If Status 1 IS rejected, Status 2 becomes active and colored
+            status2HTML = `<span class="status status-${status2}">${status2.toUpperCase()}</span>`;
+            }
+
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><strong>${displayId}</strong></td>
-                <td>${studentName}</td>
-                <td>${course}</td>
-                <td><span class="status status-${status}">${status.toUpperCase()}</span></td>
-                <td>${dateSub}</td>
-            `;
-
-            row.onclick = () => showDetails(id, data);
+            <td><strong>${displayId}</strong></td>
+            <td>${course}</td>
+            <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
+            <td>${course2}</td>
+            <td>${status2HTML}</td>
+            <td class="hide-mobile">${dateSub}</td>
+             <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+                VIEW
+            </button>
+            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
+        </div>
+    </td>
+`;
             tableBody.appendChild(row);
-
         });
     });
 }
@@ -444,20 +465,7 @@ function showDetails(id, data) {
     // --- AUTOMATIC STATUS SYNC ---
     // If opening a 'pending' app, immediately change it to 'review' (Under Review)
     if (data.status === "pending") {
-        updateAppStatus("review");
     }
-
-    // Set the status dropdown to match the current status
-    document.getElementById('updateStatusSelect').value = data.status || "pending";
-
-    // --- DOCUMENT COUNT SYNC ---
-    // Assuming documents are stored in data.documents (adjust based on your Firebase field)
-    const docs = data.documents || {}; 
-    const count = Object.keys(docs).length;
-    document.getElementById('docCount').textContent = count;
-    
-    // Set Document Button click listener
-    document.getElementById('docBtn').onclick = () => viewDocuments(docs);
     
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
@@ -592,9 +600,8 @@ const applyFilters = () => {
     const rows = tableBody.getElementsByTagName('tr');
 
     for (let row of rows) {
-        // cells[2] is Course, cells[3] is Status
-        const rowCourse = row.cells[2]?.innerText.toLowerCase() || "";
-        const rowStatus = row.cells[3]?.innerText.toLowerCase().replace(/\s/g, '') || "";
+        const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
+        const rowStatus = row.cells[2]?.innerText.toLowerCase().replace(/\s/g, '') || "";
 
         const matchStatus = statusVal === "all" || rowStatus.includes(statusVal.replace('_', ''));
         const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
@@ -604,100 +611,13 @@ const applyFilters = () => {
     }
 };
 
-// Add the listeners once at the bottom
-document.getElementById('filterStatus').addEventListener('change', applyFilters);
-document.getElementById('filterCourse').addEventListener('change', applyFilters);
+// Add this at the end of staff.js
+window.showDetails = showDetails;
 
-// Function to sync status changes to Firebase (Both Staff and Student see this)
-async function updateAppStatus(newStatus) {
-    if (!currentAppId) return;
-    
-    try {
-        const appRef = doc(db, "applications", currentAppId);
-        await updateDoc(appRef, {
-            status: newStatus,
-            lastUpdated: new Date() // Syncs the timestamp
-        });
-        console.log("Status synced to both portals: " + newStatus);
-    } catch (error) {
-        console.error("Error syncing status:", error);
-    }
-}
 
-// Listener for the Manual Status Dropdown
-document.getElementById('updateStatusSelect').addEventListener('change', (e) => {
-    updateAppStatus(e.target.value);
-});
 
-// View Documents Logic
-function viewDocuments(docs) {
-    if (Object.keys(docs).length === 0) {
-        alert("This student has not uploaded any documents yet.");
-        return;
-    }
-    
-    let list = "STUDENT DOCUMENTS:\n\n";
-    Object.entries(docs).forEach(([name, url]) => {
-        list += `- ${name.toUpperCase()}\n`;
-    });
-    
-    // For a cleaner UI, you could build a small sub-modal here, 
-    // but for now, we show the names and allow the "View" concept.
-    alert(list + "\nTo view/download, use the main file links.");
-}
 
-window.downloadSummary = function(type) {
-    if(type === 'pdf') {
-        // This opens the browser print dialog
-        // Because your modal is already longitudinal (Top-to-bottom), 
-        // printing the 'modalBody' creates the professional document you need.
-        const printContent = document.getElementById('modalBody').innerHTML;
-        const originalContent = document.body.innerHTML;
-        
-        document.body.innerHTML = `
-            <div style="padding: 40px; font-family: Arial, sans-serif;">
-                <h1 style="text-align:center; border-bottom: 2px solid #333;">OFFICIAL STUDENT APPLICATION SUMMARY</h1>
-                ${printContent}
-            </div>`;
-            
-        window.print();
-        document.body.innerHTML = originalContent;
-        location.reload(); // Restore the dashboard
-    } else {
-        alert("Excel/Word export requires an external library (like SheetJS), but the PDF is ready!");
-    }
-};
 
-window.editDetails = async function() {
-    const newName = prompt("Enter corrected Full Names for this student:");
-    
-    if (newName && currentAppId) {
-        try {
-            const appRef = doc(db, "applications", currentAppId);
-            // This updates the 'step1' object inside Firestore so the student sees the fix
-            await updateDoc(appRef, {
-                "step1.fullNames": newName,
-                "lastUpdated": new Date()
-            });
-            alert("Success! The Student's portal has been updated with the new name.");
-            location.reload(); 
-        } catch (error) {
-            console.error("Sync Error:", error);
-            alert("Failed to sync change to student portal.");
-        }
-    }
-};
 
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.btn-save')) {
-        var dropdowns = document.getElementsByClassName("show");
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.id === "actionDrop") {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
-}
+
 
