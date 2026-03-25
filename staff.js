@@ -303,6 +303,72 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     }
 });
 
+// --- TAB SWITCHING LOGIC ---
+
+const tabs = {
+    new: document.getElementById('tabNew'),
+    accepted: document.getElementById('tabAccepted'),
+    rejected: document.getElementById('tabRejected'),
+    archived: document.getElementById('tabArchived')
+};
+
+let activeTabFilter = 'all'; // Default to showing everything (New Apps)
+
+function handleTabClick(selectedKey) {
+    // 1. Update UI Styles
+    Object.values(tabs).forEach(tab => {
+        tab.style.borderBottom = "none";
+        tab.style.background = "#fff";
+    });
+    
+    tabs[selectedKey].style.borderBottom = "3px solid #4a90e2";
+    // Optional: add a light blue tint to active tab background
+    tabs[selectedKey].style.background = "rgba(74, 144, 226, 0.05)";
+
+    // 2. Set Filter Key
+    activeTabFilter = selectedKey;
+
+    // 3. Re-apply all filters (Tabs + Dropdowns)
+    applyFilters();
+}
+
+// Attach Event Listeners
+tabs.new.onclick = () => handleTabClick('new');
+tabs.accepted.onclick = () => handleTabClick('accepted');
+tabs.rejected.onclick = () => handleTabClick('rejected');
+tabs.archived.onclick = () => handleTabClick('archived');
+
+// Update your existing applyFilters function to include the Tab logic
+const applyFilters = () => {
+    const statusDropdownVal = document.getElementById('filterStatus').value.toLowerCase();
+    const courseVal = document.getElementById('filterCourse').value.toLowerCase();
+    const rows = tableBody.getElementsByTagName('tr');
+
+    for (let row of rows) {
+        // Get the status from the hidden text or status pill in cell index 2
+        const rowStatus = row.cells[2]?.innerText.toLowerCase().trim() || "";
+        const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
+
+        // Tab Logic
+        let matchTab = false;
+        if (activeTabFilter === 'new') matchTab = true; // Show all for "New Applications"
+        if (activeTabFilter === 'accepted') matchTab = (rowStatus === 'uncon_accepted' || rowStatus === 'prov_accepted');
+        if (activeTabFilter === 'rejected') matchTab = (rowStatus === 'rejected');
+        if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
+
+        // Dropdown Logic
+        const matchDropdownStatus = statusDropdownVal === "all" || rowStatus.includes(statusDropdownVal.replace('_', ''));
+        const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
+
+        // Final Visibility: Must match Tab AND Dropdowns
+        if (matchTab && matchDropdownStatus && matchCourse) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+};
+
 
 
 
