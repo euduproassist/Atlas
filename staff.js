@@ -431,15 +431,6 @@ const applyFilters = () => {
         const rowStatus = row.cells[2]?.innerText.toLowerCase().trim() || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
 
-        // Tab Logic
-        let matchTab = false;
-        if (activeTabFilter === 'new') matchTab = true; // Show all for "New Applications"
-        if (activeTabFilter === 'accepted') matchTab = (rowStatus === 'uncon_accepted' || rowStatus === 'prov_accepted');
-        if (activeTabFilter === 'rejected') matchTab = (rowStatus === 'rejected');
-        if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
-
-        // Dropdown Logic
-        const matchDropdownStatus = statusDropdownVal === "all" || rowStatus.includes(statusDropdownVal.replace('_', ''));
         const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
 
         // Final Visibility: Must match Tab AND Dropdowns
