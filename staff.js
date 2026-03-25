@@ -476,6 +476,23 @@ const applyFilters = () => {
 
 handleTabClick('new');
 
+window.setSubFilter = (val) => {
+    activeSubFilter = val;
+    
+    // Update UI Styles for sub-tabs
+    document.querySelectorAll('.sub-tab').forEach(t => {
+        t.style.color = "#999";
+        t.style.borderBottom = "none";
+    });
+    
+    const active = document.getElementById('sub' + val.charAt(0).toUpperCase() + val.slice(1));
+    active.style.color = "#4a90e2";
+    active.style.borderBottom = "2px solid #4a90e2";
+    
+    applyFilters();
+};
+
+
 
 
 
