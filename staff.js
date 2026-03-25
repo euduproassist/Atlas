@@ -63,6 +63,20 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
                 <th>Accepted By</th>
                 <th>Action</th>
             </tr>`;
+    } else if (activeTabFilter === 'rejected') {
+    tableHead.innerHTML = `
+    <tr>
+    <th>Application ID</th>
+    <th>Student Name</th>
+    <th>Course 1 Declined</th>
+    <th>Course 2 Declined</th>
+    <th class="hide-mobile">Date Submitted</th>
+    <th>Date Declined</th>
+    <th>Reason</th>
+    <th>Declined By</th>
+    <th>Action</th>
+    </tr>`;
+        
     } else {
         tableHead.innerHTML = `
             <tr>
