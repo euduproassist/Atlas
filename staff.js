@@ -423,7 +423,7 @@ tabs.archived.onclick = () => handleTabClick('archived');
 // Update your existing applyFilters function to include the Tab logic
 const applyFilters = () => {
     const statusDropdownVal = "all"; 
-    const courseVal = document.getElementById('filterCourse').value.toLowerCase();
+    const docsFilterVal = document.getElementById('filterDocs').value;
     const rows = tableBody.getElementsByTagName('tr');
 
     for (let row of rows) {
