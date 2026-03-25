@@ -517,3 +517,26 @@ document.getElementById('sortDate').addEventListener('change', (e) => {
 // Re-attach Document Filter listener
 document.getElementById('filterDocs').addEventListener('change', applyFilters);
 
+function setupProfile(user) {
+    const trigger = document.getElementById('profileTrigger');
+    const overlay = document.getElementById('profileOverlay');
+    const emailDisp = document.getElementById('staffEmailDisplay');
+
+    trigger.onclick = () => {
+        emailDisp.innerText = user.email;
+        overlay.style.display = 'flex';
+    };
+
+    document.getElementById('btnResetPass').onclick = () => {
+        sendPasswordResetEmail(auth, user.email)
+            .then(() => alert("Reset link sent to " + user.email))
+            .catch(err => alert(err.message));
+    };
+
+    document.getElementById('btnLogout').onclick = () => {
+        if(confirm("Logout of management portal?")) {
+            signOut(auth).then(() => window.location.href = "staff-login.html");
+        }
+    };
+}
+
