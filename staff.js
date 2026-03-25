@@ -127,6 +127,43 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
             // If Status 1 IS rejected, Status 2 becomes active and colored
             status2HTML = `<span class="status status-${status2}">${status2.toUpperCase()}</span>`;
             }
+
+           const row = document.createElement('tr');
+            
+            // REPLACE YOUR OLD row.innerHTML WITH THIS:
+            if (activeTabFilter === 'accepted') {
+                row.innerHTML = `
+                    <td><strong>${displayId}</strong></td>
+                    <td>${studentName}</td>
+                    <td>${course}</td>
+                    <td class="hide-mobile">${dateSub}</td>
+                    <td>${data.dateAccepted || 'N/A'}</td>
+                    <td><span style="font-size: 0.8rem; color: #666;">${data.acceptedBy || 'Staff User'}</span></td>
+                    <td>
+                        <button class="view-btn" style="background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; cursor: not-allowed;">
+                            VIEW
+                        </button>
+                    </td>
+                `;
+            } else {
+                row.innerHTML = `
+                    <td><strong>${displayId}</strong></td>
+                    <td>${course}</td>
+                    <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
+                    <td>${course2}</td>
+                    <td>${status2HTML}</td>
+                    <td class="hide-mobile">${dateSub}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+                                VIEW
+                            </button>
+                            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
+                        </div>
+                    </td>
+                `;
+            }
+
             tableBody.appendChild(row);
         });
     });
