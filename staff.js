@@ -48,6 +48,34 @@ document.getElementById('acceptedCount').innerText = acceptedCount;
 document.getElementById('rejectedCount').innerText = rejectedCount;
 document.getElementById('archivedCount').innerText = archivedCount; // Now this will show '0' instead of [object]
 
+        tableBody.innerHTML = ''; // Keep this line
+
+    // ADD THIS BELOW:
+    const tableHead = document.querySelector('table thead');
+    if (activeTabFilter === 'accepted') {
+        tableHead.innerHTML = `
+            <tr>
+                <th>Application ID</th>
+                <th>Student Name</th>
+                <th>Course Accepted</th>
+                <th class="hide-mobile">Date Submitted</th>
+                <th>Date Accepted</th>
+                <th>Accepted By</th>
+                <th>Action</th>
+            </tr>`;
+    } else {
+        tableHead.innerHTML = `
+            <tr>
+                <th>Application ID</th>
+                <th>Course 1</th>
+                <th>Status 1</th>
+                <th>Course 2</th>
+                <th>Status 2</th>
+                <th class="hide-mobile">Date Submitted</th>
+                <th>Action</th>
+            </tr>`;
+    }
+
 
     if (snapshot.empty) {
         // If Firebase is empty, show this message instead of a blank screen
