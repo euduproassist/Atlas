@@ -402,6 +402,14 @@ function handleTabClick(selectedKey) {
     // 2. Set the Filter Key (CRITICAL: Do this before loading)
     activeTabFilter = selectedKey;
 
+   // ADD THIS: Only show Sub-Nav if we are in the "New" tab
+    const subNav = document.getElementById('newAppSubNav');
+    if (selectedKey === 'new') {
+        subNav.style.display = 'flex';
+    } else {
+        subNav.style.display = 'none';
+    }
+
     // 3. Re-run the listener to rebuild the table with the new headers
     loadApplications(); 
 }
