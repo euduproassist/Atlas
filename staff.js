@@ -499,6 +499,23 @@ window.setSubFilter = (val) => {
     applyFilters();
 };
 
+document.getElementById('sortDate').addEventListener('change', (e) => {
+    const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
+    const isNewest = e.target.value === 'newest';
+
+    rows.sort((a, b) => {
+        const dateA = new Date(a.cells[5].innerText);
+        const dateB = new Date(b.cells[5].innerText);
+        return isNewest ? dateB - dateA : dateA - dateB;
+    });
+
+    rows.forEach(row => tableBody.appendChild(row));
+});
+
+// Re-attach Document Filter listener
+document.getElementById('filterDocs').addEventListener('change', applyFilters);
+
+
 
 
 
