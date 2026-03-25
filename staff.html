@@ -258,6 +258,13 @@
     </div>
 </div>
 
+ <div id="newAppSubNav" style="display: flex; gap: 25px; padding: 10px 25px; background: #fff; border-bottom: 1px solid #e1e4e8; margin-top: -1px;">
+    <div onclick="setSubFilter('all')" class="sub-tab" id="subAll" style="font-size: 0.85rem; font-weight: 600; color: #4a90e2; cursor: pointer; border-bottom: 2px solid #4a90e2; padding-bottom: 5px;">All</div>
+    <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Pending</div>
+    <div onclick="setSubFilter('review')" class="sub-tab" id="subReview" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Under Review</div>
+    <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Waiting List</div>
+</div>
+
     <div class="toolbar">
         <div class="filters">
             <select id="sortDate">
