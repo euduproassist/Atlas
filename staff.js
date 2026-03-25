@@ -48,7 +48,6 @@ document.getElementById('acceptedCount').innerText = acceptedCount;
 document.getElementById('rejectedCount').innerText = rejectedCount;
 document.getElementById('archivedCount').innerText = archivedCount; // Now this will show '0' instead of [object]
 
-    tableBody.innerHTML = ''; // Always clear the table first
 
     if (snapshot.empty) {
         // If Firebase is empty, show this message instead of a blank screen
