@@ -54,7 +54,7 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
         // If Firebase is empty, show this message instead of a blank screen
         tableBody.innerHTML = `
             <tr>
-                <td colspan="5" style="text-align: center; padding: 50px; color: #999;">
+                <td colspan="7" style="text-align: center; padding: 50px; color: #999;">
                     <i class="fas fa-inbox" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
                     No student applications have been submitted yet.
                 </td>
