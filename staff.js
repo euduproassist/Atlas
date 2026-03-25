@@ -303,26 +303,6 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     }
 });
 
-// NEW FILTER LOGIC (Checks both Status and Course)
-const applyFilters = () => {
-    const statusVal = document.getElementById('filterStatus').value.toLowerCase();
-    const courseVal = document.getElementById('filterCourse').value.toLowerCase();
-    const rows = tableBody.getElementsByTagName('tr');
-
-    for (let row of rows) {
-        const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
-        const rowStatus = row.cells[2]?.innerText.toLowerCase().replace(/\s/g, '') || "";
-
-        const matchStatus = statusVal === "all" || rowStatus.includes(statusVal.replace('_', ''));
-        const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
-
-        // Only show the row if BOTH filters match
-        row.style.display = (matchStatus && matchCourse) ? '' : 'none';
-    }
-};
-
-document.getElementById('filterStatus').addEventListener('change', applyFilters);
-document.getElementById('filterCourse').addEventListener('change', applyFilters);
 
 
 
