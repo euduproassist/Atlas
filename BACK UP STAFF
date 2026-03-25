@@ -347,19 +347,13 @@
 
 
 
-
-
-
-
-
-
-
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 const tableBody = document.getElementById('applicationTableBody');
 const filterCourse = document.getElementById('filterCourse');
+
 
 let selectedAppId = null;
 let currentAppId = null; // To track which student we are looking at
@@ -390,14 +384,26 @@ function loadApplications() {
     // We order by lastUpdated to show newest first, matching your 'Sort: Newest' UI
     const q = query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 
-    onSnapshot(q, (snapshot) => {
+onSnapshot(q, (snapshot) => {
+const totalApps = snapshot.size;
+const acceptedCount = snapshot.docs.filter(d => d.data().status1 === 'uncon_accepted' || d.data().status1 === 'prov_accepted').length;
+const rejectedCount = snapshot.docs.filter(d => d.data().status1 === 'rejected').length;
+
+// ADD THIS LINE to define archivedCount (adjust logic if you have a specific 'archived' status)
+const archivedCount = snapshot.docs.filter(d => d.data().status1 === 'archived').length; 
+
+document.getElementById('newAppsCount').innerText = totalApps;
+document.getElementById('acceptedCount').innerText = acceptedCount;
+document.getElementById('rejectedCount').innerText = rejectedCount;
+document.getElementById('archivedCount').innerText = archivedCount; // Now this will show '0' instead of [object]
+
     tableBody.innerHTML = ''; // Always clear the table first
 
     if (snapshot.empty) {
         // If Firebase is empty, show this message instead of a blank screen
         tableBody.innerHTML = `
             <tr>
-                <td colspan="5" style="text-align: center; padding: 50px; color: #999;">
+                <td colspan="7" style="text-align: center; padding: 50px; color: #999;">
                     <i class="fas fa-inbox" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
                     No student applications have been submitted yet.
                 </td>
@@ -646,23 +652,89 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     }
 });
 
-// NEW FILTER LOGIC (Checks both Status and Course)
+// --- TAB SWITCHING LOGIC ---
+
+const tabs = {
+    new: document.getElementById('tabNew'),
+    accepted: document.getElementById('tabAccepted'),
+    rejected: document.getElementById('tabRejected'),
+    archived: document.getElementById('tabArchived')
+};
+
+let activeTabFilter = 'all'; // Default to showing everything (New Apps)
+
+function handleTabClick(selectedKey) {
+    // 1. Update UI Styles
+    Object.values(tabs).forEach(tab => {
+        tab.style.borderBottom = "none";
+        tab.style.background = "#fff";
+    });
+    
+    tabs[selectedKey].style.borderBottom = "3px solid #4a90e2";
+    // Optional: add a light blue tint to active tab background
+    tabs[selectedKey].style.background = "rgba(74, 144, 226, 0.05)";
+
+    // 2. Set Filter Key
+    activeTabFilter = selectedKey;
+
+    // 3. Re-apply all filters (Tabs + Dropdowns)
+    applyFilters();
+}
+
+// Attach Event Listeners
+tabs.new.onclick = () => handleTabClick('new');
+tabs.accepted.onclick = () => handleTabClick('accepted');
+tabs.rejected.onclick = () => handleTabClick('rejected');
+tabs.archived.onclick = () => handleTabClick('archived');
+
+// Update your existing applyFilters function to include the Tab logic
 const applyFilters = () => {
-    const statusVal = document.getElementById('filterStatus').value.toLowerCase();
+    const statusDropdownVal = document.getElementById('filterStatus').value.toLowerCase();
     const courseVal = document.getElementById('filterCourse').value.toLowerCase();
     const rows = tableBody.getElementsByTagName('tr');
 
     for (let row of rows) {
+        // Get the status from the hidden text or status pill in cell index 2
+        const rowStatus = row.cells[2]?.innerText.toLowerCase().trim() || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
-        const rowStatus = row.cells[2]?.innerText.toLowerCase().replace(/\s/g, '') || "";
 
-        const matchStatus = statusVal === "all" || rowStatus.includes(statusVal.replace('_', ''));
+        // Tab Logic
+        let matchTab = false;
+        if (activeTabFilter === 'new') matchTab = true; // Show all for "New Applications"
+        if (activeTabFilter === 'accepted') matchTab = (rowStatus === 'uncon_accepted' || rowStatus === 'prov_accepted');
+        if (activeTabFilter === 'rejected') matchTab = (rowStatus === 'rejected');
+        if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
+
+        // Dropdown Logic
+        const matchDropdownStatus = statusDropdownVal === "all" || rowStatus.includes(statusDropdownVal.replace('_', ''));
         const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
 
-        // Only show the row if BOTH filters match
-        row.style.display = (matchStatus && matchCourse) ? '' : 'none';
+        // Final Visibility: Must match Tab AND Dropdowns
+        if (matchTab && matchDropdownStatus && matchCourse) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
     }
 };
+
+handleTabClick('new');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
