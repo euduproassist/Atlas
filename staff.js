@@ -446,8 +446,6 @@ else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
 // We removed the status dropdown, so we can set this to true
 const matchDropdownStatus = true;
 
-        const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
-
         // Final Visibility: Must match Tab AND Dropdowns
         if (matchTab && matchDropdownStatus && matchCourse) {
             row.style.display = '';
