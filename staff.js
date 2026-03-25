@@ -431,6 +431,21 @@ const applyFilters = () => {
         const rowStatus = row.cells[2]?.innerText.toLowerCase().trim() || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
 
+        
+// NEW LOGIC:
+let matchTab = false;
+if (activeTabFilter === 'new') {
+    // If in New tab, check the sub-filter (All, Pending, Review, or Waiting)
+    if (activeSubFilter === 'all') matchTab = true;
+    else matchTab = rowStatus.includes(activeSubFilter);
+} 
+else if (activeTabFilter === 'accepted') matchTab = (rowStatus === 'uncon_accepted' || rowStatus === 'prov_accepted');
+else if (activeTabFilter === 'rejected') matchTab = (rowStatus === 'rejected');
+else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
+
+// We removed the status dropdown, so we can set this to true
+const matchDropdownStatus = true;
+
         const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
 
         // Final Visibility: Must match Tab AND Dropdowns
