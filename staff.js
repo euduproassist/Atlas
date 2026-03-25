@@ -519,6 +519,49 @@ document.getElementById('sortDate').addEventListener('change', (e) => {
 // Re-attach Document Filter listener
 document.getElementById('filterDocs').addEventListener('change', applyFilters);
 
+// Profile Card Logic for Staff
+const triggerProfileActions = async () => {
+    const user = auth.currentUser;
+    const modal = document.getElementById('appModal'); // Reusing your existing modal container
+    const body = document.getElementById('modalBody');
+    const header = document.getElementById('modalStudentHeader');
+    const personal = document.getElementById('personalSection');
+    const academic = document.getElementById('academicSection');
+
+    // Hide standard application sections to show the profile card
+    [personal, academic, document.getElementById('appDetailsSection')].forEach(s => { if(s) s.style.display = 'none'; });
+    header.innerHTML = ""; // Clear applicant header
+    document.getElementById('breadcrumbActive').innerText = "Staff Profile";
+
+    body.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+            <div style="width: 100px; height: 100px; background: #e3f2fd; color: #4a90e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2.5rem;">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h2 style="margin-bottom: 5px;">Staff Member</h2>
+            <p style="color: #666; margin-bottom: 30px;">${user.email}</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto;">
+                <button id="staffChangePass" style="padding: 14px; background: white; border: 1px solid #4a90e2; color: #4a90e2; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    <i class="fas fa-key"></i> Reset My Password
+                </button>
+                <button id="staffLogout" style="padding: 14px; background: #ff4d4d; border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    <i class="fas fa-sign-out-alt"></i> Logout System
+                </button>
+            </div>
+            <p style="margin-top: 30px; font-size: 0.75rem; color: #bbb;">Authorized Staff Access Only</p>
+        </div>
+    `;
+    modal.style.display = 'flex';
+
+    // Logic for buttons
+    document.getElementById('staffChangePass').onclick = () => {
+        sendPasswordResetEmail(auth, user.email).then(() => alert("Reset link sent to " + user.email));
+    };
+    document.getElementById('staffLogout').onclick = () => {
+        if(confirm("Log out of the Management Portal?")) signOut(auth).then(() => window.location.href = "staff-login.html");
+    };
+};
 
 
 
