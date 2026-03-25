@@ -166,6 +166,7 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
 
             tableBody.appendChild(row);
         });
+        applyFilters();
     });
 }
 
