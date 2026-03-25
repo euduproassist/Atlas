@@ -413,6 +413,29 @@ const applyFilters = () => {
             row.style.display = 'none';
         }
     }
+
+    // ADD THIS AT THE VERY END OF applyFilters function
+    const existingNoData = document.getElementById('noDataRow');
+    if (existingNoData) existingNoData.remove();
+
+    // Check if any rows are actually visible
+    const visibleRows = Array.from(rows).filter(r => r.style.display !== 'none');
+    
+    if (visibleRows.length === 0) {
+        const noDataRow = document.createElement('tr');
+        noDataRow.id = 'noDataRow';
+        const message = activeTabFilter === 'accepted' 
+            ? "No students have been admitted yet. Accepted students will appear here." 
+            : "No applications found in this section.";
+            
+        noDataRow.innerHTML = `
+            <td colspan="7" style="text-align: center; padding: 60px; color: #999;">
+                <i class="fas fa-user-graduate" style="font-size: 2.5rem; display: block; margin-bottom: 15px; opacity: 0.5;"></i>
+                <p style="font-weight: 500;">${message}</p>
+            </td>
+        `;
+        tableBody.appendChild(noDataRow);
+    }
 };
 
 handleTabClick('new');
