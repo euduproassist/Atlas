@@ -36,19 +36,7 @@ function loadApplications() {
     const q = query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 
     onSnapshot(q, (snapshot) => {
-            // 1. Calculate the counts
-    const totalApps = snapshot.size;
-    const acceptedCount = snapshot.docs.filter(d => d.data().status1 === 'uncon_accepted' || d.data().status1 === 'prov_accepted').length;
-    const rejectedCount = snapshot.docs.filter(d => d.data().status1 === 'rejected').length;
 
-        // Add these inside the onSnapshot in staff.js
-document.getElementById('newAppsCount').innerText = totalApps;
-document.getElementById('acceptedCount').innerText = acceptedCount;
-document.getElementById('rejectedCount').innerText = rejectedCount;
-document.getElementById('archivedCount').innerText = archivedCount;
-
-    // 2. Update the UI numbers (Make sure to add IDs to those span elements in the HTML above)
-    // Example: document.getElementById('newAppsCount').innerText = totalApps;
     tableBody.innerHTML = ''; // Always clear the table first
 
     if (snapshot.empty) {
