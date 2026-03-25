@@ -5,6 +5,13 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/fi
 const tableBody = document.getElementById('applicationTableBody');
 const filterCourse = document.getElementById('filterCourse');
 
+// Add these inside the onSnapshot in staff.js
+document.getElementById('newAppsCount').innerText = totalApps;
+document.getElementById('acceptedCount').innerText = acceptedCount;
+document.getElementById('rejectedCount').innerText = rejectedCount;
+document.getElementById('archievedCount').innerText = archievedCount;
+
+
 let selectedAppId = null;
 let currentAppId = null; // To track which student we are looking at
 
