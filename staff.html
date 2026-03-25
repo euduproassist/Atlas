@@ -38,31 +38,19 @@
 
     .logo-section i { color: var(--primary); }
 
-    #newAppSubNav {
-    width: 98%;           /* Same length as the table */
-    max-width: 1400px;
-    margin: 0 auto;       /* Centers the card */
-    display: flex;
-    gap: 25px;
-    padding: 15px 25px;
-    background: transparent; /* As requested: Transparent color */
-    border: 1px solid var(--border);
-    border-bottom: none;     /* Removes bottom border to combine with filter card */
-    border-radius: 8px 8px 0 0; /* Rounds only the top corners */
-    }
-
      /* 2. Toolbar (Filters + Search) */
     .toolbar {
-        width: 98%;
-        max-width: 1400px;
-        background: #fff;
+        background: transparent;
         padding: 15px 25px;
-        margin: 0 auto; 
-        border-radius: 0;       
-        border: 1px solid var(--border);
+        margin-bottom: 0; 
+        border-radius: 0;      /* Removed border-radius so it sits flush with the screen edges */
+        border-left: none;     /* Optional: remove side borders for a seamless full-width look */
+        border-right: none;
+        border-top: 1px solid rgba(74, 144, 226, 0.1);
+        border-bottom: 1px solid rgba(74, 144, 226, 0.1);
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
     }
 
     .filters {
@@ -99,19 +87,15 @@
 
     /* 3. Main Table Content - Full Screen */
     .main-content {
-        width: 98%;
-        max-width: 1400px;
+        width: 100%;
         padding: 0;
-        margin: 0 auto;
+        margin-top: 0;
     }
 
     .table-wrapper {
         width: 100%;
-        overflow: hidden;
-        border: 1px solid var(--border);
-        border-top: none;
+        overflow-x: auto; /* Allows horizontal swipe on small phones */
         background: white;
-        border-radius: 0 0 8px 8px;
     }
 
     table {
@@ -274,34 +258,36 @@
         <span id="archivedCount" style="font-size: 1.1rem; color: #666; font-weight: 700;">0</span>
     </div>
 </div>
-        <div id="newAppSubNav">
-    <div onclick="setSubFilter('all')" class="sub-tab" id="subAll">All</div>
-    <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending">Pending</div>
-    <div onclick="setSubFilter('review')" class="sub-tab" id="subReview">Under Review</div>
-    <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting">Waiting List</div>
-</div>
 
-<div class="toolbar">
-    <div class="search-bar">
+ <div id="newAppSubNav" style="display: flex; gap: 25px; padding: 10px 25px; background: #fff; border-bottom: 1px solid #e1e4e8; margin-top: -1px;">
+    <div onclick="setSubFilter('all')" class="sub-tab" id="subAll" style="font-size: 0.85rem; font-weight: 600; color: #4a90e2; cursor: pointer; border-bottom: 2px solid #4a90e2; padding-bottom: 5px;">All</div>
+    <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Pending</div>
+    <div onclick="setSubFilter('review')" class="sub-tab" id="subReview" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Under Review</div>
+    <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Waiting List</div>
+</div>
+        <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center; background: transparent; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="search-bar" style="width: 450px;">
         <input type="text" id="searchInput" placeholder="Search Application ID or Course...">
         <i class="fas fa-search"></i>
     </div>
-    <div class="filters">
-        <select id="filterDocs">
+    <div class="filters" style="display: flex; gap: 10px;">
+        <select id="filterDocs" style="width: 240px;">
             <option value="all">All Documents</option>
             <option value="CD">Complete Docs (CD)</option>
             <option value="MD">Missing Docs (MD)</option>
         </select>
-        <select id="sortDate">
+        <select id="sortDate" style="width: 230px;">
             <option value="newest">Sort: Newest</option>
             <option value="oldest">Sort: Oldest</option>
         </select>
     </div>
 </div>
+    </div>
 
 <div class="main-content">
     <div class="table-wrapper">
         <table>
+            <thead>
                 <tr>
                     <th>Application ID</th>
                     <th>Course 1</th>
@@ -311,10 +297,10 @@
                     <th class="hide-mobile">Date Submitted</th>
                     <th>Action</th>
                 </tr>
+            </thead>
             <tbody id="applicationTableBody"></tbody>
         </table>
     </div>
-</div>
 
     <div id="appModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; flex-direction: column; shadow-y: auto; overflow-y: auto;">
     <div style="padding: 15px 25px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; color: #666; font-size: 0.85rem;">
@@ -347,4 +333,5 @@
 <script type="module" src="staff.js"></script>
 </body>
 </html>
+
 
