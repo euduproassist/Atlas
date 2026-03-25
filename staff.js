@@ -24,6 +24,7 @@ onAuthStateChanged(auth, async (user) => {
     
     if (staffSnap.exists()) {
     loadApplications();
+    setupProfile(user);
 
 } else {
     console.warn("Security: UID", user.uid, "not found in staff collection.");
