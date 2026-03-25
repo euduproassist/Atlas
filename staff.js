@@ -35,7 +35,18 @@ function loadApplications() {
     // We order by lastUpdated to show newest first, matching your 'Sort: Newest' UI
     const q = query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 
-    onSnapshot(q, (snapshot) => {
+onSnapshot(q, (snapshot) => {
+const totalApps = snapshot.size;
+const acceptedCount = snapshot.docs.filter(d => d.data().status1 === 'uncon_accepted' || d.data().status1 === 'prov_accepted').length;
+const rejectedCount = snapshot.docs.filter(d => d.data().status1 === 'rejected').length;
+
+// ADD THIS LINE to define archivedCount (adjust logic if you have a specific 'archived' status)
+const archivedCount = snapshot.docs.filter(d => d.data().status1 === 'archived').length; 
+
+document.getElementById('newAppsCount').innerText = totalApps;
+document.getElementById('acceptedCount').innerText = acceptedCount;
+document.getElementById('rejectedCount').innerText = rejectedCount;
+document.getElementById('archivedCount').innerText = archivedCount; // Now this will show '0' instead of [object]
 
     tableBody.innerHTML = ''; // Always clear the table first
 
@@ -309,6 +320,10 @@ const applyFilters = () => {
         row.style.display = (matchStatus && matchCourse) ? '' : 'none';
     }
 };
+
+document.getElementById('filterStatus').addEventListener('change', applyFilters);
+document.getElementById('filterCourse').addEventListener('change', applyFilters);
+
 
 
 
