@@ -264,18 +264,18 @@
     <div onclick="setSubFilter('review')" class="sub-tab" id="subReview" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Under Review</div>
     <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting" style="font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 5px;">Waiting List</div>
 </div>
-        <div class="toolbar">
-    <div class="search-bar" style="flex: 1;">
+        <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="search-bar" style="width: 350px;">
         <input type="text" id="searchInput" placeholder="Search Application ID or Course...">
         <i class="fas fa-search"></i>
     </div>
-    <div class="filters" style="flex: 1.5; display: flex; gap: 10px;">
-        <select id="filterDocs" style="width: 100%;">
+    <div class="filters" style="display: flex; gap: 10px;">
+        <select id="filterDocs" style="width: 160px;">
             <option value="all">All Documents</option>
             <option value="CD">Complete Docs (CD)</option>
             <option value="MD">Missing Docs (MD)</option>
         </select>
-        <select id="sortDate" style="width: 100%;">
+        <select id="sortDate" style="width: 150px;">
             <option value="newest">Sort: Newest</option>
             <option value="oldest">Sort: Oldest</option>
         </select>
