@@ -38,6 +38,27 @@
 
     .logo-section i { color: var(--primary); }
 
+/* 2. Toolbar (Filters + Search) - Stretched Full Width */
+.toolbar {
+    background: #ffffff; /* Make the card white */
+    padding: 15px 25px;
+    margin-bottom: 0; 
+    border-radius: 0; 
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;       /* Force it to be 100% of the viewport width */
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
     .filters {
         display: flex;
         gap: 8px;
