@@ -445,9 +445,12 @@ else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
 
 // We removed the status dropdown, so we can set this to true
 const matchDropdownStatus = true;
+        // Check if row has CD or MD label
+const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
+const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
         // Final Visibility: Must match Tab AND Dropdowns
-        if (matchTab && matchDropdownStatus && matchCourse) {
+        if (matchTab && matchDocs) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
