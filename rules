@@ -1,3 +1,49 @@
+staff.js:425 Uncaught TypeError: Cannot read properties of null (reading 'value')
+    at applyFilters (staff.js:425:70)
+    at Array.<anonymous> (staff.js:198:9)
+    at next (reference_impl.ts:749:7)
+    at bundle_reader_impl.ts:43:3
+applyFilters	@	staff.js:425
+(anonymous)	@	staff.js:198
+next	@	reference_impl.ts:749
+(anonymous)	@	bundle_reader_impl.ts:43
+setTimeout		
+Ya	@	bundle_reader_impl.ts:32
+next	@	async_observer.ts:48
+oa	@	event_manager.ts:567
+X_	@	event_manager.ts:470
+__PRIVATE_eventManagerListen	@	event_manager.ts:211
+(anonymous)	@	firestore_client.ts:454
+await in (anonymous)		
+(anonymous)	@	async_queue_impl.ts:138
+(anonymous)	@	async_queue_impl.ts:330
+Promise.then		
+gu	@	async_queue_impl.ts:189
+enqueue	@	async_queue_impl.ts:136
+enqueueAndForget	@	async_queue_impl.ts:97
+__PRIVATE_firestoreClientListen	@	firestore_client.ts:455
+onSnapshot	@	reference_impl.ts:810
+loadApplications	@	staff.js:39
+(anonymous)	@	staff.js:26
+await in (anonymous)		
+(anonymous)	@	auth_impl.ts:744
+Promise.then		
+registerStateListener	@	auth_impl.ts:744
+onAuthStateChanged	@	auth_impl.ts:545
+onAuthStateChanged	@	index.ts:211
+(anonymous)	@	staff.js:15
+﻿
+
+
+
+
+
+
+
+
+
+
+
 gsutil cors set cors.json gs://atlas-c58f8.firebasestorage.app
 
 
