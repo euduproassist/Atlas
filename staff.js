@@ -369,6 +369,9 @@ const applyFilters = () => {
     }
 };
 
+handleTabClick('new');
+
+
 
 
 
