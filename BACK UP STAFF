@@ -19,16 +19,10 @@
 
     /* 1. Dashboard Header - Full Width & Clean */
     .dashboard-header {
-        background: white;
-        padding: 12px 25px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between; /* Pushes Logo to left, Toolbar to right */
-        align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    background: transparent; /* Colorless header card */
+    padding: 20px 25px;
+    border-bottom: none;
+    box-shadow: none;
     }
 
     .logo-section {
@@ -39,15 +33,24 @@
         font-weight: 700;
         color: #2c3e50;
         white-space: nowrap; /* Prevents logo text from wrapping */
+        margin-bottom: 30px;
     }
 
     .logo-section i { color: var(--primary); }
 
-    /* 2. Toolbar (Filters + Search) */
+     /* 2. Toolbar (Filters + Search) */
     .toolbar {
+        background: rgba(74, 144, 226, 0.05);
+        padding: 15px 25px;
+        margin-top: 30px; 
+        border-radius: 0;      /* Removed border-radius so it sits flush with the screen edges */
+        border-left: none;     /* Optional: remove side borders for a seamless full-width look */
+        border-right: none;
+        border-top: 1px solid rgba(74, 144, 226, 0.1);
+        border-bottom: 1px solid rgba(74, 144, 226, 0.1);
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 15px; /* Spacing between filters and search */
     }
 
     .filters {
@@ -219,6 +222,42 @@
         <i class="fas fa-graduation-cap"></i>
         <span>Staff Management Portal</span>
     </div>
+
+        <div style="display: flex; align-items: center; border: 1px solid #e1e4e8; border-radius: 8px; background: #fff; margin-bottom: 20px;">
+    
+    <div id="tabNew" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-right: 1px solid #e1e4e8; cursor: pointer;">
+        <div style="display: flex; flex-direction: column;">
+        <span style="font-weight: 600; font-size: 0.9rem; color: #333;">New Applications</span>
+        <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">NEW</span>
+        </div>
+        <span id="newAppsCount" style="font-size: 1.1rem; color: #666; font-weight: 600;">0</span>
+    </div>
+
+    <div id="tabAccepted" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-right: 1px solid #e1e4e8; cursor: pointer;">
+        <div style="display: flex; flex-direction: column;">
+            <span style="font-weight: 600; font-size: 0.9rem; color: #333;">Admissions</span>
+            <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">ACCEPTED</span>
+        </div>
+        <span id="acceptedCount" style="font-size: 1.1rem; color: #666; font-weight: 600;">0</span>
+    </div>
+
+    <div id="tabRejected" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-right: 1px solid #e1e4e8; cursor: pointer;">
+        <div style="display: flex; flex-direction: column;">
+            <span style="font-weight: 600; font-size: 0.9rem; color: #333;">Declined</span>
+            <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">REJECTED</span>
+        </div>
+        <span id="rejectedCount" style="font-size: 1.1rem; color: #666; font-weight: 600;">0</span>
+    </div>
+
+    <div id="tabArchived" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; cursor: pointer;">
+        <div style="display: flex; flex-direction: column;">
+            <span style="font-weight: 600; font-size: 0.9rem; color: #333;">System Archive</span>
+            <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">ARCHIVED</span>
+        </div>
+        <span id="archivedCount" style="font-size: 1.1rem; color: #666; font-weight: 700;">0</span>
+    </div>
+</div>
+
     <div class="toolbar">
         <div class="filters">
             <select id="filterStatus">
@@ -298,6 +337,7 @@
 <script type="module" src="staff.js"></script>
 </body>
 </html>
+
 
 
 
