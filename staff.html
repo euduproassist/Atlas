@@ -274,6 +274,30 @@
         <span id="archivedCount" style="font-size: 1.1rem; color: #666; font-weight: 700;">0</span>
     </div>
 </div>
+        <div id="newAppSubNav">
+    <div onclick="setSubFilter('all')" class="sub-tab" id="subAll">All</div>
+    <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending">Pending</div>
+    <div onclick="setSubFilter('review')" class="sub-tab" id="subReview">Under Review</div>
+    <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting">Waiting List</div>
+</div>
+
+<div class="toolbar">
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search Application ID or Course...">
+        <i class="fas fa-search"></i>
+    </div>
+    <div class="filters">
+        <select id="filterDocs">
+            <option value="all">All Documents</option>
+            <option value="CD">Complete Docs (CD)</option>
+            <option value="MD">Missing Docs (MD)</option>
+        </select>
+        <select id="sortDate">
+            <option value="newest">Sort: Newest</option>
+            <option value="oldest">Sort: Oldest</option>
+        </select>
+    </div>
+</div>
 
 <div class="main-content">
     <div class="table-wrapper">
