@@ -24,6 +24,10 @@ onAuthStateChanged(auth, async (user) => {
     
     if (staffSnap.exists()) {
     loadApplications();
+    // Trigger Profile Card when clicking the logo section
+    document.querySelector('.logo-section').style.cursor = 'pointer';
+    document.querySelector('.logo-section').onclick = () => triggerProfileActions();
+
 } else {
     console.warn("Security: UID", user.uid, "not found in staff collection.");
     auth.signOut();
