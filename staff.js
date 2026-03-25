@@ -159,6 +159,22 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
                         </button>
                     </td>
                 `;
+            }  else if (activeTabFilter === 'rejected') {
+                  row.innerHTML = `
+                  <td><strong>${displayId}</strong></td>
+                  <td>${studentName}</td>
+                  <td>${course}</td>
+                  <td>${course2}</td>
+                  <td class="hide-mobile">${dateSub}</td>
+                  <td>${data.dateDeclined || 'N/A'}</td>
+                  <td><span style="font-size: 0.8rem; color: #c62828;">${data.rejectionReason || 'N/A'}</span></td>
+                  <td><span style="font-size: 0.8rem; color: #666;">${data.declinedBy || 'Staff User'}</span></td>
+                  <td>
+                  <button class="view-btn" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;">
+                VIEW
+                </button>
+             </td>
+           `;
             } else {
                 row.innerHTML = `
                     <td><strong>${displayId}</strong></td>
