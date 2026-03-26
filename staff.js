@@ -405,6 +405,14 @@ function handleTabClick(selectedKey) {
     activeTabFilter = selectedKey;
 
    // ADD THIS: Only show Sub-Nav if we are in the "New" tab
+    const subNav = document.getElementById('newAppSubNav');
+    const accSubNav = document.getElementById('acceptedSubNav'); // Add this line
+    
+    // Switch visibility based on the main tab
+    subNav.style.display = (selectedKey === 'new') ? 'flex' : 'none';
+    accSubNav.style.display = (selectedKey === 'accepted') ? 'flex' : 'none';
+    
+    activeSubFilter = 'all'; // Reset sub-filter when we change main tabs
 
     // 3. Re-run the listener to rebuild the table with the new headers
     loadApplications(); 
