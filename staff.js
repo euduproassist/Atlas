@@ -443,6 +443,13 @@ if (activeTabFilter === 'new') {
     if (activeSubFilter === 'all') matchTab = true;
     else matchTab = rowStatus.includes(activeSubFilter);
 } 
+    else if (activeTabFilter === 'accepted') {
+    if (activeSubFilter === 'all') {
+        matchTab = ['prov_accepted', 'uncon_accepted', 'registered'].includes(rowStatus);
+    } else {
+        matchTab = (rowStatus === activeSubFilter);
+    }
+}
 
 else if (activeTabFilter === 'rejected') matchTab = (rowStatus === 'rejected');
 else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
