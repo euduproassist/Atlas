@@ -513,14 +513,6 @@ window.setSubFilter = (val) => {
         t.style.borderBottom = "none";
     });
   // Logic to pick the right ID based on which main tab is active
-    let tabId;
-    if (activeTabFilter === 'new') {
-        tabId = 'sub' + val.charAt(0).toUpperCase() + val.slice(1);
-    } else {
-        tabId = (val === 'all') ? 'subAccAll' : 
-                (val === 'prov_accepted') ? 'subProv' : 
-                (val === 'uncon_accepted') ? 'subUncon' : 'subReg';
-    }
     
     const active = document.getElementById(tabId);
     
