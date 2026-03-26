@@ -503,7 +503,6 @@ window.setSubFilter = (val) => {
         t.style.borderBottom = "none";
     });
     
-    const active = document.getElementById('sub' + val.charAt(0).toUpperCase() + val.slice(1));
     active.style.color = "#4a90e2";
     active.style.borderBottom = "2px solid #4a90e2";
     
