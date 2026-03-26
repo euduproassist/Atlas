@@ -453,7 +453,6 @@ if (activeTabFilter === 'new') {
     }
 }
 
-else if (activeTabFilter === 'rejected') matchTab = (rowStatus === 'rejected');
 else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
 
 // We removed the status dropdown, so we can set this to true
