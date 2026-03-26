@@ -452,6 +452,15 @@ if (activeTabFilter === 'new') {
         matchTab = (rowStatus === activeSubFilter);
     }
 }
+   else if (activeTabFilter === 'rejected') {
+    if (activeSubFilter === 'all') {
+        // Show anything that is a 'No', whether from system or student
+        matchTab = ['rejected', 'rejected_both', 'withdrawn_expired', 'student_declined'].includes(rowStatus);
+    } else {
+        // Show specific reason (e.g., only show 'student_declined')
+        matchTab = (rowStatus === activeSubFilter);
+    }
+}
 
 else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
 
