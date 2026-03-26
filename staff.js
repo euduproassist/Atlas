@@ -40,6 +40,7 @@ function loadApplications() {
 
 onSnapshot(q, (snapshot) => {
 const totalApps = snapshot.size;
+const acceptedCount = snapshot.docs.filter(d => ['uncon_accepted', 'prov_accepted', 'registered'].includes(d.data().status1)).length;
 const rejectedCount = snapshot.docs.filter(d => d.data().status1 === 'rejected').length;
 
 // ADD THIS LINE to define archivedCount (adjust logic if you have a specific 'archived' status)
