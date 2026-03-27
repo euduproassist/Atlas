@@ -17,35 +17,13 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
     body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
+    /* 1. Dashboard Header - Full Width & Clean */
     .dashboard-header {
-    padding: 20px 40px; /* Gives some breathing room like the photo */
-}
-
-/* Container for the 4 small cards */
-.stats-container {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.stats-tab {
-    background: white;
-    flex: 1;
-    padding: 15px 20px;
-    border-radius: 8px; /* Rounded corners like the photo */
-    border: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-/* When a card is active, show the blue line at the bottom inside the card */
-.stats-tab.active {
-    border-bottom: 2px solid var(--primary);
-    background: #fff;
-}
+    background: transparent; /* Colorless header card */
+    padding: 20px 25px;
+    border-bottom: none;
+    box-shadow: none;
+    }
 
     .logo-section {
         display: flex;
@@ -61,18 +39,25 @@
     .logo-section i { color: var(--primary); }
 
 /* 2. Toolbar (Filters + Search) - Stretched Full Width */
-    .toolbar {
-    background: #ffffff;
-    padding: 20px 25px;
+.toolbar {
+    background: #ffffff; /* Make the card white */
+    padding: 15px 25px;
+    margin-bottom: 0; 
+    border-radius: 0; 
+    border-left: none;
+    border-right: none;
     border-top: 1px solid var(--border);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    border-radius: 8px 8px 0 0; /* Only round top corners */
+    border-bottom: 1px solid var(--border);
     display: flex;
-    gap: 15px;
+    justify-content: space-between;
     align-items: center;
-    margin: 0 40px; /* Align with header padding */
-    }
+    width: 100vw;       /* Force it to be 100% of the viewport width */
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
 
     .filters {
         display: flex;
@@ -92,21 +77,18 @@
     select:focus, .search-bar input:focus { border-color: var(--primary); }
 
     .search-bar {
-        flex: 1;
         position: relative;
+        min-width: 240px;
     }
 
-    .search-bar input { 
-        background: #f8f9fa;
-        border: 1px solid #eee;
-        width: 100%; 
-        padding: 35px;
-        border-radius: 4px;
-    }
+    .search-bar input { width: 100%; padding-right: 35px; }
 
     .search-bar i {
-        left: 15px;
-        right: auto;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
     }
 
     /* 3. Main Table Content - Full Screen */
@@ -117,11 +99,9 @@
     }
 
     .table-wrapper {
-    margin: 0 40px 40px 40px; /* Match the toolbar margin */
-    background: white;
-    border: 1px solid var(--border);
-    border-top: none; /* Merges with toolbar */
-    border-radius: 0 0 8px 8px;
+        width: 100%;
+        overflow-x: auto; /* Allows horizontal swipe on small phones */
+        background: white;
     }
 
     table {
@@ -134,11 +114,11 @@
         text-align: left;
         padding: 16px 20px;
         background: #f8f9fa;
-        font-weight: 500;
+        font-size: 0.75rem;
         text-transform: uppercase;
         color: #666;
         border-bottom: 2px solid var(--border);
-        letter-spacing: 0.05em;
+        letter-spacing: 0.5px;
     }
 
     td {
@@ -221,16 +201,16 @@
         .ticket-details { margin: 10px; }
     }
 
- /* Match the 'Action' buttons in the photo */
-.view-btn {
-    background: #f3f4f6;
-    color: #374151;
-    border: none;
-    padding: 4px 12px;
+    /* Add this inside your <style> tag */
+    .view-btn {
+    padding: 6px 12px;
+    cursor: pointer;
     border-radius: 4px;
+    font-weight: 700;
     font-size: 0.75rem;
-    font-weight: 600;
-}
+    border: 1px solid transparent;
+    transition: background 0.2s;
+    }
 
     .view-btn:hover {
     filter: brightness(0.95);
@@ -239,6 +219,10 @@
     /* style: Remove the pointer cursor from the row since it's no longer a big button */
     tr:hover { background-color: #fcfdfe; cursor: default; }
 
+    .stats-tab {
+    flex: 1; /* This forces all 4 cards to share the width equally */
+    border-radius: 0 !important; /* Removes rounded corners so they touch the screen edges */
+}
     /* Centered Profile Card Styling */
 .profile-card {
     background: white;
@@ -261,42 +245,6 @@
     align-items: center;
 }
 
- /* Add this to your <style> */
-.container {
-    display: flex; /* Creates the side-by-side look */
-    min-height: 100vh;
-}
-
-.sidebar {
-    width: 240px;
-    background: #fff;
-    border-right: 1px solid var(--border);
-    padding: 20px 0;
-}
-
-.sidebar-item {
-    padding: 12px 25px;
-    font-size: 0.9rem;
-    color: #666;
-    cursor: pointer;
-}
-
-.sidebar-item.active {
-    background: #eef5ff;
-    color: var(--primary);
-    border-left: 4px solid var(--primary);
-    font-weight: 600;
-}
-
- /* Style for the badge count */
-.badge {
-    background: #f0f0f0;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    color: #333;
-}
-
 </style>
 
 </head>
@@ -315,41 +263,39 @@
 </div>
 
         <div style="display: flex; align-items: center; border-top: 1px solid #e1e4e8; border-bottom: 1px solid #e1e4e8; background: #fff; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; margin-bottom: 0;">
-
-            <div class="stats-container">
-    <div id="tabNew" class="stats-tab">
+    
+    <div id="tabNew" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-right: 1px solid #e1e4e8; cursor: pointer;">
         <div style="display: flex; flex-direction: column;">
-            <span style="font-weight: 600; font-size: 0.95rem; color: #333;">New Applications</span>
-            <span style="font-size: 0.7rem; color: var(--primary); font-weight: 700;">NEW</span>
+        <span style="font-weight: 600; font-size: 0.9rem; color: #333;">New Applications</span>
+        <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">NEW</span>
         </div>
-        <span id="newAppsCount" style="font-size: 1.2rem; color: #444; font-weight: 600; background: #eee; padding: 4px 10px; border-radius: 50px;">0</span>
+        <span id="newAppsCount" style="font-size: 1.1rem; color: #666; font-weight: 600;">0</span>
     </div>
 
-    <div id="tabAccepted" class="stats-tab">
+    <div id="tabAccepted" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-right: 1px solid #e1e4e8; cursor: pointer;">
         <div style="display: flex; flex-direction: column;">
-            <span style="font-weight: 600; font-size: 0.95rem; color: #333;">Admissions</span>
-            <span style="font-size: 0.7rem; color: #999; font-weight: 700;">ACCEPTED</span>
+            <span style="font-weight: 600; font-size: 0.9rem; color: #333;">Admissions</span>
+            <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">ACCEPTED</span>
         </div>
-        <span id="acceptedCount" style="font-size: 1.1rem; color: #999;">0</span>
+        <span id="acceptedCount" style="font-size: 1.1rem; color: #666; font-weight: 600;">0</span>
     </div>
 
-    <div id="tabRejected" class="stats-tab">
+    <div id="tabRejected" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-right: 1px solid #e1e4e8; cursor: pointer;">
         <div style="display: flex; flex-direction: column;">
-            <span style="font-weight: 600; font-size: 0.95rem; color: #333;">Declined</span>
-            <span style="font-size: 0.7rem; color: #999; font-weight: 700;">REJECTED</span>
+            <span style="font-weight: 600; font-size: 0.9rem; color: #333;">Declined</span>
+            <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">REJECTED</span>
         </div>
-        <span id="rejectedCount" style="font-size: 1.1rem; color: #999;">0</span>
+        <span id="rejectedCount" style="font-size: 1.1rem; color: #666; font-weight: 600;">0</span>
     </div>
 
-    <div id="tabArchived" class="stats-tab">
+    <div id="tabArchived" class="stats-tab" style="flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; cursor: pointer;">
         <div style="display: flex; flex-direction: column;">
-            <span style="font-weight: 600; font-size: 0.95rem; color: #333;">System Archive</span>
-            <span style="font-size: 0.7rem; color: #999; font-weight: 700;">ARCHIVED</span>
+            <span style="font-weight: 600; font-size: 0.9rem; color: #333;">System Archive</span>
+            <span style="font-size: 0.7rem; color: #4a90e2; font-weight: 700; text-transform: uppercase;">ARCHIVED</span>
         </div>
-        <span id="archivedCount" style="font-size: 1.1rem; color: #999;">0</span>
+        <span id="archivedCount" style="font-size: 1.1rem; color: #666; font-weight: 700;">0</span>
     </div>
 </div>
-
         <div id="newAppSubNav" style="display: flex; justify-content: space-between; padding: 15px 50px; background: transparent; border-bottom: 1px solid #e1e4e8; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
     
     <div onclick="setSubFilter('all')" class="sub-tab" id="subAll" style="flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600; color: #4a90e2; cursor: pointer; border-bottom: 2px solid #4a90e2; padding-bottom: 10px;">All</div>
@@ -458,5 +404,58 @@
 <script type="module" src="staff.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
