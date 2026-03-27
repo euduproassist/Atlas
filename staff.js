@@ -405,14 +405,7 @@ function handleTabClick(selectedKey) {
     activeTabFilter = selectedKey;
 
    // ADD THIS: Only show Sub-Nav if we are in the "New" tab
-    const subNav = document.getElementById('newAppSubNav');
-    const accSubNav = document.getElementById('acceptedSubNav'); // Add this line
-    const rejSubNav = document.getElementById('rejectedSubNav');
-    
-    // Switch visibility based on the main tab
-    subNav.style.display = (selectedKey === 'new') ? 'flex' : 'none';
-    accSubNav.style.display = (selectedKey === 'accepted') ? 'flex' : 'none';
-    rejSubNav.style.display = (selectedKey === 'rejected') ? 'flex' : 'none';
+
     
     activeSubFilter = 'all'; // Reset sub-filter when we change main tabs
 
