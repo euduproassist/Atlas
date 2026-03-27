@@ -17,6 +17,36 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
     body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
+    .dashboard-header {
+    padding: 20px 40px; /* Gives some breathing room like the photo */
+}
+
+/* Container for the 4 small cards */
+.stats-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stats-tab {
+    background: white;
+    flex: 1;
+    padding: 15px 20px;
+    border-radius: 8px; /* Rounded corners like the photo */
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* When a card is active, show the blue line at the bottom inside the card */
+.stats-tab.active {
+    border-bottom: 3px solid var(--primary);
+    background: #fcfdfe;
+}
+
     .logo-section {
         display: flex;
         align-items: center;
