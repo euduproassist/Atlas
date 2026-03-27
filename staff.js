@@ -1,3 +1,4 @@
+
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
@@ -393,31 +394,30 @@ const tabs = {
 let activeTabFilter = 'all'; // Default to showing everything (New Apps)
 
 function handleTabClick(selectedKey) {
-    // 1. Update UI Styles
-    Object.keys(tabs).forEach(key => {
-        tabs[key].classList.remove('active');
-        // Reset colors of text inside the cards
-        tabs[key].querySelector('span:nth-child(2)').style.color = "#999";
-        tabs[key].querySelector('span[id*="Count"]').style.color = "#999";
+    // 1. Update UI Styles (Active tab color)
+    Object.values(tabs).forEach(tab => {
+        tab.style.borderBottom = "none";
+        tab.style.background = "#fff";
     });
+    tabs[selectedKey].style.borderBottom = "3px solid #4a90e2";
+    tabs[selectedKey].style.background = "rgba(74, 144, 226, 0.05)";
 
-    // 2. Set active state
-    tabs[selectedKey].classList.add('active');
-    tabs[selectedKey].querySelector('span:nth-child(2)').style.color = "var(--primary)";
-    tabs[selectedKey].querySelector('span[id*="Count"]').style.color = "#444";
-
+    // 2. Set the Filter Key (CRITICAL: Do this before loading)
     activeTabFilter = selectedKey;
 
-    // Show/Hide Sub-Navs (Keep your existing logic for subNav.style.display)
+   // ADD THIS: Only show Sub-Nav if we are in the "New" tab
     const subNav = document.getElementById('newAppSubNav');
-    const accSubNav = document.getElementById('acceptedSubNav');
+    const accSubNav = document.getElementById('acceptedSubNav'); // Add this line
     const rejSubNav = document.getElementById('rejectedSubNav');
     
-    if(subNav) subNav.style.display = (selectedKey === 'new') ? 'flex' : 'none';
-    if(accSubNav) accSubNav.style.display = (selectedKey === 'accepted') ? 'flex' : 'none';
-    if(rejSubNav) rejSubNav.style.display = (selectedKey === 'rejected') ? 'flex' : 'none';
+    // Switch visibility based on the main tab
+    subNav.style.display = (selectedKey === 'new') ? 'flex' : 'none';
+    accSubNav.style.display = (selectedKey === 'accepted') ? 'flex' : 'none';
+    rejSubNav.style.display = (selectedKey === 'rejected') ? 'flex' : 'none';
     
-    activeSubFilter = 'all';
+    activeSubFilter = 'all'; // Reset sub-filter when we change main tabs
+
+    // 3. Re-run the listener to rebuild the table with the new headers
     loadApplications(); 
 }
 
