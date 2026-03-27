@@ -38,6 +38,19 @@
 
     .logo-section i { color: var(--primary); }
 
+  /* 2. Toolbar (Filters + Search) - Fixed to stay within container */
+.toolbar {
+    background: #ffffff;
+    padding: 15px 25px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Changed from 100vw to fit the screen properly */
+    gap: 15px;
+}
+
     .filters {
         display: flex;
         gap: 8px;
