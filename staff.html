@@ -91,44 +91,11 @@
         color: #999;
     }
 
-     /* 3. Main Table Content - Sidebar + Table Layout */
+    /* 3. Main Table Content - Full Screen */
     .main-content {
-        display: flex; /* This puts sidebar and table next to each other */
         width: 100%;
-        gap: 0;
-        background: #fff;
-        border-top: 1px solid var(--border);
-    }
-
-    .sidebar-menu {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;  
-    }
-
-    .sub-tab {
-        padding: 12px 25px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #666;
-        transition: 0.2s;
-        display: block; /* Stack them vertically */
-        border-left: 3px solid transparent;
-        width: 100%
-    }
-
-    /* This will be the "Active" state for the sidebar items */
-    .sub-tab.active-sidebar {
-        background: #f0f7ff;
-        color: var(--primary);
-        border-left: 3px solid var(--primary);
-        font-weight: 700;
-    }
-
-    .table-container-right {
-        flex-grow: 1;
-        overflow-x: auto;
+        padding: 0;
+        margin-top: 0;
     }
 
     .table-wrapper {
@@ -329,6 +296,16 @@
         <span id="archivedCount" style="font-size: 1.1rem; color: #666; font-weight: 700;">0</span>
     </div>
 </div>
+        <div id="newAppSubNav" style="display: flex; justify-content: space-between; padding: 15px 50px; background: transparent; border-bottom: 1px solid #e1e4e8; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+    
+    <div onclick="setSubFilter('all')" class="sub-tab" id="subAll" style="flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600; color: #4a90e2; cursor: pointer; border-bottom: 2px solid #4a90e2; padding-bottom: 10px;">All</div>
+    
+    <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending" style="flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 10px;">Pending</div>
+    
+    <div onclick="setSubFilter('review')" class="sub-tab" id="subReview" style="flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 10px;">Under Review</div>
+    
+    <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting" style="flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600; color: #999; cursor: pointer; padding-bottom: 10px;">Waiting List</div>
+</div>
 
  <div id="acceptedSubNav" style="display: none; justify-content: space-between; padding: 15px 50px; background: transparent; border-bottom: 1px solid #e1e4e8; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
     <div onclick="setSubFilter('all')" class="sub-tab" id="subAccAll" style="flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600; color: #4a90e2; cursor: pointer; border-bottom: 2px solid #4a90e2; padding-bottom: 10px;">All Admissions</div>
@@ -363,48 +340,23 @@
 </div>
     </div>
 
-    <div class="main-content">
-    <div class="sidebar-menu">
-        <div style="padding: 0 25px 15px; font-size: 0.75rem; color: #999; font-weight: 700; text-transform: uppercase;">Filters</div>
-        
-        <div id="newAppSubNav">
-            <div onclick="setSubFilter('all')" class="sub-tab active-sidebar" id="subAll">All</div>
-            <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending">Pending</div>
-            <div onclick="setSubFilter('review')" class="sub-tab" id="subReview">Under Review</div>
-            <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting">Wait List</div>
-        </div>
-
-        <div id="acceptedSubNav" style="display:none;">
-            <div onclick="setSubFilter('all')" class="sub-tab active-sidebar" id="subAccAll">All Admissions</div>
-            <div onclick="setSubFilter('prov_accepted')" class="sub-tab" id="subProv">Provisional</div>
-            <div onclick="setSubFilter('uncon_accepted')" class="sub-tab" id="subUncon">Unconditional</div>
-        </div>
-
-        <div id="rejectedSubNav" style="display:none;">
-            <div onclick="setSubFilter('all')" class="sub-tab active-sidebar" id="subRejAll">All Declined</div>
-            <div onclick="setSubFilter('student_declined')" class="sub-tab" id="subStudent">Student Declined</div>
-        </div>
+<div class="main-content">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Course 1</th>
+                    <th>Status 1</th>
+                    <th>Course 2</th>
+                    <th>Status 2</th>
+                    <th class="hide-mobile">Date Submitted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="applicationTableBody"></tbody>
+        </table>
     </div>
-
-    <div class="table-container-right">
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Application ID</th>
-                        <th>Course 1</th>
-                        <th>Status 1</th>
-                        <th>Course 2</th>
-                        <th>Status 2</th>
-                        <th class="hide-mobile">Date Submitted</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="applicationTableBody"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
 
     <div id="appModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; flex-direction: column; shadow-y: auto; overflow-y: auto;">
     <div style="padding: 15px 25px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; color: #666; font-size: 0.85rem;">
@@ -452,3 +404,5 @@
 <script type="module" src="staff.js"></script>
 </body>
 </html>
+
+
