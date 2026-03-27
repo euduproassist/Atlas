@@ -581,10 +581,6 @@ window.toggleFolder = (sectionId, tabKey) => {
     handleTabClick(tabKey);
 };
 
-// Add this to your staff.js
-document.getElementById('sidebarToggle').addEventListener('click', () => {
-    const sidebar = document.querySelector('.sidebar-menu');
-    sidebar.classList.toggle('collapsed');
-});
+
 
 
