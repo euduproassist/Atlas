@@ -404,8 +404,15 @@ function handleTabClick(selectedKey) {
     // 2. Set the Filter Key (CRITICAL: Do this before loading)
     activeTabFilter = selectedKey;
 
-   // ADD THIS: Only show Sub-Nav if we are in the "New" tab
+// ADD THIS: Only show Sub-Nav if we are in the "New" tab
+const sideNew = document.getElementById('sideNavNew');
+const sideAcc = document.getElementById('sideNavAccepted');
+const sideRej = document.getElementById('sideNavRejected');
 
+// Show only the relevant sidebar section
+sideNew.style.display = (selectedKey === 'new') ? 'block' : 'none';
+sideAcc.style.display = (selectedKey === 'accepted') ? 'block' : 'none';
+sideRej.style.display = (selectedKey === 'rejected') ? 'block' : 'none';
     
     activeSubFilter = 'all'; // Reset sub-filter when we change main tabs
 
