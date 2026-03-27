@@ -569,3 +569,18 @@ function setupProfile(user) {
         }
     };
 }
+
+window.toggleFolder = (sectionId, tabKey) => {
+    // 1. Hide all sections first
+    document.querySelectorAll('.sidebar-section').forEach(sec => {
+        sec.style.display = 'none';
+    });
+    
+    // 2. Show the one we clicked
+    const target = document.getElementById(sectionId);
+    target.style.display = 'block';
+
+    // 3. Trigger your existing tab logic to refresh the table
+    handleTabClick(tabKey);
+};
+
