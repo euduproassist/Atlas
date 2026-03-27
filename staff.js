@@ -1,4 +1,3 @@
-
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
@@ -504,6 +503,32 @@ const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 };
 
 handleTabClick('new');
+
+window.setSubFilter = (val) => {
+    activeSubFilter = val;
+    
+    // Remove active class from ALL sub-tabs
+    document.querySelectorAll('.sub-tab').forEach(t => {
+        t.classList.remove('active-sidebar');
+        t.style.color = ""; // Clear inline styles if any
+        t.style.borderBottom = ""; 
+    });
+
+    let tabId;
+    if (activeTabFilter === 'new') {
+        tabId = 'sub' + val.charAt(0).toUpperCase() + val.slice(1);
+    } else if (activeTabFilter === 'accepted') {
+        tabId = (val === 'all') ? 'subAccAll' : (val === 'prov_accepted') ? 'subProv' : 'subUncon';
+    } else if (activeTabFilter === 'rejected') {
+        tabId = (val === 'all') ? 'subRejAll' : 'subStudent';
+    }
+    
+    // Add the new active class to the selected sidebar item
+    const activeItem = document.getElementById(tabId);
+    if(activeItem) activeItem.classList.add('active-sidebar');
+    
+    applyFilters();
+};
 
 document.getElementById('sortDate').addEventListener('change', (e) => {
     const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
