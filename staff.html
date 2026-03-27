@@ -101,12 +101,9 @@
     }
 
     .sidebar-menu {
-        width: 200px;
-        min-width: 200px;
-        border-right: 1px solid var(--border);
-        background: #fff;
-        padding-top: 20px;
-        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;  
     }
 
     .sub-tab {
@@ -118,6 +115,7 @@
         transition: 0.2s;
         display: block; /* Stack them vertically */
         border-left: 3px solid transparent;
+        width: 100%
     }
 
     /* This will be the "Active" state for the sidebar items */
