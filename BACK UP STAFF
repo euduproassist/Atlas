@@ -389,7 +389,7 @@
 
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 const tableBody = document.getElementById('applicationTableBody');
 const filterCourse = document.getElementById('filterCourse');
@@ -397,6 +397,7 @@ const filterCourse = document.getElementById('filterCourse');
 
 let selectedAppId = null;
 let currentAppId = null; // To track which student we are looking at
+let activeSubFilter = 'all'; // Tracks Pending, Review, or Waiting
 
 
 // 1. Security Check: Ensure user is logged in
@@ -412,6 +413,8 @@ onAuthStateChanged(auth, async (user) => {
     
     if (staffSnap.exists()) {
     loadApplications();
+    setupProfile(user);
+
 } else {
     console.warn("Security: UID", user.uid, "not found in staff collection.");
     auth.signOut();
@@ -426,7 +429,7 @@ function loadApplications() {
 
 onSnapshot(q, (snapshot) => {
 const totalApps = snapshot.size;
-const acceptedCount = snapshot.docs.filter(d => d.data().status1 === 'uncon_accepted' || d.data().status1 === 'prov_accepted').length;
+const acceptedCount = snapshot.docs.filter(d => ['uncon_accepted', 'prov_accepted', 'registered'].includes(d.data().status1)).length;
 const rejectedCount = snapshot.docs.filter(d => d.data().status1 === 'rejected').length;
 
 // ADD THIS LINE to define archivedCount (adjust logic if you have a specific 'archived' status)
@@ -437,7 +440,47 @@ document.getElementById('acceptedCount').innerText = acceptedCount;
 document.getElementById('rejectedCount').innerText = rejectedCount;
 document.getElementById('archivedCount').innerText = archivedCount; // Now this will show '0' instead of [object]
 
-    tableBody.innerHTML = ''; // Always clear the table first
+        tableBody.innerHTML = ''; // Keep this line
+
+    // ADD THIS BELOW:
+    const tableHead = document.querySelector('table thead');
+    if (activeTabFilter === 'accepted') {
+        tableHead.innerHTML = `
+            <tr>
+                <th>Application ID</th>
+                <th>Student Name</th>
+                <th>Course Accepted</th>
+                <th class="hide-mobile">Date Submitted</th>
+                <th>Date Accepted</th>
+                <th>Accepted By</th>
+                <th>Action</th>
+            </tr>`;
+    } else if (activeTabFilter === 'rejected') {
+    tableHead.innerHTML = `
+    <tr>
+    <th>Application ID</th>
+    <th>Student Name</th>
+    <th>Course 1 Declined</th>
+    <th>Course 2 Declined</th>
+    <th class="hide-mobile">Date Submitted</th>
+    <th>Date Declined</th>
+    <th>Declined By</th>
+    <th>Action</th>
+    </tr>`;
+        
+    } else {
+        tableHead.innerHTML = `
+            <tr>
+                <th>Application ID</th>
+                <th>Course 1</th>
+                <th>Status 1</th>
+                <th>Course 2</th>
+                <th>Status 2</th>
+                <th class="hide-mobile">Date Submitted</th>
+                <th>Action</th>
+            </tr>`;
+    }
+
 
     if (snapshot.empty) {
         // If Firebase is empty, show this message instead of a blank screen
@@ -490,25 +533,60 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
             status2HTML = `<span class="status status-${status2}">${status2.toUpperCase()}</span>`;
             }
 
-            const row = document.createElement('tr');
-            row.innerHTML = `
-            <td><strong>${displayId}</strong></td>
-            <td>${course}</td>
-            <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
-            <td>${course2}</td>
-            <td>${status2HTML}</td>
-            <td class="hide-mobile">${dateSub}</td>
-             <td>
-            <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+           const row = document.createElement('tr');
+            
+            // REPLACE YOUR OLD row.innerHTML WITH THIS:
+            if (activeTabFilter === 'accepted') {
+                row.innerHTML = `
+                    <td><strong>${displayId}</strong></td>
+                    <td>${studentName}</td>
+                    <td>${course}</td>
+                    <td class="hide-mobile">${dateSub}</td>
+                    <td>${data.dateAccepted || 'N/A'}</td>
+                    <td><span style="font-size: 0.8rem; color: #666;">${data.acceptedBy || 'Staff User'}</span></td>
+                    <td>
+                        <button class="view-btn" style="background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; cursor: not-allowed;">
+                            VIEW
+                        </button>
+                    </td>
+                `;
+            }  else if (activeTabFilter === 'rejected') {
+                  row.innerHTML = `
+                  <td><strong>${displayId}</strong></td>
+                  <td>${studentName}</td>
+                  <td>${course}</td>
+                  <td>${course2}</td>
+                  <td class="hide-mobile">${dateSub}</td>
+                  <td>${data.dateDeclined || 'N/A'}</td>
+                  <td><span style="font-size: 0.8rem; color: #666;">${data.declinedBy || 'Staff User'}</span></td>
+                  <td>
+                  <button class="view-btn" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;">
                 VIEW
-            </button>
-            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
-        </div>
-    </td>
-`;
+                </button>
+             </td>
+           `;
+            } else {
+                row.innerHTML = `
+                    <td><strong>${displayId}</strong></td>
+                    <td>${course}</td>
+                    <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
+                    <td>${course2}</td>
+                    <td>${status2HTML}</td>
+                    <td class="hide-mobile">${dateSub}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+                                VIEW
+                            </button>
+                            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
+                        </div>
+                    </td>
+                `;
+            }
+
             tableBody.appendChild(row);
         });
+        applyFilters();
     });
 }
 
@@ -704,21 +782,31 @@ const tabs = {
 let activeTabFilter = 'all'; // Default to showing everything (New Apps)
 
 function handleTabClick(selectedKey) {
-    // 1. Update UI Styles
+    // 1. Update UI Styles (Active tab color)
     Object.values(tabs).forEach(tab => {
         tab.style.borderBottom = "none";
         tab.style.background = "#fff";
     });
-    
     tabs[selectedKey].style.borderBottom = "3px solid #4a90e2";
-    // Optional: add a light blue tint to active tab background
     tabs[selectedKey].style.background = "rgba(74, 144, 226, 0.05)";
 
-    // 2. Set Filter Key
+    // 2. Set the Filter Key (CRITICAL: Do this before loading)
     activeTabFilter = selectedKey;
 
-    // 3. Re-apply all filters (Tabs + Dropdowns)
-    applyFilters();
+   // ADD THIS: Only show Sub-Nav if we are in the "New" tab
+    const subNav = document.getElementById('newAppSubNav');
+    const accSubNav = document.getElementById('acceptedSubNav'); // Add this line
+    const rejSubNav = document.getElementById('rejectedSubNav');
+    
+    // Switch visibility based on the main tab
+    subNav.style.display = (selectedKey === 'new') ? 'flex' : 'none';
+    accSubNav.style.display = (selectedKey === 'accepted') ? 'flex' : 'none';
+    rejSubNav.style.display = (selectedKey === 'rejected') ? 'flex' : 'none';
+    
+    activeSubFilter = 'all'; // Reset sub-filter when we change main tabs
+
+    // 3. Re-run the listener to rebuild the table with the new headers
+    loadApplications(); 
 }
 
 // Attach Event Listeners
@@ -729,8 +817,8 @@ tabs.archived.onclick = () => handleTabClick('archived');
 
 // Update your existing applyFilters function to include the Tab logic
 const applyFilters = () => {
-    const statusDropdownVal = document.getElementById('filterStatus').value.toLowerCase();
-    const courseVal = document.getElementById('filterCourse').value.toLowerCase();
+    const statusDropdownVal = "all"; 
+    const docsFilterVal = document.getElementById('filterDocs').value;
     const rows = tableBody.getElementsByTagName('tr');
 
     for (let row of rows) {
@@ -738,27 +826,143 @@ const applyFilters = () => {
         const rowStatus = row.cells[2]?.innerText.toLowerCase().trim() || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
 
-        // Tab Logic
-        let matchTab = false;
-        if (activeTabFilter === 'new') matchTab = true; // Show all for "New Applications"
-        if (activeTabFilter === 'accepted') matchTab = (rowStatus === 'uncon_accepted' || rowStatus === 'prov_accepted');
-        if (activeTabFilter === 'rejected') matchTab = (rowStatus === 'rejected');
-        if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
+        
+// NEW LOGIC:
+let matchTab = false;
+if (activeTabFilter === 'new') {
+    // If in New tab, check the sub-filter (All, Pending, Review, or Waiting)
+    if (activeSubFilter === 'all') matchTab = true;
+    else matchTab = rowStatus.includes(activeSubFilter);
+} 
+    else if (activeTabFilter === 'accepted') {
+    if (activeSubFilter === 'all') {
+        matchTab = ['prov_accepted', 'uncon_accepted', 'registered'].includes(rowStatus);
+    } else {
+        matchTab = (rowStatus === activeSubFilter);
+    }
+}
+   else if (activeTabFilter === 'rejected') {
+    if (activeSubFilter === 'all') {
+        // Show anything that is a 'No', whether from system or student
+        matchTab = ['rejected', 'rejected_both', 'withdrawn_expired', 'student_declined'].includes(rowStatus);
+    } else {
+        // Show specific reason (e.g., only show 'student_declined')
+        matchTab = (rowStatus === activeSubFilter);
+    }
+}
 
-        // Dropdown Logic
-        const matchDropdownStatus = statusDropdownVal === "all" || rowStatus.includes(statusDropdownVal.replace('_', ''));
-        const matchCourse = courseVal === "all" || rowCourse.includes(courseVal);
+else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
+
+// We removed the status dropdown, so we can set this to true
+const matchDropdownStatus = true;
+        // Check if row has CD or MD label
+const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
+const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
         // Final Visibility: Must match Tab AND Dropdowns
-        if (matchTab && matchDropdownStatus && matchCourse) {
+        if (matchTab && matchDocs) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
         }
     }
+
+    // ADD THIS AT THE VERY END OF applyFilters function
+    const existingNoData = document.getElementById('noDataRow');
+    if (existingNoData) existingNoData.remove();
+
+    // Check if any rows are actually visible
+    const visibleRows = Array.from(rows).filter(r => r.style.display !== 'none');
+    
+    if (visibleRows.length === 0) {
+        const noDataRow = document.createElement('tr');
+        noDataRow.id = 'noDataRow';
+        const message = activeTabFilter === 'accepted' 
+            ? "No students have been admitted yet. Accepted students will appear here." 
+            : "No applications found in this section.";
+            
+        noDataRow.innerHTML = `
+            <td colspan="7" style="text-align: center; padding: 60px; color: #999;">
+                <i class="fas fa-user-graduate" style="font-size: 2.5rem; display: block; margin-bottom: 15px; opacity: 0.5;"></i>
+                <p style="font-weight: 500;">${message}</p>
+            </td>
+        `;
+        tableBody.appendChild(noDataRow);
+    }
 };
 
 handleTabClick('new');
+
+window.setSubFilter = (val) => {
+    activeSubFilter = val;
+    
+    // Update UI Styles for sub-tabs
+    document.querySelectorAll('.sub-tab').forEach(t => {
+        t.style.color = "#999";
+        t.style.borderBottom = "none";
+    });
+  // Logic to pick the right ID based on which main tab is active
+    let tabId;
+if (activeTabFilter === 'new') {
+    tabId = 'sub' + val.charAt(0).toUpperCase() + val.slice(1);
+} else if (activeTabFilter === 'accepted') {
+    tabId = (val === 'all') ? 'subAccAll' : 
+            (val === 'prov_accepted') ? 'subProv' : 
+            (val === 'uncon_accepted') ? 'subUncon' : 'subReg';
+} else if (activeTabFilter === 'rejected') {
+    // Logic for the new Declined Sub-Nav
+    tabId = (val === 'all') ? 'subRejAll' : 
+            (val === 'rejected_both') ? 'subDouble' : 
+            (val === 'withdrawn_expired') ? 'subExpired' : 'subStudent';
+}
+    
+    const active = document.getElementById(tabId);
+    
+    active.style.color = "#4a90e2";
+    active.style.borderBottom = "2px solid #4a90e2";
+    
+    applyFilters();
+};
+
+document.getElementById('sortDate').addEventListener('change', (e) => {
+    const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
+    const isNewest = e.target.value === 'newest';
+
+    rows.sort((a, b) => {
+        const dateA = new Date(a.cells[5].innerText);
+        const dateB = new Date(b.cells[5].innerText);
+        return isNewest ? dateB - dateA : dateA - dateB;
+    });
+
+    rows.forEach(row => tableBody.appendChild(row));
+});
+
+// Re-attach Document Filter listener
+document.getElementById('filterDocs').addEventListener('change', applyFilters);
+
+function setupProfile(user) {
+    const trigger = document.getElementById('profileTrigger');
+    const overlay = document.getElementById('profileOverlay');
+    const emailDisp = document.getElementById('staffEmailDisplay');
+
+    trigger.onclick = () => {
+        emailDisp.innerText = user.email;
+        overlay.style.display = 'flex';
+    };
+
+    document.getElementById('btnResetPass').onclick = () => {
+        sendPasswordResetEmail(auth, user.email)
+            .then(() => alert("Reset link sent to " + user.email))
+            .catch(err => alert(err.message));
+    };
+
+    document.getElementById('btnLogout').onclick = () => {
+        if(confirm("Logout of management portal?")) {
+            signOut(auth).then(() => window.location.href = "staff-login.html");
+        }
+    };
+}
+
 
 
 
