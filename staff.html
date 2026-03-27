@@ -261,6 +261,33 @@
     align-items: center;
 }
 
+ /* Add this to your <style> */
+.container {
+    display: flex; /* Creates the side-by-side look */
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    background: #fff;
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+}
+
+.sidebar-item {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.sidebar-item.active {
+    background: #eef5ff;
+    color: var(--primary);
+    border-left: 4px solid var(--primary);
+    font-weight: 600;
+}
+
 </style>
 
 </head>
