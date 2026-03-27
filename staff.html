@@ -91,6 +91,48 @@
         color: #999;
     }
 
+     /* 3. Main Table Content - Sidebar + Table Layout */
+    .main-content {
+        display: flex; /* This puts sidebar and table next to each other */
+        width: 100%;
+        gap: 0;
+        background: #fff;
+        border-top: 1px solid var(--border);
+    }
+
+    .sidebar-menu {
+        width: 200px;
+        min-width: 200px;
+        border-right: 1px solid var(--border);
+        background: #fff;
+        padding-top: 20px;
+        min-height: 80vh;
+    }
+
+    .sub-tab {
+        padding: 12px 25px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #666;
+        transition: 0.2s;
+        display: block; /* Stack them vertically */
+        border-left: 3px solid transparent;
+    }
+
+    /* This will be the "Active" state for the sidebar items */
+    .sub-tab.active-sidebar {
+        background: #f0f7ff;
+        color: var(--primary);
+        border-left: 3px solid var(--primary);
+        font-weight: 700;
+    }
+
+    .table-container-right {
+        flex-grow: 1;
+        overflow-x: auto;
+    }
+
     .table-wrapper {
         width: 100%;
         overflow-x: auto; /* Allows horizontal swipe on small phones */
