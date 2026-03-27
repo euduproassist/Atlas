@@ -392,6 +392,35 @@ const tabs = {
 
 let activeTabFilter = 'all'; // Default to showing everything (New Apps)
 
+function handleTabClick(selectedKey) {
+    // 1. Update UI Styles
+    Object.keys(tabs).forEach(key => {
+        tabs[key].classList.remove('active');
+        // Reset colors of text inside the cards
+        tabs[key].querySelector('span:nth-child(2)').style.color = "#999";
+        tabs[key].querySelector('span[id*="Count"]').style.color = "#999";
+    });
+
+    // 2. Set active state
+    tabs[selectedKey].classList.add('active');
+    tabs[selectedKey].querySelector('span:nth-child(2)').style.color = "var(--primary)";
+    tabs[selectedKey].querySelector('span[id*="Count"]').style.color = "#444";
+
+    activeTabFilter = selectedKey;
+
+    // Show/Hide Sub-Navs (Keep your existing logic for subNav.style.display)
+    const subNav = document.getElementById('newAppSubNav');
+    const accSubNav = document.getElementById('acceptedSubNav');
+    const rejSubNav = document.getElementById('rejectedSubNav');
+    
+    if(subNav) subNav.style.display = (selectedKey === 'new') ? 'flex' : 'none';
+    if(accSubNav) accSubNav.style.display = (selectedKey === 'accepted') ? 'flex' : 'none';
+    if(rejSubNav) rejSubNav.style.display = (selectedKey === 'rejected') ? 'flex' : 'none';
+    
+    activeSubFilter = 'all';
+    loadApplications(); 
+}
+
 // Attach Event Listeners
 tabs.new.onclick = () => handleTabClick('new');
 tabs.accepted.onclick = () => handleTabClick('accepted');
