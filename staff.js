@@ -82,7 +82,7 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
     } else {
         tableHead.innerHTML = `
             <tr>
-                <th>Application ID</th>
+                
                 <th>Course 1</th>
                 <th>Status 1</th>
                 <th>Course 2</th>
