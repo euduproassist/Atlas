@@ -365,6 +365,49 @@
 </div>
     </div>
 
+    <div class="main-content">
+    <div class="sidebar-menu">
+        <div style="padding: 0 25px 15px; font-size: 0.75rem; color: #999; font-weight: 700; text-transform: uppercase;">Filters</div>
+        
+        <div id="newAppSubNav">
+            <div onclick="setSubFilter('all')" class="sub-tab active-sidebar" id="subAll">All</div>
+            <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending">Pending</div>
+            <div onclick="setSubFilter('review')" class="sub-tab" id="subReview">Under Review</div>
+            <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting">Wait List</div>
+        </div>
+
+        <div id="acceptedSubNav" style="display:none;">
+            <div onclick="setSubFilter('all')" class="sub-tab active-sidebar" id="subAccAll">All Admissions</div>
+            <div onclick="setSubFilter('prov_accepted')" class="sub-tab" id="subProv">Provisional</div>
+            <div onclick="setSubFilter('uncon_accepted')" class="sub-tab" id="subUncon">Unconditional</div>
+        </div>
+
+        <div id="rejectedSubNav" style="display:none;">
+            <div onclick="setSubFilter('all')" class="sub-tab active-sidebar" id="subRejAll">All Declined</div>
+            <div onclick="setSubFilter('student_declined')" class="sub-tab" id="subStudent">Student Declined</div>
+        </div>
+    </div>
+
+    <div class="table-container-right">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Application ID</th>
+                        <th>Course 1</th>
+                        <th>Status 1</th>
+                        <th>Course 2</th>
+                        <th>Status 2</th>
+                        <th class="hide-mobile">Date Submitted</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="applicationTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
     <div id="appModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; flex-direction: column; shadow-y: auto; overflow-y: auto;">
     <div style="padding: 15px 25px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; color: #666; font-size: 0.85rem;">
         <span>Manage Applications</span> <i class="fas fa-chevron-right" style="font-size: 0.7rem;"></i> <span id="breadcrumbActive" style="font-weight: 600;">Applicant Details</span>
