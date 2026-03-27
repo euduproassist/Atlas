@@ -350,6 +350,26 @@
     </div>
 </div>
 
+            <div class="table-container">
+               <div class="toolbar">
+        <div class="search-bar" style="width: 450px;">
+        <input type="text" id="searchInput" placeholder="Search Application ID or Course...">
+        <i class="fas fa-search"></i>
+    </div>
+    <div class="filters" style="display: flex; gap: 10px;">
+        <select id="filterDocs" style="width: 240px;">
+            <option value="all">All Documents</option>
+            <option value="CD">Complete Docs (CD)</option>
+            <option value="MD">Missing Docs (MD)</option>
+        </select>
+        <select id="sortDate" style="width: 230px;">
+            <option value="newest">Sort: Newest</option>
+            <option value="oldest">Sort: Oldest</option>
+        </select>
+    </div>
+</div>
+            </div>
+
 <div class="main-content">
         <div class="sidebar-menu">
         
@@ -378,25 +398,6 @@
         </div>
         </div>
 
-    <div class="table-container">
-               <div class="toolbar">
-        <div class="search-bar" style="width: 450px;">
-        <input type="text" id="searchInput" placeholder="Search Application ID or Course...">
-        <i class="fas fa-search"></i>
-    </div>
-    <div class="filters" style="display: flex; gap: 10px;">
-        <select id="filterDocs" style="width: 240px;">
-            <option value="all">All Documents</option>
-            <option value="CD">Complete Docs (CD)</option>
-            <option value="MD">Missing Docs (MD)</option>
-        </select>
-        <select id="sortDate" style="width: 230px;">
-            <option value="newest">Sort: Newest</option>
-            <option value="oldest">Sort: Oldest</option>
-        </select>
-    </div>
-</div>
-    </div>
     <div class="table-wrapper">
         <table>
             <thead>
