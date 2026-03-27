@@ -82,7 +82,12 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
     } else {
         tableHead.innerHTML = `
             <tr>
-                
+                <th style="display: flex; align-items: center; gap: 10px;">
+                <button id="sidebarToggle" style="background: none; border: none; cursor: pointer; color: var(--primary); font-size: 1rem;">
+                <i class="fas fa-chevron-left" id="toggleIcon"></i>
+                </button>
+                Application ID
+                </th>                
                 <th>Course 1</th>
                 <th>Status 1</th>
                 <th>Course 2</th>
