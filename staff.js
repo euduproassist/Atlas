@@ -505,37 +505,6 @@ const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
 handleTabClick('new');
 
-window.setSubFilter = (val) => {
-    activeSubFilter = val;
-    
-    // Update UI Styles for sub-tabs
-    document.querySelectorAll('.sub-tab').forEach(t => {
-        t.style.color = "#999";
-        t.style.borderBottom = "none";
-    });
-  // Logic to pick the right ID based on which main tab is active
-    let tabId;
-if (activeTabFilter === 'new') {
-    tabId = 'sub' + val.charAt(0).toUpperCase() + val.slice(1);
-} else if (activeTabFilter === 'accepted') {
-    tabId = (val === 'all') ? 'subAccAll' : 
-            (val === 'prov_accepted') ? 'subProv' : 
-            (val === 'uncon_accepted') ? 'subUncon' : 'subReg';
-} else if (activeTabFilter === 'rejected') {
-    // Logic for the new Declined Sub-Nav
-    tabId = (val === 'all') ? 'subRejAll' : 
-            (val === 'rejected_both') ? 'subDouble' : 
-            (val === 'withdrawn_expired') ? 'subExpired' : 'subStudent';
-}
-    
-    const active = document.getElementById(tabId);
-    
-    active.style.color = "#4a90e2";
-    active.style.borderBottom = "2px solid #4a90e2";
-    
-    applyFilters();
-};
-
 document.getElementById('sortDate').addEventListener('change', (e) => {
     const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
     const isNewest = e.target.value === 'newest';
