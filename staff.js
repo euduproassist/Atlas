@@ -581,6 +581,24 @@ window.toggleFolder = (sectionId, tabKey) => {
     handleTabClick(tabKey);
 };
 
+/* Update the sidebarToggle listener at the bottom of staff.js */
+document.addEventListener('click', (e) => {
+    if (e.target.closest('#sidebarToggle')) {
+        const sidebar = document.querySelector('.sidebar-menu');
+        const icon = document.getElementById('toggleIcon');
+        
+        sidebar.classList.toggle('collapsed');
+        
+        // Flip the arrow based on state
+        if (sidebar.classList.contains('collapsed')) {
+            icon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+        } else {
+            icon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+        }
+    }
+});
+
+
 
 
 
