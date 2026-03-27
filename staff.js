@@ -141,7 +141,7 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
 
             if (status1 !== "rejected") {
             const reason = isStatus1Accepted ? "ST1 ACCEPTED" : "WAITING FOR ST1";
-            status2HTML = `<span style="color: #999; font-size: 0.7rem; font-weight: 600; border: 1px solid #ddd; padding: 3px 6px; border-radius: 4px;">
+            status2HTML = `<span style="color: #999; font-size: 0.6rem; font-weight: 500; border: 1px solid #ddd; padding: 2px 4px; border-radius: 3px;">
                     <i class="fas fa-clock"></i> ${reason}</span>`;
             } else {
             // If Status 1 IS rejected, Status 2 becomes active and colored
