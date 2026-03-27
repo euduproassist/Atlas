@@ -99,6 +99,58 @@
         background: white;
     }
 
+ /* Add this new Sidebar styling */
+.sidebar-menu {
+    width: 250px;
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+.sidebar-section {
+    margin-bottom: 25px;
+}
+
+.sidebar-header {
+    padding: 0 25px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sub-tab {
+    display: block; /* Makes them stack vertically */
+    padding: 12px 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.sub-tab:hover {
+    background: #f8f9fa;
+    color: var(--primary);
+}
+
+/* This replaces your old horizontal border-bottom active style */
+.sub-tab.active-link {
+    background: #eef5ff;
+    color: #4a90e2;
+    border-left: 3px solid #4a90e2;
+}
+
+/* Update table wrapper to take remaining space */
+.table-container {
+    flex-grow: 1;
+    overflow-x: auto;
+}
+
     .table-wrapper {
         width: 100%;
         overflow-x: auto; /* Allows horizontal swipe on small phones */
