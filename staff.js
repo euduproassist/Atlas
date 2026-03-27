@@ -573,5 +573,3 @@ function setupProfile(user) {
         }
     };
 }
-
-
