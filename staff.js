@@ -393,14 +393,6 @@ const tabs = {
 let activeTabFilter = 'all'; // Default to showing everything (New Apps)
 
 function handleTabClick(selectedKey) {
-    // 1. Update UI Styles (Active tab color)
-    Object.values(tabs).forEach(tab => {
-        tab.style.borderBottom = "none";
-        tab.style.background = "#fff";
-    });
-    tabs[selectedKey].style.borderBottom = "3px solid #4a90e2";
-    tabs[selectedKey].style.background = "rgba(74, 144, 226, 0.05)";
-
     // 2. Set the Filter Key (CRITICAL: Do this before loading)
     activeTabFilter = selectedKey;
 
