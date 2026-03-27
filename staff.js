@@ -206,7 +206,7 @@ window.showDetails = showDetails;
 // Professional Summary Modal Logic
 function showDetails(id, data) {
     currentAppId = id;
-    const modalBody = document.getElementById('modalBody');
+    const modal = document.getElementById('appModal');
     const personalSection = document.getElementById('personalSection');
     const academicSection = document.getElementById('academicSection');
     const header = document.getElementById('modalStudentHeader'); // Make sure you added this ID in the HTML above
@@ -214,7 +214,7 @@ function showDetails(id, data) {
     appDetailsSection.id = "appDetailsSection";
     appDetailsSection.style.display = "none";
    // Ensure this is appended to your modal body if it's a new element
-   if(!document.getElementById('appDetailsSection')) modalBody.appendChild(appDetailsSection);
+   if(!document.getElementById('appDetailsSection')) personalSection.parentNode.appendChild(appDetailsSection);
 
     
     const s1 = data.step1 || {};
