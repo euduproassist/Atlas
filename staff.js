@@ -541,7 +541,29 @@ const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
 handleTabClick('new');
 
+window.setSubFilter = (val) => {
+    // 1. Identify which main category this sub-tab belongs to
+    const clickedElement = event.currentTarget;
+    const parentSectionId = clickedElement.parentElement.id;
 
+    if (parentSectionId === 'sideNavNew') activeTabFilter = 'new';
+    else if (parentSectionId === 'sideNavAccepted') activeTabFilter = 'accepted';
+    else if (parentSectionId === 'sideNavRejected') activeTabFilter = 'rejected';
+    else if (parentSectionId === 'sideNavArchived') activeTabFilter = 'archived';
+
+    activeSubFilter = val;
+    
+    // 2. Visual updates
+    document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active-link'));
+    clickedElement.classList.add('active-link');
+
+    // 3. Save to localStorage so it stays on refresh
+    localStorage.setItem('lastTab', activeTabFilter);
+    localStorage.setItem('lastSub', val);
+
+    // 4. Update Table
+    loadApplications(); 
+};
 
 document.getElementById('sortDate').addEventListener('change', (e) => {
     const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
