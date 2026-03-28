@@ -445,6 +445,32 @@ mainForm.addEventListener('submit', async (e) => {
             lastUpdated: new Date()
         }, { merge: true });
 
+  // At the very end of your final step logic:
+const [draftSnap, appSnap] = await Promise.all([
+    getDoc(doc(db, "drafts", user.uid)),
+    getDoc(doc(db, "applications", user.uid))
+]);
+
+if (draftSnap.exists()) {
+    const existingData = appSnap.exists() ? appSnap.data() : {};
+    
+    // Only reset status to pending if it doesn't exist yet 
+    // or if it was previously "Missing Info"
+    let finalStatus = existingData.status || "pending";
+    if (existingData.status === "Missing Info") {
+        finalStatus = "pending"; // Re-submit for review
+    }
+
+    await setDoc(doc(db, "applications", user.uid), {
+        ...draftSnap.data(),
+        status: finalStatus,
+        submittedAt: existingData.submittedAt || new Date(),
+        lastUpdated: new Date()
+    }, { merge: true });  
+
+    alert("Application Submitted Successfully!");
+}
+
 
        // PASTE THIS INSTEAD:
         goToStep(4);
