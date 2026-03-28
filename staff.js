@@ -437,6 +437,38 @@ const applyFilters = () => {
 
         
 // NEW LOGIC:
+let matchTab = false;
+
+if (activeTabFilter === 'new') {
+    // Only show if status is one of the "New" types
+    const isNewType = ['pending', 'review', 'waiting'].includes(rowStatus);
+    if (activeSubFilter === 'all') {
+        matchTab = isNewType;
+    } else {
+        matchTab = (rowStatus === activeSubFilter);
+    }
+} 
+else if (activeTabFilter === 'accepted') {
+    // Only show if status is one of the "Admissions" types
+    const isAcceptedType = ['prov_accepted', 'uncon_accepted', 'registered'].includes(rowStatus);
+    if (activeSubFilter === 'all') {
+        matchTab = isAcceptedType;
+    } else {
+        matchTab = (rowStatus === activeSubFilter);
+    }
+}
+else if (activeTabFilter === 'rejected') {
+    // Only show if status is one of the "Declined" types
+    const isDeclinedType = ['rejected', 'withdrawn_expired', 'student_declined'].includes(rowStatus);
+    if (activeSubFilter === 'all') {
+        matchTab = isDeclinedType;
+    } else {
+        matchTab = (rowStatus === activeSubFilter);
+    }
+}
+else if (activeTabFilter === 'archived') {
+    matchTab = (rowStatus === 'archived');
+}
 
 // We removed the status dropdown, so we can set this to true
 const matchDropdownStatus = true;
