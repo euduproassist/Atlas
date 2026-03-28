@@ -9,7 +9,7 @@ const filterCourse = document.getElementById('filterCourse');
 let selectedAppId = null;
 let currentAppId = null; // To track which student we are looking at
 let activeSubFilter = 'all'; // Tracks Pending, Review, or Waiting
-
+let activeTabFilter = 'new'; 
 
 // 1. Security Check: Ensure user is logged in
 onAuthStateChanged(auth, async (user) => {
