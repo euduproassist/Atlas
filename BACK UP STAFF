@@ -35,12 +35,12 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        font-size: 1.25rem;
+        font-size: 0.95rem;
         font-weight: 700;
         color: #2c3e50;
         white-space: nowrap; /* Prevents logo text from wrapping */
-        margin-bottom: 30px;
-        padding-left: 25px;
+        margin-bottom: 15px;
+        padding-left: 15px;
     }
 
     .logo-section i { color: var(--primary); }
@@ -48,7 +48,7 @@
   /* 2. Toolbar (Filters + Search) - Fixed to stay within container */
 .toolbar {
     background: #ffffff;
-    padding: 15px 25px;
+    padding: 6px 15px;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -64,11 +64,11 @@
     }
 
     select, .search-bar input {
-        padding: 10px 12px;
+        padding: 5px 10px;
         border: 1px solid var(--border);
-        border-radius: 6px;
+        border-radius: 4px;
         background: #fff;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         outline: none;
         transition: border 0.2s;
     }
@@ -87,6 +87,7 @@
         right: 12px;
         top: 50%;
         transform: translateY(-50%);
+        font-size: 0.8rem;
         color: #999;
     }
 
@@ -101,9 +102,9 @@
     }
 
     .sidebar-folder {
-    padding: 15px 25px;
+    padding: 10px 25px;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #333;
     cursor: pointer;
     display: flex;
@@ -118,15 +119,15 @@
 
  /* Add this new Sidebar styling */
 .sidebar-menu {
-    width: 250px;
+    width: 200px;
     border-right: 1px solid var(--border);
     background: #fff;
     flex-shrink: 0;
     transition: all 0.3s ease;
-    height: calc(100vh - 250px);
+    height: calc(100vh - 140px);
     overflow-y: auto;
     position: sticky;
-    top: 250px;
+    top: 140px;
 }
 
     .sidebar-menu.collapsed {
@@ -152,8 +153,8 @@
 
 .sub-tab {
     display: block; /* Makes them stack vertically */
-    padding: 12px 25px;
-    font-size: 0.85rem;
+    padding: 6px 20px;
+    font-size: 0.75rem;
     font-weight: 600;
     color: #666;
     text-decoration: none;
@@ -184,7 +185,7 @@
         flex-grow: 1;
         width: 100%;
         background: white;
-        height: calc(100vh - 250px);
+        height: calc(100vh - 140px);
         overflow-y: auto; 
     }
 
@@ -213,16 +214,17 @@
     }
 
     td {
-        padding: 8px 15px;
+        padding: 10px 15px;
         border-bottom: 1px solid var(--border);
-        font-size: 0.8rem;
-        color: #444;
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: #555;
     }
 
     tr:hover { background-color: #fcfdfe; cursor: pointer; }
 
     /* 4. Status Pills */
-    .status { padding: 2px 6px; border-radius: 3px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
+    .status { padding: 2px 8px; border-radius: 3px; font-size: 0.6rem; font-weight: 500; text-transform: uppercase; }
     .status-pending { background: #e3f2fd; color: #1976d2; }
     .status-review { background: #f3e5f5; color: #7b1fa2; }
     .status-missing { background: #fff3e0; color: #ef6c00; }
@@ -294,11 +296,11 @@
 
     /* Add this inside your <style> tag */
     .view-btn {
-    padding: 6px 12px;
+    padding: 4px 10px;
     cursor: pointer;
     border-radius: 4px;
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     border: 1px solid transparent;
     transition: background 0.2s;
     }
@@ -342,33 +344,33 @@
 <body>
 
     <div class="dashboard-header">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
     <div class="logo-section" style="margin-bottom: 0;">
         <i class="fas fa-graduation-cap"></i>
         <span>Staff Management Portal</span>
     </div>
-    <div id="profileTrigger" style="margin-right: 25px; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 8px 15px; background: #fff; border: 1px solid var(--border); border-radius: 50px; transition: 0.2s;">
-        <i class="fas fa-user-circle" style="font-size: 1.2rem; color: var(--primary);"></i>
-        <span style="font-size: 0.85rem; font-weight: 600; color: #555;">Account</span>
+    <div id="profileTrigger" style="margin-right: 15px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: #fff; border: 1px solid var(--border); border-radius: 50px; transition: 0.2s;">
+        <i class="fas fa-user-circle" style="font-size: 0.9rem; color: var(--primary);"></i>
+        <span style="font-size: 0.75rem; font-weight: 600; color: #555;">Account</span>
     </div>
 </div>
 
-        <div style="display: flex; gap: 0; margin-bottom: 20px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); border-left: none; border-right: none; border-radius: 0; overflow: hidden;">
+        <div style="display: flex; gap: 0; margin-bottom: 4px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); border-left: none; border-right: none; border-radius: 0; overflow: hidden;">
     <div class="stats-tab" style="padding: 8px; background: white; border-right: 1px solid var(--border); text-align: center;">
-        <span style="display: block; font-size: 0.7rem; color: #999; text-transform: uppercase;">New Apps</span>
-        <strong id="newAppsCount" style="font-size: 1.2rem;">0</strong>
+        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">New Apps</span>
+        <strong id="newAppsCount" style="font-size: 1rem;">0</strong>
     </div>
     <div class="stats-tab" style="padding: 8px; background: white; border-right: 1px solid var(--border); text-align: center;">
-        <span style="display: block; font-size: 0.7rem; color: #999; text-transform: uppercase;">Admissions</span>
-        <strong id="acceptedCount" style="font-size: 1.2rem;">0</strong>
+        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">Admissions</span>
+        <strong id="acceptedCount" style="font-size: 1rem;">0</strong>
     </div>
     <div class="stats-tab" style="padding: 8px; background: white; border-right: 1px solid var(--border); text-align: center;">
-        <span style="display: block; font-size: 0.7rem; color: #999; text-transform: uppercase;">Declined</span>
-        <strong id="rejectedCount" style="font-size: 1.2rem;">0</strong>
+        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">Declined</span>
+        <strong id="rejectedCount" style="font-size: 1rem;">0</strong>
     </div>
     <div class="stats-tab" style="padding: 8px; background: white; text-align: center;">
-        <span style="display: block; font-size: 0.7rem; color: #999; text-transform: uppercase;">Archived</span>
-        <strong id="archivedCount" style="font-size: 1.2rem;">0</strong>
+        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">Archived</span>
+        <strong id="archivedCount" style="font-size: 1rem;">0</strong>
     </div>
 </div>
 
@@ -450,7 +452,7 @@
 </div>
     </div>
 
-    <div id="appModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; flex-direction: column; shadow-y: auto; overflow-y: auto;">
+        <div id="appModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; flex-direction: column; shadow-y: auto; overflow-y: auto;">
     <div style="padding: 15px 25px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; color: #666; font-size: 0.85rem;">
         <span>Manage Applications</span> <i class="fas fa-chevron-right" style="font-size: 0.7rem;"></i> <span id="breadcrumbActive" style="font-weight: 600;">Applicant Details</span>
         <button onclick="document.getElementById('appModal').style.display='none'" style="margin-left: auto; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
