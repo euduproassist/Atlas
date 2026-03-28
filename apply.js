@@ -445,19 +445,6 @@ mainForm.addEventListener('submit', async (e) => {
             lastUpdated: new Date()
         }, { merge: true });
 
-        // At the very end of your final step logic:
-        const draftSnap = await getDoc(doc(db, "drafts", user.uid));
-
-        if (draftSnap.exists()) {
-        await setDoc(doc(db, "applications", user.uid), {
-        ...draftSnap.data(),
-        status: "pending",
-        submittedAt: new Date()
-        },
-        { merge: true});  
-    
-      alert("Application Submitted Successfully!");
-       }
 
        // PASTE THIS INSTEAD:
         goToStep(4);
