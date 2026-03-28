@@ -458,7 +458,19 @@ sideRej.style.display = (selectedKey === 'rejected') ? 'block' : 'none';
 }
 
 // Attach Event Listeners
+const savedTab = localStorage.getItem('lastTab') || 'new';
+const savedSub = localStorage.getItem('lastSub') || 'all';
 
+activeTabFilter = savedTab;
+activeSubFilter = savedSub;
+
+// Open the correct folder visually
+const sectionMap = { 'new': 'sideNavNew', 'accepted': 'sideNavAccepted', 'rejected': 'sideNavRejected', 'archived': 'sideNavArchived' };
+document.getElementById(sectionMap[savedTab]).style.display = 'block';
+
+// Highlight the correct sub-tab (Matches your ID naming convention)
+// Note: You may need to ensure your IDs like 'subAll' or 'subPending' are unique across folders
+loadApplications();
 tabs.accepted.onclick = () => handleTabClick('accepted');
 tabs.rejected.onclick = () => handleTabClick('rejected');
 tabs.archived.onclick = () => handleTabClick('archived');
