@@ -371,7 +371,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                 </div>
 
                 <button onclick="saveStatusUpdate()" style="width: 100%; background: #4a90e2; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; font-size: 0.8rem;">
-                    UPDATE STUDENT APPLICATION STATUS
+                    UPDATE STATUS
                 </button>
             </div>
         </div>
