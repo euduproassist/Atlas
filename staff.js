@@ -233,7 +233,7 @@ function showDetails(id, data) {
             <span style="color:#333; font-weight: 500;">${value}</span>
         </div>` : '';
 
-    personalSection.innerHTML = `
+    secPers.innerHTML = `
         <div style="display: flex; flex-direction: column; gap: 30px;">          
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Personal Details</h3>
@@ -278,7 +278,7 @@ function showDetails(id, data) {
             </div>
             `;
             
-            academicSection.innerHTML = `
+            secAcad.innerHTML = `
                <div style="display: flex; flex-direction: column; gap: 30px;"> 
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">1. Education History</h3>
@@ -323,7 +323,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
 </div>`;
 
 
-            appDetailsSection.innerHTML = `
+            secApp.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 30px;"> 
             <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px; background: #fafcfe;">
                 <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">4. Programme Choices</h3>
