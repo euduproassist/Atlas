@@ -607,6 +607,20 @@ function setupProfile(user) {
     };
 }
 
+window.toggleFolder = (sectionId) => {
+    const target = document.getElementById(sectionId);
+    const arrow = event.currentTarget.querySelector('.arrow');
+    
+    // Toggle visibility without closing others or changing the table
+    if (target.style.display === 'none' || target.style.display === '') {
+        target.style.display = 'block';
+        if(arrow) arrow.style.transform = 'rotate(0deg)';
+    } else {
+        target.style.display = 'none';
+        if(arrow) arrow.style.transform = 'rotate(-90deg)';
+    }
+};
+
 /* Update the sidebarToggle listener at the bottom of staff.js */
 document.addEventListener('click', (e) => {
     if (e.target.closest('#sidebarToggle')) {
