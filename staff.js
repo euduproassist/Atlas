@@ -431,7 +431,7 @@ const applyFilters = () => {
 
     for (let row of rows) {
         // Get the status from the hidden text or status pill in cell index 2
-        
+        const rowStatus = row.getAttribute('data-status') || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
 
         
