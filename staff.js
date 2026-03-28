@@ -607,6 +607,21 @@ function setupProfile(user) {
     };
 }
 
+window.toggleFolder = (sectionId) => {
+    const target = document.getElementById(sectionId);
+    const folder = target.previousElementSibling;
+    const arrow = folder.querySelector('.arrow');
+
+    // Toggle visibility without closing others
+    if (target.style.display === 'none' || target.style.display === '') {
+        target.style.display = 'block';
+        arrow.classList.replace('fa-chevron-down', 'fa-chevron-up');
+    } else {
+        target.style.display = 'none';
+        arrow.classList.replace('fa-chevron-up', 'fa-chevron-down');
+    }
+};
+
 window.saveStatusUpdate = async () => {
     const s1Value = document.getElementById('updateStatus1').value;
     const s2Value = document.getElementById('updateStatus2').value;
