@@ -209,6 +209,22 @@ window.showDetails = showDetails;
 
 // Professional Summary Modal Logic
 function showDetails(id, data) {
+    function showDetails(id, data) {
+    currentAppId = id;
+    const modal = document.getElementById('appModal');
+    const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
+    const s1 = data.step1 || {};
+    const s2 = data.step2 || {};
+
+    // Update Sidebar Header
+    document.getElementById('modalIdBadge').innerText = displayId;
+    document.getElementById('modalStudentName').innerText = `${s1.fullNames} ${s1.surname}`;
+
+    // Define Sections
+    const secPers = document.getElementById('sec-personal');
+    const secAcad = document.getElementById('sec-academic');
+    const secDocs = document.getElementById('sec-documents');
+    const secApp = document.getElementById('sec-application');
 
     // Helper to hide empty fields - if value is missing, it returns empty string
     const row = (label, value) => value ? `
