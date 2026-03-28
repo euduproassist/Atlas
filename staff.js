@@ -39,17 +39,7 @@ function loadApplications() {
     const q = query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 
 onSnapshot(q, (snapshot) => {
-const totalApps = snapshot.size;
-const acceptedCount = snapshot.docs.filter(d => ['uncon_accepted', 'prov_accepted', 'registered'].includes(d.data().status1)).length;
-const rejectedCount = snapshot.docs.filter(d => d.data().status1 === 'rejected').length;
 
-// ADD THIS LINE to define archivedCount (adjust logic if you have a specific 'archived' status)
-const archivedCount = snapshot.docs.filter(d => d.data().status1 === 'archived').length; 
-
-document.getElementById('newAppsCount').innerText = totalApps;
-document.getElementById('acceptedCount').innerText = acceptedCount;
-document.getElementById('rejectedCount').innerText = rejectedCount;
-document.getElementById('archivedCount').innerText = archivedCount; // Now this will show '0' instead of [object]
 
         tableBody.innerHTML = ''; // Keep this line
 
