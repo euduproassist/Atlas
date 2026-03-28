@@ -541,33 +541,6 @@ const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
 handleTabClick('new');
 
-window.setSubFilter = (val) => {
-    activeSubFilter = val;
-    
-    // Remove active class from ALL sidebar links
-    document.querySelectorAll('.sub-tab').forEach(t => {
-        t.classList.remove('active-link');
-    });
-
-    // Find the specific ID to highlight (keep your existing ID logic)
-    let tabId;
-    if (activeTabFilter === 'new') {
-        tabId = 'sub' + val.charAt(0).toUpperCase() + val.slice(1);
-    } else if (activeTabFilter === 'accepted') {
-        tabId = (val === 'all') ? 'subAccAll' : (val === 'prov_accepted') ? 'subProv' : (val === 'uncon_accepted') ? 'subUncon' : 'subReg';
-    } else if (activeTabFilter === 'rejected') {
-        tabId = (val === 'all') ? 'subRejAll' : (val === 'rejected_both') ? 'subDouble' : (val === 'withdrawn_expired') ? 'subExpired' : 'subStudent';
-    }
-    
-    // Add the active class to the selected sidebar link
-    const activeElement = document.getElementById(tabId);
-    if (activeElement) {
-        activeElement.classList.add('active-link');
-    }
-    
-    applyFilters();
-};
-
 document.getElementById('sortDate').addEventListener('change', (e) => {
     const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
     const isNewest = e.target.value === 'newest';
