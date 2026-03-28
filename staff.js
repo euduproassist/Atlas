@@ -437,30 +437,6 @@ const applyFilters = () => {
 
         
 // NEW LOGIC:
-let matchTab = false;
-if (activeTabFilter === 'new') {
-    // If in New tab, check the sub-filter (All, Pending, Review, or Waiting)
-    if (activeSubFilter === 'all') matchTab = true;
-    else matchTab = rowStatus.includes(activeSubFilter);
-} 
-    else if (activeTabFilter === 'accepted') {
-    if (activeSubFilter === 'all') {
-        matchTab = ['prov_accepted', 'uncon_accepted', 'registered'].includes(rowStatus);
-    } else {
-        matchTab = (rowStatus === activeSubFilter);
-    }
-}
-   else if (activeTabFilter === 'rejected') {
-    if (activeSubFilter === 'all') {
-        // Show anything that is a 'No', whether from system or student
-        matchTab = ['rejected', 'rejected_both', 'withdrawn_expired', 'student_declined'].includes(rowStatus);
-    } else {
-        // Show specific reason (e.g., only show 'student_declined')
-        matchTab = (rowStatus === activeSubFilter);
-    }
-}
-
-else if (activeTabFilter === 'archived') matchTab = (rowStatus === 'archived');
 
 // We removed the status dropdown, so we can set this to true
 const matchDropdownStatus = true;
