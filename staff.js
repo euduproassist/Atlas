@@ -536,25 +536,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-window.setSubFilter = (val, parentTab) => {
-    activeTabFilter = parentTab; // Set the main category (new/accepted/rejected)
-    activeSubFilter = val;       // Set the sub-status
-    
-    // Save to localStorage so it persists on refresh
-    localStorage.setItem('lastTab', parentTab);
-    localStorage.setItem('lastSub', val);
-
-    // Remove active class from ALL sidebar links
-    document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active-link'));
-
-    // Highlight the clicked link using the event target
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add('active-link');
-    }
-    
-    loadApplications(); // Refresh table headers and data
-};
-
 document.getElementById('sortDate').addEventListener('change', (e) => {
     const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
     const isNewest = e.target.value === 'newest';
