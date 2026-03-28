@@ -349,7 +349,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                         <i class="fas fa-file-pdf" style="color: #e74c3c; font-size: 1.2rem;"></i>
                         <span style="font-size: 0.85rem; font-weight: 500;">${name.replace(/([A-Z])/g, ' $1').trim()}</span>
                     </div>
-                    <a href="${url}" target="_blank" style="font-size: 0.75rem; color: #4a90e2; text-decoration: none; font-weight: 700;">VIEW DOCUMENT</a>
+                    <a href="${url}" target="_blank" style="font-size: 0.7rem; color: var(--primary); text-decoration: none; font-weight: 700;">VIEW DOCUMENT</a>
                 </div>
             `).join('') : '<p style="color: #999; text-align: center; padding: 20px;">No documents have been uploaded yet.</p>'}
         </div>
