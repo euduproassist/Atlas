@@ -458,7 +458,7 @@ sideRej.style.display = (selectedKey === 'rejected') ? 'block' : 'none';
 }
 
 // Attach Event Listeners
-tabs.new.onclick = () => handleTabClick('new');
+
 tabs.accepted.onclick = () => handleTabClick('accepted');
 tabs.rejected.onclick = () => handleTabClick('rejected');
 tabs.archived.onclick = () => handleTabClick('archived');
