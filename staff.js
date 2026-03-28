@@ -539,8 +539,6 @@ const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
     }
 };
 
-handleTabClick('new');
-
 window.setSubFilter = (val, parentTab) => {
     activeTabFilter = parentTab; // Set the main category (new/accepted/rejected)
     activeSubFilter = val;       // Set the sub-status
