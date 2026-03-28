@@ -732,8 +732,7 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
             const status2 = data.status2 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
             const docLabel = isComplete ? "CD" : "MD";
-            const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;";
-            
+            const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; padding: 3px 8px; font-size: 0.65rem;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 3px 8px; font-size: 0.65rem;";
             // Format ID like the photo (APP23-001) using last 4 digits of UID
             const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
@@ -743,7 +742,7 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
 
             if (status1 !== "rejected") {
             const reason = isStatus1Accepted ? "ST1 ACCEPTED" : "WAITING FOR ST1";
-            status2HTML = `<span style="color: #999; font-size: 0.7rem; font-weight: 600; border: 1px solid #ddd; padding: 3px 6px; border-radius: 4px;">
+            status2HTML = `<span style="color: #999; font-size: 0.6rem; font-weight: 500; border: 1px solid #ddd; padding: 2px 4px; border-radius: 3px;">
                     <i class="fas fa-clock"></i> ${reason}</span>`;
             } else {
             // If Status 1 IS rejected, Status 2 becomes active and colored
@@ -783,7 +782,7 @@ document.getElementById('archivedCount').innerText = archivedCount; // Now this 
              </td>
            `;
             } else {
-                row.innerHTML = `
+                    row.innerHTML = `
                     <td><strong>${displayId}</strong></td>
                     <td>${course}</td>
                     <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
@@ -1198,6 +1197,11 @@ document.addEventListener('click', (e) => {
         }
     }
 });
+
+
+
+
+
 
 
 
