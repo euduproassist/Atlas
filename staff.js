@@ -338,6 +338,24 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
             </div>
         </div>
     `;
+
+     // NEW: Documents Section Logic
+    const docs = data.documents || {};
+    secDocs.innerHTML = `
+        <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Uploaded Documents</h3>
+        <div style="display: grid; gap: 15px;">
+            ${Object.keys(docs).length > 0 ? Object.entries(docs).map(([name, url]) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #eee; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-file-pdf" style="color: #e74c3c; font-size: 1.2rem;"></i>
+                        <span style="font-size: 0.85rem; font-weight: 500;">${name.replace(/([A-Z])/g, ' $1').trim()}</span>
+                    </div>
+                    <a href="${url}" target="_blank" style="font-size: 0.75rem; color: #4a90e2; text-decoration: none; font-weight: 700;">VIEW DOCUMENT</a>
+                </div>
+            `).join('') : '<p style="color: #999; text-align: center; padding: 20px;">No documents have been uploaded yet.</p>'}
+        </div>
+    `;
+
   // Tab Switching Logic
     const tPers = document.getElementById('tabPersonal');
     const tAcad = document.getElementById('tabAcademic');
