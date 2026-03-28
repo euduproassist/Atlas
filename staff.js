@@ -147,6 +147,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
             }
 
            const row = document.createElement('tr');
+           row.setAttribute('data-status', status1.toLowerCase());
             
             // REPLACE YOUR OLD row.innerHTML WITH THIS:
             if (activeTabFilter === 'accepted') {
