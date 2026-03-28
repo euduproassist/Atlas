@@ -536,6 +536,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
+// Add 'e' as a parameter
+window.setSubFilter = (val, parentTab, e) => {
+    activeTabFilter = parentTab;
+    activeSubFilter = val;
+    
+    localStorage.setItem('lastTab', parentTab);
+    localStorage.setItem('lastSub', val);
+
+    document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active-link'));
+
+    // Use 'e' instead of 'event'
+    if (e && e.currentTarget) {
+        e.currentTarget.classList.add('active-link');
+    }
+    
+    loadApplications(); 
+};
+
 document.getElementById('sortDate').addEventListener('change', (e) => {
     const rows = Array.from(tableBody.querySelectorAll('tr:not(#noDataRow)'));
     const isNewest = e.target.value === 'newest';
