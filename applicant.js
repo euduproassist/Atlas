@@ -108,21 +108,6 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
         const s1 = data.step1 || {};
         const s2 = data.step2 || {};
         
-        // --- LOGIC: Handle 2nd Choice Status based on 1st Choice ---
-        const firstChoiceStatus = data.status || "Pending";
-        let secondChoiceStatusDisplay = "";
-        
-        if (firstChoiceStatus.toLowerCase() === "rejected") {
-            // If 1st choice is rejected, 2nd choice becomes active (Under Review)
-            secondChoiceStatusDisplay = "UNDER REVIEW";
-        } else if (firstChoiceStatus.toLowerCase().includes("accepted")) {
-            // If 1st choice is accepted, 2nd choice is effectively on hold/not reviewed
-            secondChoiceStatusDisplay = "N/A (1ST CHOICE ACCEPTED)";
-        } else {
-            // Default: 1st choice is still pending or in review
-            secondChoiceStatusDisplay = "PENDING 1ST CHOICE OUTCOME";
-        }
-
         // --- UI Construction ---
         body.innerHTML = `
             <div style="display: flex; gap: 40px; margin-bottom: 30px;">
