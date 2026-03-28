@@ -209,7 +209,6 @@ window.showDetails = showDetails;
 
 // Professional Summary Modal Logic
 function showDetails(id, data) {
-    function showDetails(id, data) {
     currentAppId = id;
     const modal = document.getElementById('appModal');
     const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
