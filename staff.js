@@ -39,7 +39,15 @@ function loadApplications() {
     const q = query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 
 onSnapshot(q, (snapshot) => {
+const newAppsCount = snapshot.docs.filter(d => ['pending', 'review', 'waiting'].includes(d.data().status1)).length;
+const acceptedCount = snapshot.docs.filter(d => ['prov_accepted', 'uncon_accepted', 'registered'].includes(d.data().status1)).length;
+const rejectedCount = snapshot.docs.filter(d => ['rejected', 'withdrawn_expired', 'student_declined'].includes(d.data().status1)).length;
+const archivedCount = snapshot.docs.filter(d => d.data().status1 === 'archived').length; 
 
+document.getElementById('newAppsCount').innerText = newAppsCount;
+document.getElementById('acceptedCount').innerText = acceptedCount;
+document.getElementById('rejectedCount').innerText = rejectedCount;
+document.getElementById('archivedCount').innerText = archivedCount;
 
         tableBody.innerHTML = ''; // Keep this line
 
