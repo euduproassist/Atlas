@@ -560,6 +560,8 @@ document.getElementById('sortDate').addEventListener('change', (e) => {
     const isNewest = e.target.value === 'newest';
 
     rows.sort((a, b) => {
+        const dateA = new Date(a.querySelector('.hide-mobile')?.innerText || 0);
+        const dateB = new Date(b.querySelector('.hide-mobile')?.innerText || 0);
 
         return isNewest ? dateB - dateA : dateA - dateB;
     });
