@@ -426,7 +426,6 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 
 // Update your existing applyFilters function to include the Tab logic
 const applyFilters = () => {
-    const statusDropdownVal = "all"; 
     const docsFilterVal = document.getElementById('filterDocs').value;
     const rows = tableBody.getElementsByTagName('tr');
 
