@@ -327,6 +327,57 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
 </div>` : ''}
 </div>`;
 
+    secApp.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 30px;"> 
+        <div style="border: 1px solid #eee; border-radius: 8px; padding: 20px; background: #fafcfe;">
+            <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">4. Programme Choices</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px;">
+                ${row("Academic Year", s2.acadYear)}
+                ${row("Campus Selection", s2.campus)}
+                ${row("First Choice", s2.choice1)}
+                ${row("Second/Third Choice", s2.choice2)}
+                ${row("Need Student Accommodation", s2.housing)}
+                ${row("Need Financial Support", s2.nsfas)}
+            </div>
+
+            <div style="border-top: 1px solid #eee; pt: 20px; margin-top: 10px;">
+                <h4 style="font-size: 0.75rem; color: #999; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Admission Decision</h4>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e1e4e8;">
+                        <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 700;">Status: Choice 1</span>
+                        <select id="updateStatus1" style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-weight: 600; font-size: 0.8rem;">
+                            <option value="review" ${data.status1 === 'review' ? 'selected' : ''}>Under Review</option>
+                            <option value="waiting" ${data.status1 === 'waiting' ? 'selected' : ''}>Waiting List</option>
+                            <option value="prov_accepted" ${data.status1 === 'prov_accepted' ? 'selected' : ''}>Provisional Acceptance</option>
+                            <option value="uncon_accepted" ${data.status1 === 'uncon_accepted' ? 'selected' : ''}>Unconditional Acceptance</option>
+                            <option value="rejected" ${data.status1 === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            <option value="registered" ${data.status1 === 'registered' ? 'selected' : ''}>Registered</option>
+                            <option value="deregistered" ${data.status1 === 'deregistered' ? 'selected' : ''}>Deregistered</option>
+                        </select>
+                    </div>
+
+                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e1e4e8; ${data.status1 !== 'rejected' ? 'opacity: 0.5;' : ''}">
+                        <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 700;">Status: Choice 2</span>
+                        <select id="updateStatus2" ${data.status1 !== 'rejected' ? 'disabled' : ''} style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-size: 0.8rem;">
+                            <option value="pending" ${data.status2 === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="prov_accepted" ${data.status2 === 'prov_accepted' ? 'selected' : ''}>Provisional Acceptance</option>
+                            <option value="uncon_accepted" ${data.status2 === 'uncon_accepted' ? 'selected' : ''}>Unconditional Acceptance</option>
+                            <option value="rejected" ${data.status2 === 'rejected' ? 'selected' : ''}>Rejected</option>
+                        </select>
+                        ${data.status1 !== 'rejected' ? '<p style="font-size: 0.6rem; color: #e74c3c; margin-top: 5px;">Choice 1 must be Rejected first</p>' : ''}
+                    </div>
+                </div>
+
+                <button onclick="saveStatusUpdate()" style="width: 100%; background: #4a90e2; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; font-size: 0.8rem;">
+                    UPDATE STUDENT APPLICATION STATUS
+                </button>
+            </div>
+        </div>
+    </div>
+`;
+
      // NEW: Documents Section Logic
     const docs = data.documents || {};
     secDocs.innerHTML = `
