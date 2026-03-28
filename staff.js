@@ -638,6 +638,33 @@ document.addEventListener('click', (e) => {
     }
 });
 
+window.saveStatusUpdate = async () => {
+    const s1Value = document.getElementById('updateStatus1').value;
+    const s2Value = document.getElementById('updateStatus2').value;
+    const btn = event.target;
+
+    try {
+        btn.innerText = "UPDATING...";
+        btn.disabled = true;
+
+        await updateDoc(doc(db, "applications", currentAppId), {
+            status1: s1Value,
+            status2: s2Value,
+            lastUpdated: new Date(),
+            processedBy: auth.currentUser.email // Tracking who made the change
+        });
+
+        alert("Application status updated successfully.");
+        document.getElementById('appModal').style.display = 'none';
+    } catch (error) {
+        alert("Error: " + error.message);
+    } finally {
+        btn.innerText = "UPDATE STUDENT APPLICATION STATUS";
+        btn.disabled = false;
+    }
+};
+
+
 
 
 
