@@ -209,36 +209,6 @@ window.showDetails = showDetails;
 
 // Professional Summary Modal Logic
 function showDetails(id, data) {
-    currentAppId = id;
-    const modal = document.getElementById('appModal');
-    const personalSection = document.getElementById('personalSection');
-    const academicSection = document.getElementById('academicSection');
-    const header = document.getElementById('modalStudentHeader'); // Make sure you added this ID in the HTML above
-    const appDetailsSection = document.getElementById('appDetailsSection') || document.createElement('div');
-    appDetailsSection.id = "appDetailsSection";
-    appDetailsSection.style.display = "none";
-   // Ensure this is appended to your modal body if it's a new element
-   if(!document.getElementById('appDetailsSection')) personalSection.parentNode.appendChild(appDetailsSection);
-
-    
-    const s1 = data.step1 || {};
-    const s2 = data.step2 || {};
-    const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
-
-    // Inject the Student Header (ID and Name on top, details on a new line below)
-    header.innerHTML = `
-    <div style="width: 100%;">
-        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 10px;">
-            ${displayId} &nbsp; ${s1.fullNames} ${s1.surname}
-        </h2>
-        <div style="display: flex; gap: 30px; color: #666; font-size: 0.9rem; flex-wrap: wrap;">
-            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">ID Number</strong><br>${s1.idNumber || 'N/A'}</span>
-            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">Cell Number</strong><br>${s1.mobile || 'N/A'}</span>
-            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">Email</strong><br>${s1.email || 'N/A'}</span>
-            <span><strong style="color: #999; text-transform: uppercase; font-size: 0.75rem;">Date Submitted</strong><br>${data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : 'N/A'}</span>
-        </div>
-    </div>
-`;
 
     // Helper to hide empty fields - if value is missing, it returns empty string
     const row = (label, value) => value ? `
