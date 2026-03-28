@@ -539,6 +539,35 @@ const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
     }
 };
 
+// Initialization Logic on Page Load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTab = localStorage.getItem('lastTab') || 'new';
+    const savedSub = localStorage.getItem('lastSub') || 'all';
+    
+    // Open the folder containing the saved sub-filter
+    const folderMap = { 'new': 'sideNavNew', 'accepted': 'sideNavAccepted', 'rejected': 'sideNavRejected', 'archived': 'sideNavArchived' };
+    if (folderMap[savedTab]) {
+        document.getElementById(folderMap[savedTab]).style.display = 'block';
+    }
+
+    // Load the table data
+    activeTabFilter = savedTab;
+    activeSubFilter = savedSub;
+    loadApplications();
+    
+    // Manually add the active-link class to the correct sub-tab
+    // We use a timeout to ensure the DOM is fully ready
+    setTimeout(() => {
+        const subTabs = document.querySelectorAll('.sub-tab');
+        subTabs.forEach(tab => {
+            if (tab.getAttribute('onclick').includes(`'${savedSub}'`) && 
+                tab.getAttribute('onclick').includes(`'${savedTab}'`)) {
+                tab.classList.add('active-link');
+            }
+        });
+    }, 100);
+});
+
 window.setSubFilter = (val, parentTab) => {
     activeTabFilter = parentTab; // Set the main category (new/accepted/rejected)
     activeSubFilter = val;       // Set the sub-status
