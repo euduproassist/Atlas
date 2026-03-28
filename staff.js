@@ -361,6 +361,22 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
     const tAcad = document.getElementById('tabAcademic');
     const tApp = document.getElementById('tabAppDetails');
 
+    // Global function to switch sections inside the modal
+    window.switchModalTab = (tabName) => {
+        // Hide all sections
+        document.querySelectorAll('.modal-section').forEach(s => s.style.display = 'none');
+        // Deactivate all nav items
+        document.querySelectorAll('.mod-nav-item').forEach(n => n.classList.remove('active'));
+
+        // Show selected
+        document.getElementById('sec-' + tabName).style.display = 'block';
+        document.getElementById('nav-' + tabName).classList.add('active');
+    };
+
+    switchModalTab('personal'); // Default view
+    modal.style.display = 'flex';
+}
+
 
 // 5. Simple Search Implementation
 document.getElementById('searchInput').addEventListener('input', (e) => {
