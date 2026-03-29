@@ -75,6 +75,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
     <th class="hide-mobile">Date Submitted</th>
     <th>Date Declined</th>
     <th>Declined By</th>
+    <th>Action</th>
     </tr>`;
         
     } else {
