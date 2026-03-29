@@ -635,6 +635,30 @@ window.saveStatusUpdate = async () => {
         btn.innerText = "UPDATING...";
         btn.disabled = true;
 
+        const staffDoc = await getDoc(doc(db, "staff", auth.currentUser.uid));
+        const staffName = staffDoc.exists() ? staffDoc.data().firstName : auth.currentUser.email;
+
+        // 2. Prepare the update object
+        const updateData = {
+            status1: s1Value,
+            status2: s2Value,
+            lastUpdated: new Date(),
+        };
+
+        // 3. Logic: If the status is an "Accepted" type, set Date Accepted and Staff Name
+        if (['prov_accepted', 'uncon_accepted', 'registered'].includes(s1Value)) {
+            updateData.dateAccepted = new Date().toLocaleDateString();
+            updateData.acceptedBy = staffName;
+        } 
+        
+        // 4. Logic: If the status is a "Rejected" type, set Date Declined and Staff Name
+        if (['rejected', 'withdrawn_expired', 'student_declined'].includes(s1Value)) {
+            updateData.dateDeclined = new Date().toLocaleDateString();
+            updateData.declinedBy = staffName;
+        }
+
+        await updateDoc(doc(db, "applications", currentAppId), updateData);
+
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
     } catch (error) {
