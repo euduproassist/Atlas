@@ -73,8 +73,8 @@ document.getElementById('archivedCount').innerText = archivedCount;
     <th>Course 1 Declined</th>
     <th>Course 2 Declined</th>
     <th class="hide-mobile">Date Submitted</th>
-    <th>Date Actioned</th>
-    <th>Actioned By</th>
+    <th>Date Declined</th>
+    <th>Declined By</th>
     </tr>`;
         
     } else {
