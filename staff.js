@@ -156,7 +156,8 @@ document.getElementById('archivedCount').innerText = archivedCount;
                     <td><strong>${displayId}</strong></td>
                     <td>${studentName}</td>
                     <td>${course}</td>
-
+                    <td class="hide-mobile">${data.submittedAt ? new Date(data.submittedAt.seconds * 1000).toLocaleDateString() : dateSub}</td>
+                    <td>${data.dateAccepted ? new Date(data.dateAccepted.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
                     <td><span style="font-size: 0.8rem; color: #666;">${data.acceptedBy || 'Staff User'}</span></td>
                     <td>
                     <button class="view-btn" style="background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; cursor: pointer;" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
