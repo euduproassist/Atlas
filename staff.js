@@ -71,7 +71,10 @@ document.getElementById('archivedCount').innerText = archivedCount;
     <th>Application ID</th>
     <th>Student Name</th>
     <th>Course 1 Declined</th>
-
+    <th>Course 2 Declined</th>
+    <th class="hide-mobile">Date Submitted</th>
+    <th>Date Actioned</th>
+    <th>Actioned By</th>
     </tr>`;
         
     } else {
