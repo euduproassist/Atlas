@@ -23,7 +23,7 @@ onAuthStateChanged(auth, async (user) => {
     const staffSnap = await getDoc(staffRef);
     
     if (staffSnap.exists()) {
-        window.currentStaffName = staffSnap.data().firstName || "Staff";
+        window.currentStaffName = staffSnap.data().fullName || "Staff";
     loadApplications();
     setupProfile(user);
 
