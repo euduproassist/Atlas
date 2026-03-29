@@ -174,9 +174,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
                   <td>${data.dateDeclined || 'N/A'}</td>
                   <td><span style="font-size: 0.8rem; color: #666;">${data.declinedBy || 'Staff User'}</span></td>
                   <td>
-                  <button class="view-btn" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;">
-                VIEW
-                </button>
              </td>
            `;
             } else {
