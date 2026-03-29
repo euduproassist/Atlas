@@ -636,14 +636,6 @@ window.saveStatusUpdate = async () => {
         btn.innerText = "UPDATING...";
         btn.disabled = true;
 
-         await updateDoc(doc(db, "applications", currentAppId), {
-            status1: s1Value,
-            status2: s2Value,
-            lastUpdated: new Date(),
-            processedBy: auth.currentUser.email // Tracking who made the change
-        });
-
-
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
     } catch (error) {
