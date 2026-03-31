@@ -1,3 +1,26 @@
+    // 5. APPLICATIONS
+    match /applications/{appDocId} {
+      // Allow any logged-in user to check if an ID exists (for uniqueness check)
+      allow get: if request.auth != null; 
+      
+      // Allow listing only for Staff/Admins
+      allow list: if request.auth != null && (
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+
+      allow create: if request.auth != null;
+
+      allow update: if request.auth != null && (
+        request.auth.uid == appDocId || 
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+
+
+
 apply.js:481 Critical: Error checking Application ID uniqueness: FirebaseError: Missing or insufficient permissions.
 (anonymous)	@	apply.js:481﻿
 
