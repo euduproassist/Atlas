@@ -460,6 +460,29 @@ if (draftSnap.exists()) {
         finalStatus = "pending"; // Re-submit for review
     }  
 
+  // Get last two digits of current year (e.g., 2026 -> 26, 2027 -> 27)
+const yearSuffix = new Date().getFullYear().toString().slice(-2);
+
+if (!finalAppId) {
+    let isUnique = false;
+    while (!isUnique) {
+        // Generates exactly 6 random digits (100000 to 999999)
+        const randomDigits = Math.floor(100000 + Math.random() * 900000);
+        const candidateId = `APP-${yearSuffix}${randomDigits}`;
+        
+        try {
+            const duplicateCheck = await getDoc(doc(db, "applications", candidateId));
+            if (!duplicateCheck.exists()) {
+                finalAppId = candidateId;
+                isUnique = true;
+            }
+        } catch (err) {
+            console.error("Critical: Error checking Application ID uniqueness:", err);
+            break; 
+        }
+    }
+}
+
 await setDoc(doc(db, "applications", user.uid), {
     ...draftSnap.data(),
     applicationId: finalAppId, // This saves the ID permanently
