@@ -109,21 +109,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
         const s2 = data.step2 || {};
 
          // --- FIXED LOGIC: Syncing with Staff Portal 'status1' and 'status2' ---
-        const firstChoiceStatus = data.status1 || "pending";
-        const secondChoiceStatus = data.status2 || "pending";
-        let secondChoiceStatusDisplay = "";
-        
-        if (firstChoiceStatus === "rejected") {
-            // If 1st choice is rejected, show the actual status of choice 2 (e.g., prov_accepted or pending)
-            secondChoiceStatusDisplay = secondChoiceStatus.toUpperCase();
-        } else if (["prov_accepted", "uncon_accepted", "registered"].includes(firstChoiceStatus)) {
-            // If 1st choice is successful, 2nd choice is ignored
-            secondChoiceStatusDisplay = "N/A (1ST CHOICE ACCEPTED)";
-        } else {
-            // 1st choice is still 'pending', 'review', or 'waiting'
-            secondChoiceStatusDisplay = "WAITING FOR 1ST CHOICE OUTCOME";
-        }
-
+        const currentStatus = data.status1 || "pending";
         
         // --- UI Construction ---
         body.innerHTML = `
