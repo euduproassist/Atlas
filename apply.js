@@ -460,16 +460,6 @@ if (draftSnap.exists()) {
         finalStatus = "pending"; // Re-submit for review
     }  
 
- // Generate Permanent Unique ID: APP + Year + 6 digits
-const yearSuffix = new Date().getFullYear().toString().slice(-2);
-let finalAppId = existingData.applicationId;
-
-if (!finalAppId) {
-    // Generate a random 6-digit number
-    const randomDigits = Math.floor(100000 + Math.random() * 900000);
-    finalAppId = `APP-${yearSuffix}${randomDigits}`;
-}
-
 await setDoc(doc(db, "applications", user.uid), {
     ...draftSnap.data(),
     applicationId: finalAppId, // This saves the ID permanently
