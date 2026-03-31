@@ -196,7 +196,10 @@ function showDetails(id, data) {
     }).catch(err => console.error("Auto-review failed:", err));
     }
     const modal = document.getElementById('appModal');
-    
+    const displayId = data.applicationId;
+if (!displayId) {
+    console.error("System Error: Application found without a generated ID for Student:", studentName);
+}
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
 
