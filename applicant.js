@@ -116,7 +116,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
             <div style="display: flex; gap: 40px; margin-bottom: 30px;">
                 <div>
                     <span style="color: #888; font-size: 0.85rem;">Application ID:</span>
-                    
+                    <strong style="display: block;">${data.applicationId || 'Generating...'}</strong>
                 </div>
                 <div>
                     <span style="color: #888; font-size: 0.85rem;">Name:</span>
