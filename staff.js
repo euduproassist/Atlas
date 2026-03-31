@@ -328,8 +328,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                         <select id="updateStatus1" style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-weight: 600; font-size: 0.8rem;">
                             <option value="review" ${data.status1 === 'review' ? 'selected' : ''}>Under Review</option>
                             <option value="waiting" ${data.status1 === 'waiting' ? 'selected' : ''}>Waiting List</option>
-                            <option value="prov_accepted" ${data.status1 === 'prov_accepted' ? 'selected' : ''}>Provisional Acceptance</option>
-                            <option value="uncon_accepted" ${data.status1 === 'uncon_accepted' ? 'selected' : ''}>Unconditional Acceptance</option>
+                            <option value="uncon_accepted" ${data.status1 === 'uncon_accepted' ? 'selected' : ''}>Accepted</option>
                             <option value="rejected" ${data.status1 === 'rejected' ? 'selected' : ''}>Rejected</option>
                             <option value="registered" ${data.status1 === 'registered' ? 'selected' : ''}>Registered</option>
                             <option value="deregistered" ${data.status1 === 'deregistered' ? 'selected' : ''}>Deregistered</option>
