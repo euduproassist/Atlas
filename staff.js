@@ -635,7 +635,6 @@ const isAdmissionStatus = ['prov_accepted', 'uncon_accepted', 'registered'].incl
 
 await updateDoc(doc(db, "applications", currentAppId), {
     status1: s1Value,
-    status2: s2Value,
     lastUpdated: new Date(),
     // Only update these if the status is an admission status
     ...(isAdmissionStatus && { 
