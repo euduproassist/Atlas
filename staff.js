@@ -425,7 +425,7 @@ else if (activeTabFilter === 'accepted') {
 }
 else if (activeTabFilter === 'rejected') {
     // Only show if status is one of the "Declined" types
-    const isDeclinedType = ['rejected', 'withdrawn_expired', 'student_declined'].includes(rowStatus);
+    const isDeclinedType = ['rejected', 'withdrawn_expired'].includes(rowStatus);
     if (activeSubFilter === 'all') {
         matchTab = isDeclinedType;
     } else {
