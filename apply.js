@@ -460,26 +460,6 @@ if (draftSnap.exists()) {
         finalStatus = "pending"; // Re-submit for review
     }  
 
-    // NEW LOGIC: Generate APP-YY + 7 Unique Digits
-const yearSuffix = new Date().getFullYear().toString().slice(-2);
-let finalAppId = existingData.applicationId;
-
-if (!finalAppId) {
-    let isUnique = false;
-    while (!isUnique) {
-        // Generates exactly 7 random digits
-        const randomDigits = Math.floor(1000000 + Math.random() * 9000000);
-        const candidateId = `APP-${yearSuffix}${randomDigits}`;
-        
-        // Safety Check: Verify this ID doesn't exist in the 'applications' collection
-        const duplicateCheck = await getDoc(doc(db, "applications", candidateId));
-        if (!duplicateCheck.exists()) {
-            finalAppId = candidateId;
-            isUnique = true;
-        }
-    }
-}
-
 await setDoc(doc(db, "applications", user.uid), {
     ...draftSnap.data(),
     applicationId: finalAppId, // This saves the ID permanently
