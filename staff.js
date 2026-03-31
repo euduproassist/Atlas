@@ -126,8 +126,10 @@ document.getElementById('archivedCount').innerText = archivedCount;
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
             const docLabel = isComplete ? "CD" : "MD";
             const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; padding: 3px 8px; font-size: 0.65rem;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 3px 8px; font-size: 0.65rem;";
-            // Format ID like the photo (APP23-001) using last 4 digits of UID
-            const displayId = data.applicationId || "No ID";
+            const displayId = data.applicationId;
+            if (!displayId) {
+            console.error("System Error: Application found without a generated ID for Student:", studentName);
+              }
 
            const row = document.createElement('tr');
            row.setAttribute('data-status', status1.toLowerCase());
