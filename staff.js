@@ -600,7 +600,7 @@ window.saveStatusUpdate = async () => {
         btn.innerText = "UPDATING...";
         btn.disabled = true;
 
-const isAdmissionStatus = ['prov_accepted', 'uncon_accepted', 'registered'].includes(s1Value);
+const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
 
 await updateDoc(doc(db, "applications", currentAppId), {
     status1: s1Value,
