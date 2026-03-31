@@ -332,7 +332,6 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                 ${row("Academic Year", s2.acadYear)}
                 ${row("Campus Selection", s2.campus)}
                 ${row("First Choice", s2.choice1)}
-                ${row("Second/Third Choice", s2.choice2)}
                 ${row("Need Student Accommodation", s2.housing)}
                 ${row("Need Financial Support", s2.nsfas)}
             </div>
