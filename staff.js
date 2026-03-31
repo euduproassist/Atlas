@@ -625,7 +625,6 @@ document.addEventListener('click', (e) => {
 
 window.saveStatusUpdate = async () => {
     const s1Value = document.getElementById('updateStatus1').value;
-    const s2Value = document.getElementById('updateStatus2').value;
     const btn = event.target;
 
     try {
