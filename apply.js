@@ -387,8 +387,7 @@ mainForm.addEventListener('submit', async (e) => {
             postSchoolQualifications: qualData,
             
             // 4. Choices
-            choice1: document.getElementById('choice1').value,
-            choice2: document.getElementById('choice2').value,
+            choice: document.getElementById('choice1').value,
             acadYear: document.getElementById('acadYear').value,
             campus: document.getElementById('campus').value,
             attendance: document.getElementById('attendance').value,
