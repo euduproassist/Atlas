@@ -458,14 +458,7 @@ if (draftSnap.exists()) {
     let finalStatus = existingData.status || "pending";
     if (existingData.status === "Missing Info") {
         finalStatus = "pending"; // Re-submit for review
-    }
-
-    await setDoc(doc(db, "applications", user.uid), {
-        ...draftSnap.data(),
-        status: finalStatus,
-        submittedAt: existingData.submittedAt || new Date(),
-        lastUpdated: new Date()
-    }, { merge: true });  
+    }  
 
     alert("Application Submitted Successfully!");
 }
