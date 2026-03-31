@@ -353,18 +353,6 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                         </select>
                     </div>
 
-                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e1e4e8; ${data.status1 !== 'rejected' ? 'opacity: 0.5;' : ''}">
-                        <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 700;">Status: Choice 2</span>
-                        <select id="updateStatus2" ${data.status1 !== 'rejected' ? 'disabled' : ''} style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-size: 0.8rem;">
-                            <option value="pending" ${data.status2 === 'pending' ? 'selected' : ''}>Pending</option>
-                            <option value="prov_accepted" ${data.status2 === 'prov_accepted' ? 'selected' : ''}>Provisional Acceptance</option>
-                            <option value="uncon_accepted" ${data.status2 === 'uncon_accepted' ? 'selected' : ''}>Unconditional Acceptance</option>
-                            <option value="rejected" ${data.status2 === 'rejected' ? 'selected' : ''}>Rejected</option>
-                        </select>
-                        ${data.status1 !== 'rejected' ? '<p style="font-size: 0.6rem; color: #e74c3c; margin-top: 5px;">Choice 1 must be Rejected first</p>' : ''}
-                    </div>
-                </div>
-
                 <button onclick="saveStatusUpdate()" style="width: 100%; background: #4a90e2; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; font-size: 0.8rem;">
                     UPDATE STATUS
                 </button>
