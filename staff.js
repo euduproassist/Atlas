@@ -605,18 +605,6 @@ window.saveStatusUpdate = async () => {
         btn.innerText = "UPDATING...";
         btn.disabled = true;
 
-const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
-
-await updateDoc(doc(db, "applications", currentAppId), {
-    status1: s1Value,
-    lastUpdated: new Date(),
-    // Only update these if the status is an admission status
-    ...(isAdmissionStatus && { 
-        dateAccepted: new Date(), 
-        acceptedBy: window.currentStaffName 
-    }),
-    processedBy: auth.currentUser.email
-});
 
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
