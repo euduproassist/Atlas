@@ -196,7 +196,7 @@ function showDetails(id, data) {
     }).catch(err => console.error("Auto-review failed:", err));
     }
     const modal = document.getElementById('appModal');
-    const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
+    const displayId = data.applicationID || "Pending...";
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
 
