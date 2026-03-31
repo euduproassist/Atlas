@@ -314,7 +314,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px;">
                 ${row("Academic Year", s2.acadYear)}
                 ${row("Campus Selection", s2.campus)}
-                ${row("First Choice", s2.choice1)}
+                ${row("Course Selection", s2.choice1)}
                 ${row("Need Student Accommodation", s2.housing)}
                 ${row("Need Financial Support", s2.nsfas)}
             </div>
