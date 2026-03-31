@@ -129,7 +129,6 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
             <thead>
             <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
            <th style="padding: 10px;">Year</th>
-                <th style="padding: 10px;">Choice</th>
                <th style="padding: 10px;">Qualification</th>
                <th style="padding: 10px;">Campus</th>
                <th style="padding: 10px;">Status</th> <!-- New Column -->
