@@ -42,7 +42,7 @@ function loadApplications() {
 onSnapshot(q, (snapshot) => {
 const newAppsCount = snapshot.docs.filter(d => ['pending', 'review', 'waiting'].includes(d.data().status1)).length;
 const acceptedCount = snapshot.docs.filter(d => ['uncon_accepted', 'registered'].includes(d.data().status1)).length;
-const rejectedCount = snapshot.docs.filter(d => ['rejected', 'withdrawn_expired', 'student_declined'].includes(d.data().status1)).length;
+const rejectedCount = snapshot.docs.filter(d => ['rejected', 'withdrawn_expired'].includes(d.data().status1)).length;
 const archivedCount = snapshot.docs.filter(d => d.data().status1 === 'archived').length; 
 
 document.getElementById('newAppsCount').innerText = newAppsCount;
