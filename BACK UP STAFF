@@ -338,6 +338,22 @@
     align-items: center;
 }
 
+    .mod-nav-item {
+    padding: 14px 25px;
+    font-size: 0.85rem;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.2s;
+}
+.mod-nav-item i:not(.arrow) { width: 18px; text-align: center; font-size: 0.9rem; }
+.mod-nav-item .arrow { margin-left: auto; font-size: 0.7rem; opacity: 0; transition: 0.2s; }
+.mod-nav-item:hover { background: #fcfdfe; color: var(--primary); }
+.mod-nav-item.active { background: #eef5ff; color: var(--primary); font-weight: 600; border-right: 3px solid var(--primary); }
+.mod-nav-item.active .arrow { opacity: 1; transform: translateX(5px); }
+
 </style>
 
 </head>
@@ -396,41 +412,42 @@
 
 <div class="main-content">
     <div class="sidebar-menu">
-    <div id="tabNew" class="sidebar-folder" onclick="toggleFolder('sideNavNew', 'new')">
+    <div id="tabNew" class="sidebar-folder" onclick="toggleFolder('sideNavNew')">
         <i class="fas fa-folder"></i> New Applications <i class="fas fa-chevron-down arrow"></i>
     </div>
     <div id="sideNavNew" class="sidebar-section">
-        <div onclick="setSubFilter('all')" class="sub-tab active-link" id="subAll">All Applications</div>
-        <div onclick="setSubFilter('pending')" class="sub-tab" id="subPending">Pending</div>
-        <div onclick="setSubFilter('review')" class="sub-tab" id="subReview">Under Review</div>
-        <div onclick="setSubFilter('waiting')" class="sub-tab" id="subWaiting">Waiting List</div>
+        <div onclick="setSubFilter('all', 'new', event)" class="sub-tab active-link" id="subAll">All Applications</div>
+        <div onclick="setSubFilter('pending', 'new', event)" class="sub-tab" id="subPending">Pending</div>
+        <div onclick="setSubFilter('review', 'new', event)" class="sub-tab" id="subReview">Under Review</div>
+        <div onclick="setSubFilter('waiting', 'new', event)" class="sub-tab" id="subWaiting">Waiting List</div>
     </div>
 
-    <div id="tabAccepted" class="sidebar-folder" onclick="toggleFolder('sideNavAccepted', 'accepted')">
+    <div id="tabAccepted" class="sidebar-folder" onclick="toggleFolder('sideNavAccepted')">
         <i class="fas fa-folder"></i> Admissions <i class="fas fa-chevron-down arrow"></i>
     </div>
     <div id="sideNavAccepted" class="sidebar-section" style="display: none;">
-        <div onclick="setSubFilter('all')" class="sub-tab" id="subAccAll">All Admissions</div>
-        <div onclick="setSubFilter('prov_accepted')" class="sub-tab" id="subProv">Provisional</div>
-        <div onclick="setSubFilter('uncon_accepted')" class="sub-tab" id="subUncon">Unconditional</div>
-        <div onclick="setSubFilter('registered')" class="sub-tab" id="subReg">Registered</div>
+        <div onclick="setSubFilter('all', 'accepted', event)" class="sub-tab" id="subAccAll">All Admissions</div>
+        <div onclick="setSubFilter('prov_accepted', 'accepted', event)" class="sub-tab" id="subProv">Provisional</div>
+        <div onclick="setSubFilter('uncon_accepted', 'accepted', event)" class="sub-tab" id="subUncon">Unconditional</div>
+        <div onclick="setSubFilter('registered', 'accepted', event)" class="sub-tab" id="subReg">Registered</div>
     </div>
 
-    <div id="tabRejected" class="sidebar-folder" onclick="toggleFolder('sideNavRejected', 'rejected')">
+    <div id="tabRejected" class="sidebar-folder" onclick="toggleFolder('sideNavRejected')">
         <i class="fas fa-folder"></i> Declined <i class="fas fa-chevron-down arrow"></i>
     </div>
     <div id="sideNavRejected" class="sidebar-section" style="display: none;">
-        <div onclick="setSubFilter('all')" class="sub-tab" id="subRejAll">All Declined</div>
-        <div onclick="setSubFilter('rejected_both')" class="sub-tab" id="subDouble">Rejected</div>
-        <div onclick="setSubFilter('withdrawn_expired')" class="sub-tab" id="subExpired">Withdrawn/Expired</div>
-        <div onclick="setSubFilter('student_declined')" class="sub-tab" id="subStudent">Student Declined</div>
+        <div onclick="setSubFilter('all', 'rejected', event)" class="sub-tab" id="subRejAll">All Declined</div>
+        <div onclick="setSubFilter('rejected', 'rejected', event)" class="sub-tab" id="subDouble">Rejected</div>
+        <div onclick="setSubFilter('withdrawn_expired', 'rejected', event)" class="sub-tab" id="subExpired">Withdrawn/Expired</div>
+        <div onclick="setSubFilter('student_declined', 'rejected', event)" class="sub-tab" id="subStudent">Student Declined</div>
     </div>
 
     <div id="tabArchived" class="sidebar-folder" onclick="toggleFolder('sideNavArchived', 'archived')">
         <i class="fas fa-archive"></i> System Archive <i class="fas fa-chevron-down arrow"></i>
     </div>
-    <div id="sideNavArchived" class="sidebar-section" style="display: none;">
-        </div>
+        <div id="sideNavArchived" class="sidebar-section" style="display: none;">
+    <div onclick="setSubFilter('archived', 'archived', event)" class="sub-tab" id="subArchived">All Archived</div>
+</div>
 </div>
 
     <div class="table-wrapper">
@@ -453,27 +470,42 @@
     </div>
 
         <div id="appModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; flex-direction: column; shadow-y: auto; overflow-y: auto;">
-    <div style="padding: 15px 25px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; color: #666; font-size: 0.85rem;">
-        <span>Manage Applications</span> <i class="fas fa-chevron-right" style="font-size: 0.7rem;"></i> <span id="breadcrumbActive" style="font-weight: 600;">Applicant Details</span>
-        <button onclick="document.getElementById('appModal').style.display='none'" style="margin-left: auto; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <div style="display: flex; height: 100vh; background: #f8f9fa;">
+    
+    <div style="width: 280px; background: white; border-right: 1px solid #eee; display: flex; flex-direction: column; padding: 20px 0;">
+        <div style="padding: 0 25px 20px; border-bottom: 1px solid #f5f5f5; margin-bottom: 10px;">
+            <button onclick="document.getElementById('appModal').style.display='none'" style="background:none; border:none; color:#999; cursor:pointer; font-size: 0.8rem; margin-bottom: 15px;">
+                <i class="fas fa-arrow-left"></i> BACK TO LIST
+            </button>
+            <div id="modalIdBadge" style="font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 1px;"></div>
+            <h2 id="modalStudentName" style="font-size: 1.1rem; margin-top: 5px; color: #333;"></h2>
+        </div>
+
+        <nav id="modalNav">
+            <div onclick="switchModalTab('personal')" class="mod-nav-item active" id="nav-personal">
+                <i class="fas fa-user"></i> Personal Details <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div onclick="switchModalTab('academic')" class="mod-nav-item" id="nav-academic">
+                <i class="fas fa-graduation-cap"></i> Academic Qualifications <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div onclick="switchModalTab('documents')" class="mod-nav-item" id="nav-documents">
+                <i class="fas fa-file-alt"></i> Uploaded Documents <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div onclick="switchModalTab('application')" class="mod-nav-item" id="nav-application">
+                <i class="fas fa-clipboard-list"></i> Application Details <i class="fas fa-chevron-right arrow"></i>
+            </div>
+        </nav>
     </div>
 
-    <div style="padding: 30px 50px;">
-        <h1 style="font-size: 1.8rem; margin-bottom: 20px;">Applicant Details</h1>
-        
-        <div id="modalStudentHeader" style="display: flex; gap: 40px; align-items: center; margin-bottom: 30px;">
-            </div>
-
-     <div style="display: flex; gap: 30px; border-bottom: 2px solid #f0f0f0; margin-bottom: 25px;">
-    <div id="tabPersonal" class="tab-btn active" style="padding-bottom: 10px; border-bottom: 3px solid #4a90e2; color: #4a90e2; font-weight: 600; cursor: pointer;">Personal Details</div>
-    <div id="tabAcademic" class="tab-btn" style="padding-bottom: 10px; color: #999; cursor: pointer;">Academic Qualifications</div>
-    <div style="color: #999; cursor: not-allowed; padding-bottom: 10px;">Uploaded Documents</div>
-    <div id="tabAppDetails" class="tab-btn" style="padding-bottom: 10px; color: #999; cursor: pointer;">Application Details</div>
-    
+    <div style="flex-grow: 1; padding: 40px; overflow-y: auto; display: flex; justify-content: center;">
+        <div id="modalContentCard" style="background: white; width: 100%; max-width: 800px; padding: 35px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); height: fit-content;">
+            <div id="sec-personal" class="modal-section"></div>
+            <div id="sec-academic" class="modal-section" style="display:none;"></div>
+            <div id="sec-documents" class="modal-section" style="display:none;"></div>
+            <div id="sec-application" class="modal-section" style="display:none;"></div>
+        </div>
+    </div>
 </div>
-
-<div id="personalSection"></div>
-<div id="academicSection" style="display: none;"></div>
 
         <div id="modalBody">
             </div>
