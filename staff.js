@@ -605,6 +605,22 @@ window.saveStatusUpdate = async () => {
         btn.innerText = "UPDATING...";
         btn.disabled = true;
 
+const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
+const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value); // New check
+
+await updateDoc(doc(db, "applications", currentAppId), {
+    status1: s1Value,
+    lastUpdated: new Date(),
+    ...(isAdmissionStatus && { 
+        dateAccepted: new Date(), 
+        acceptedBy: window.currentStaffName 
+    }),
+    ...(isDeclinedStatus && { 
+        dateDeclined: new Date().toLocaleDateString(), // Saves current date
+        declinedBy: window.currentStaffName // Saves current staff fullName
+    }),
+    processedBy: auth.currentUser.email
+});
 
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
