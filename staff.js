@@ -87,10 +87,8 @@ document.getElementById('archivedCount').innerText = archivedCount;
                 </button>
                 Application ID
                 </th>                
-                <th>Course 1</th>
-                <th>Status 1</th>
-                <th>Course 2</th>
-                <th>Status 2</th>
+                <th>Course</th>
+                <th>Status</th>
                 <th class="hide-mobile">Date Submitted</th>
                 <th>Action</th>
             </tr>`;
