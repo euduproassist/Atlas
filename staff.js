@@ -123,9 +123,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
 
             const studentName = s1.fullNames + " " + (s1.surname || "");
             const course = s2.choice1 || "Not Selected";
-            const course2 = s2.choice2 || "Not Selected"; 
             const status1 = data.status1 || "pending";
-            const status2 = data.status2 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
             const docLabel = isComplete ? "CD" : "MD";
             const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; padding: 3px 8px; font-size: 0.65rem;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 3px 8px; font-size: 0.65rem;";
