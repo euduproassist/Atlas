@@ -152,7 +152,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
                   <td><strong>${displayId}</strong></td>
                   <td>${studentName}</td>
                   <td>${course}</td>
-                  <td>${course2}</td>
                   <td class="hide-mobile">${dateSub}</td>
                   <td>${data.dateDeclined || 'N/A'}</td>
                   <td><span style="font-size: 0.8rem; color: #666;">${data.declinedBy || 'Staff User'}</span></td>
