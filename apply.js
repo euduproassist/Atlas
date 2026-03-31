@@ -462,6 +462,7 @@ if (draftSnap.exists()) {
 
   // Get last two digits of current year (e.g., 2026 -> 26, 2027 -> 27)
 const yearSuffix = new Date().getFullYear().toString().slice(-2);
+    let finalAppId = existingData.applicationId;
 
 if (!finalAppId) {
     let isUnique = false;
