@@ -139,7 +139,6 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
     <!-- 1st Choice Row -->
     <tr style="border-bottom: 1px solid #eee;">
         <td style="padding: 15px 10px;">${s2.acadYear || '2027'}</td>
-        <td style="padding: 15px 10px;">Course</td>
         <td style="padding: 15px 10px;">${s2.choice1}</td>
         <td style="padding: 15px 10px;">${s2.campus}</td>
         <td style="padding: 15px 10px; font-weight: 700; color: #1976d2;">
