@@ -129,19 +129,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
             // Format ID like the photo (APP23-001) using last 4 digits of UID
             const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
 
-            // Status 2 Logic: If Status 1 isn't 'rejected', Status 2 is inactive (Grey)
-            let status2HTML;
-            const isStatus1Accepted = ["prov_accepted", "uncon_accepted"].includes(status1);
-
-            if (status1 !== "rejected") {
-            const reason = isStatus1Accepted ? "ST1 ACCEPTED" : "WAITING FOR ST1";
-            status2HTML = `<span style="color: #999; font-size: 0.6rem; font-weight: 500; border: 1px solid #ddd; padding: 2px 4px; border-radius: 3px;">
-                    <i class="fas fa-clock"></i> ${reason}</span>`;
-            } else {
-            // If Status 1 IS rejected, Status 2 becomes active and colored
-            status2HTML = `<span class="status status-${status2}">${status2.toUpperCase()}</span>`;
-            }
-
            const row = document.createElement('tr');
            row.setAttribute('data-status', status1.toLowerCase());
             
