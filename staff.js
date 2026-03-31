@@ -149,7 +149,14 @@ document.getElementById('archivedCount').innerText = archivedCount;
                     </button>
                     </td>
                 `;
-
+                }  else if (activeTabFilter === 'rejected') {
+                     row.innerHTML = `
+                     <td><strong>${displayId}</strong></td>
+                     <td>${studentName}</td>
+                     <td>${course}</td>
+                     <td class="hide-mobile">${data.submittedAt ? new Date(data.submittedAt.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+                     <td>${data.dateDeclined || 'N/A'}</td>
+                     <td><span style="font-size: 0.8rem; color: #666;">${data.declinedBy || 'Staff User'}</span></td>
                   <button class="view-btn" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
               VIEW
              </button>
