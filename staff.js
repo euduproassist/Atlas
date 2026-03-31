@@ -417,7 +417,7 @@ if (activeTabFilter === 'new') {
 } 
 else if (activeTabFilter === 'accepted') {
     // Only show if status is one of the "Admissions" types
-    const isAcceptedType = ['prov_accepted', 'uncon_accepted', 'registered'].includes(rowStatus);
+    const isAcceptedType = ['uncon_accepted', 'registered'].includes(rowStatus);
     if (activeSubFilter === 'all') {
         matchTab = isAcceptedType;
     } else {
