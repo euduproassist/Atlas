@@ -607,3 +607,72 @@ document.addEventListener('click', (e) => {
     }
 });
 
+window.saveStatusUpdate = async () => {
+    const s1Value = document.getElementById('updateStatus1').value;
+    const btn = event.currentTarget || event.target;
+
+    try {
+        btn.innerText = "UPDATING...";
+        btn.disabled = true;
+
+        // 1. Get the latest data for this specific application first
+        const appRef = doc(db, "applications", currentAppId);
+        const appSnap = await getDoc(appRef);
+        
+        if (!appSnap.exists()) {
+            throw new Error("Application document not found in database.");
+        }
+        
+        const currentData = appSnap.data();
+
+        const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
+        const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
+
+        // 2. Logic for Student Number
+        let studentNum = currentData.studentNumber || null; 
+
+        if (isAdmissionStatus && !studentNum) {
+            studentNum = prompt("Enter the Student Number for this applicant:");
+            // If they cancel or leave it blank, stop the update
+            if (!studentNum) {
+                alert("Update cancelled. A student number is required for acceptance.");
+                btn.innerText = "UPDATE STATUS";
+                btn.disabled = false;
+                return; 
+            }
+        }
+
+        // 3. Perform the update
+        await updateDoc(appRef, {
+            status1: s1Value,
+            lastUpdated: new Date(),
+            ...(isAdmissionStatus && { 
+                dateAccepted: new Date(), 
+                acceptedBy: window.currentStaffName || "Staff", 
+                studentNumber: studentNum
+            }),
+            ...(isDeclinedStatus && { 
+                dateDeclined: new Date().toLocaleDateString(),
+                declinedBy: window.currentStaffName || "Staff"
+            }),
+            processedBy: auth.currentUser.email
+        });
+
+        alert("Application status updated successfully.");
+        document.getElementById('appModal').style.display = 'none';
+
+    } catch (error) {
+        // --- THIS SECTION SHOWS THE ERROR IN YOUR CONSOLE ---
+        console.error("--- STATUS UPDATE ERROR ---");
+        console.error("Message:", error.message);
+        console.error("Stack Trace:", error.stack);
+        console.error("Application ID:", currentAppId);
+        
+        alert("Error: " + error.message + ". Check console for details.");
+    } finally {
+        btn.innerText = "UPDATE STATUS";
+        btn.disabled = false;
+    }
+};
+
+
