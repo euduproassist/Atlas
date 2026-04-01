@@ -61,8 +61,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
                 <th>Student Name</th>
                 <th>Course Accepted</th>
                 <th class="hide-mobile">Date Submitted</th>
-                <th>Date Accepted</th>
-                <th>Accepted By</th>
                 <th>Action</th>
             </tr>`;
     } else if (activeTabFilter === 'rejected') {
