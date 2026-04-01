@@ -57,7 +57,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
     if (activeTabFilter === 'accepted') {
         tableHead.innerHTML = `
             <tr>
-                <th>Application ID</th>
+                <th>Student Number</th>
                 <th>Student Name</th>
                 <th>Course Accepted</th>
                 <th class="hide-mobile">Date Submitted</th>
