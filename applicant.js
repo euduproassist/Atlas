@@ -141,9 +141,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
         <td style="padding: 15px 10px;">${s2.acadYear || '2027'}</td>
         <td style="padding: 15px 10px;">${s2.choice1}</td>
         <td style="padding: 15px 10px;">${s2.campus}</td>
-        <td style="padding: 15px 10px; font-weight: 700; color: #1976d2;">
-            ${currentStatus.replace('_', ' ').toUpperCase()}
-        </td>
+
         <td style="padding: 15px 10px;">
             ${data.adminDocs && data.adminDocs.acceptanceLetter ? `<a href="${data.adminDocs.acceptanceLetter}" target="_blank" style="color:#4a90e2; text-decoration: none;"><i class="fas fa-file-download"></i> View Letter</a>` : '<span style="color:#ccc;">None</span>'}
         </td>
