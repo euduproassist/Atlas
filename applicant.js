@@ -117,6 +117,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
                 <div>
                     <span style="color: #888; font-size: 0.85rem;">Application ID:</span>
                     <strong style="display: block;">${data.applicationId || 'Generating...'}</strong>
+                    ${data.studentNumber ? `<span style="color: #2e7d32; font-size: 0.8rem;">Student No: ${data.studentNumber}</span>` : ''}
                 </div>
                 <div>
                     <span style="color: #888; font-size: 0.85rem;">Name:</span>
