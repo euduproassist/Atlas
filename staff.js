@@ -166,7 +166,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
                     row.innerHTML = `
                     <td><strong>${displayId}</strong></td>
                     <td>${course}</td>
-                    <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
+                    
                     <td class="hide-mobile">${dateSub}</td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px;">
