@@ -340,6 +340,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                             <option value="waiting" ${data.status1 === 'waiting' ? 'selected' : ''}>Waiting List</option>
                             <option value="uncon_accepted" ${data.status1 === 'uncon_accepted' ? 'selected' : ''}>Accepted</option>
                             <option value="rejected" ${data.status1 === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            <option value="withdrawn_expired" ${data.status1 === 'withdrawn_expired' ? 'selected' : ''}>Withdrawn/Expired</option>
                             <option value="registered" ${data.status1 === 'registered' ? 'selected' : ''}>Registered</option>
                             <option value="deregistered" ${data.status1 === 'deregistered' ? 'selected' : ''}>Deregistered</option>
                         </select>
