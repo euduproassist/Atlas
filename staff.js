@@ -649,20 +649,6 @@ window.saveStatusUpdate = async () => {
         }
 
         // 3. Perform the update
-        await updateDoc(appRef, {
-            status1: s1Value,
-            lastUpdated: new Date(),
-            ...(isAdmissionStatus && { 
-                dateAccepted: new Date(), 
-                acceptedBy: window.currentStaffName || "Staff", 
-                studentNumber: studentNum
-            }),
-            ...(isDeclinedStatus && { 
-                dateDeclined: new Date().toLocaleDateString(),
-                declinedBy: window.currentStaffName || "Staff"
-            }),
-            processedBy: auth.currentUser.email
-        });
 
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
