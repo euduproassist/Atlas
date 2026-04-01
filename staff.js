@@ -186,28 +186,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
 window.showDetails = showDetails;
 
 // Professional Summary Modal Logic
-async function showDetails(id, data) {
-    currentAppId = id;
-    const appRef = doc(db, "applications", id);
-    
-    // Auto-update to Review and Log the Staff View
-    const logEntry = {
-        staffName: window.currentStaffName || "Unknown Staff",
-        action: "Viewed Application",
-        date: new Date().toLocaleString(),
-        timestamp: new Date()
-    };
-
-    const updatePayload = {
-        actionHistory: arrayUnion(logEntry)
-    };
-
-    if (data.status1 === 'pending') {
-        updatePayload.status1 = 'review';
-        updatePayload.lastUpdated = new Date();
-    }
-
-    await updateDoc(appRef, updatePayload).catch(err => console.error("Logger failed:", err));
 
     const modal = document.getElementById('appModal');
     const displayId = data.applicationId;
