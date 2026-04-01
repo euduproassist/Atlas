@@ -649,6 +649,29 @@ window.saveStatusUpdate = async () => {
         }
 
         // 3. Perform the update
+        const statusMap = {
+            'uncon_accepted': 'Accepted',
+            'registered': 'Registered',
+            'deregistered': 'Deregistered',
+            'rejected': 'Rejected',
+            'withdrawn_expired': 'Withdrawn/Expired',
+            'waiting': 'Moved to Waiting List'
+        };
+
+        const historyLog = {
+            staffName: window.currentStaffName || "Staff",
+            action: `Status changed to: ${statusMap[s1Value] || s1Value}`,
+            date: new Date().toLocaleString(),
+            timestamp: new Date()
+        };
+
+        await updateDoc(appRef, {
+            status1: s1Value,
+            lastUpdated: new Date(),
+            actionHistory: arrayUnion(historyLog),
+            ...(isAdmissionStatus && { studentNumber: studentNum }),
+            processedBy: auth.currentUser.email
+        });
 
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
