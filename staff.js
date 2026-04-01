@@ -618,6 +618,12 @@ window.saveStatusUpdate = async () => {
 const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
 const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value); // New check
 
+        let studentNum = data.studentNumber || null; // You'll need to pass 'data' into this function or fetch it
+if (isAdmissionStatus && !studentNum) {
+    studentNum = prompt("Enter the Student Number for this applicant:");
+    if (!studentNum) return; // Cancel update if no number entered
+}
+
 await updateDoc(doc(db, "applications", currentAppId), {
     status1: s1Value,
     lastUpdated: new Date(),
