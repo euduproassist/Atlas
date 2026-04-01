@@ -629,7 +629,8 @@ await updateDoc(doc(db, "applications", currentAppId), {
     lastUpdated: new Date(),
     ...(isAdmissionStatus && { 
         dateAccepted: new Date(), 
-        acceptedBy: window.currentStaffName 
+        acceptedBy: window.currentStaffName, 
+        studentNumber: studentNumber
     }),
     ...(isDeclinedStatus && { 
         dateDeclined: new Date().toLocaleDateString(), // Saves current date
