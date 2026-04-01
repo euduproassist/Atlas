@@ -136,9 +136,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
             
             // REPLACE YOUR OLD row.innerHTML WITH THIS:
             if (activeTabFilter === 'accepted') {
-                row.innerHTML = `
-                    <td><strong>${displayId}</strong></td>
-                    <td>${studentName}</td>
+
                     <td>${course}</td>
                     <td class="hide-mobile">${data.submittedAt ? new Date(data.submittedAt.seconds * 1000).toLocaleDateString() : dateSub}</td>
                     <td>${data.dateAccepted ? new Date(data.dateAccepted.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
