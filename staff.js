@@ -211,6 +211,12 @@ if (!displayId) {
     const s2 = data.step2 || {};
 
     // Update Sidebar Header
+    const isAdmissions = ['uncon_accepted', 'registered', 'deregistered'].includes(data.status1);
+document.getElementById('modalIdBadge').innerHTML = `
+    ID: ${displayId} 
+    ${isAdmissions ? `<br><span style="color:#2e7d32">Student No: ${data.studentNumber || 'Not Assigned'}</span>` : ''}
+`;
+document.getElementById('modalStudentName').innerText = `${s1.fullNames} ${s1.surname}`;
 
     // Define Sections
     const secPers = document.getElementById('sec-personal');
