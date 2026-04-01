@@ -186,6 +186,40 @@ document.getElementById('archivedCount').innerText = archivedCount;
 window.showDetails = showDetails;
 
 // Professional Summary Modal Logic
+async function showDetails(id, data) {
+    currentAppId = id;
+    const appRef = doc(db, "applications", id);
+    
+    // 1. Prepare the log
+    const logEntry = {
+        staffName: window.currentStaffName || "Staff",
+        action: "Viewed Application",
+        date: new Date().toLocaleString(),
+        timestamp: new Date()
+    };
+
+    // 2. Prepare Payload
+    let updatePayload = {
+        actionHistory: arrayUnion(logEntry)
+    };
+
+    // CRITICAL: Force the change from 'pending' to 'review'
+    if (data.status1 === 'pending') {
+        updatePayload.status1 = 'review';
+        updatePayload.lastUpdated = new Date();
+        
+        // Optimistic UI: Update the local data object so the modal reflects it immediately
+        data.status1 = 'review'; 
+    }
+
+    // 3. Execute Update
+    try {
+        await updateDoc(appRef, updatePayload);
+        // Because loadApplications() uses onSnapshot, the table will auto-refresh 
+        // to "UNDER REVIEW" in the background while the modal is open.
+    } catch (err) {
+        console.error("Auto-Review Update Failed:", err);
+    }
 
     const modal = document.getElementById('appModal');
     const displayId = data.applicationId;
