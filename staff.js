@@ -230,6 +230,7 @@ document.getElementById('modalStudentName').innerText = `${s1.fullNames} ${s1.su
     const secAcad = document.getElementById('sec-academic');
     const secDocs = document.getElementById('sec-documents');
     const secApp = document.getElementById('sec-application');
+    const secHistory = document.getElementById('sec-history');
 
     // Helper to hide empty fields - if value is missing, it returns empty string
     const row = (label, value) => value ? `
@@ -378,6 +379,20 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                     <a href="${url}" target="_blank" style="font-size: 0.7rem; color: var(--primary); text-decoration: none; font-weight: 700;">VIEW DOCUMENT</a>
                 </div>
             `).join('') : '<p style="color: #999; text-align: center; padding: 20px;">No documents have been uploaded yet.</p>'}
+        </div>
+    `;
+
+    const historyData = data.actionHistory || [];
+    secHistory.innerHTML = `
+        <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Action History</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            ${historyData.length > 0 ? historyData.reverse().map(h => `
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 12px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; font-size: 0.8rem;">
+                    <span style="font-weight: 700; color: #333;">${h.action}</span>
+                    <span style="color: #666;"><i class="fas fa-user-tie"></i> ${h.staffName}</span>
+                    <span style="color: #999; text-align: right;">${h.date}</span>
+                </div>
+            `).join('') : '<p style="text-align:center; color:#999; padding:20px;">No history recorded yet.</p>'}
         </div>
     `;
 
