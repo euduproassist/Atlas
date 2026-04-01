@@ -347,7 +347,6 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                     <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e1e4e8;">
                         <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 700;">Application Status</span>
                         <select id="updateStatus1" style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-weight: 600; font-size: 0.8rem;">
-                            <option value="review" ${data.status1 === 'review' ? 'selected' : ''}>Under Review</option>
                             <option value="waiting" ${data.status1 === 'waiting' ? 'selected' : ''}>Waiting List</option>
                             <option value="uncon_accepted" ${data.status1 === 'uncon_accepted' ? 'selected' : ''}>Accepted</option>
                             <option value="rejected" ${data.status1 === 'rejected' ? 'selected' : ''}>Rejected</option>
