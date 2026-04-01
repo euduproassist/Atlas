@@ -211,8 +211,6 @@ if (!displayId) {
     const s2 = data.step2 || {};
 
     // Update Sidebar Header
-    document.getElementById('modalIdBadge').innerText = displayId;
-    document.getElementById('modalStudentName').innerText = `${s1.fullNames} ${s1.surname}`;
 
     // Define Sections
     const secPers = document.getElementById('sec-personal');
