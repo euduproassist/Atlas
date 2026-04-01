@@ -144,7 +144,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
         <td style="padding: 15px 10px; font-weight: 700; color: #1976d2;">
     ${currentStatus === 'review' ? 'UNDER REVIEW' : 
       currentStatus === 'waiting' ? 'WAITING LIST' : 
-      currentStatus === 'uncon_accepted' ? 'UNCONDITIONALLY ACCEPTED' :
+      currentStatus === 'uncon_accepted' ? 'ACCEPTED' :
       currentStatus === 'withdrawn_expired' ? 'WITHDRAWN' :
       currentStatus.replace('_', ' ').toUpperCase()}
      </td>
