@@ -186,14 +186,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
 window.showDetails = showDetails;
 
 // Professional Summary Modal Logic
-function showDetails(id, data) {
-    currentAppId = id;
-    if (data.status1 === 'pending') {
-    updateDoc(doc(db, "applications", id), { 
-        status1: 'review',
-        lastUpdated: new Date() 
-    }).catch(err => console.error("Auto-review failed:", err));
-    }
+
     const modal = document.getElementById('appModal');
     const displayId = data.applicationId;
 if (!displayId) {
