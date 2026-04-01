@@ -455,8 +455,8 @@ if (draftSnap.exists()) {
     
     // Only reset status to pending if it doesn't exist yet 
     // or if it was previously "Missing Info"
-    let finalStatus = existingData.status || "pending";
-    if (existingData.status === "Missing Info") {
+    let finalStatus = existingData.status1 || "pending";
+    if (existingData.status1 === "missing info") {
         finalStatus = "pending"; // Re-submit for review
     }  
 
