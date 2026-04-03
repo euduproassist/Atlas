@@ -425,9 +425,28 @@ mainForm.addEventListener('submit', async (e) => {
         const fileInput = document.getElementById(f.id);
         if (fileInput.files[0]) {
             const file = fileInput.files[0];
-            const storageRef = ref(storage, `applications/${user.uid}/${f.name}_${Date.now()}`);
-            await uploadBytes(storageRef, file);
-            return await getDownloadURL(storageRef);
+            const academicFiles = document.querySelectorAll('.academic-req');
+const hasAcademic = Array.from(academicFiles).some(input => input.files.length > 0);
+if (!hasAcademic) {
+    alert("Please upload either your Matric Certificate or Grade 11 Results.");
+    uploadBtn.disabled = false; uploadBtn.innerText = "Upload & Continue";
+    return;
+}
+
+const fileInput = document.getElementById(f.id);
+if (fileInput.files[0]) {
+    let file = fileInput.files[0];
+    
+    // Compress if image and over 200KB
+    if (file.type.startsWith('image/') && file.size > 204800) {
+        file = await processFile(file);
+    }
+
+    // Fixed Path (Removing Date.now() so it overwrites the exact same file name)
+    const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef);
+}
         }
         return null;
     });
