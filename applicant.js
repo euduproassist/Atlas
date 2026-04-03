@@ -324,7 +324,7 @@ document.getElementById('closeGuide').onclick = () => {
     document.body.style.overflow = 'auto'; // Re-enable scroll
 };
 
-// --- DOCUMENT VAULT LOGIC ---
+// --- DOCUMENT VAULT LOGIC (Full Updated Version) ---
 document.getElementById('openVaultBtn').addEventListener('click', async () => {
     const user = auth.currentUser;
     const modal = document.getElementById('statusModal');
@@ -333,7 +333,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
     body.innerHTML = "<p style='text-align:center;'>Opening Vault...</p>";
     modal.style.display = 'flex';
 
-    // Use onSnapshot for real-time status & document tracking
     onSnapshot(doc(db, "applications", user.uid), (docSnap) => {
         if (!docSnap.exists()) {
             body.innerHTML = "<p style='text-align:center;'>Please submit Step 1-3 first to activate the vault.</p>";
@@ -351,8 +350,9 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
             </div>
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr style="border-bottom: 2px solid #eee; text-align: left; font-size: 0.8rem;">
+                    <tr style="border-bottom: 2px solid #eee; text-align: left; font-size: 0.8rem; text-transform: uppercase; color: #666;">
                         <th style="padding: 10px;">Document Name</th>
+                        <th style="padding: 10px;">Size</th>
                         <th style="padding: 10px;">Status</th>
                         <th style="padding: 10px;">Action</th>
                     </tr>
@@ -360,27 +360,40 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                 <tbody>
         `;
 
-        // Loop through the files you defined at the top of your code
+        // All documents matching your apply.html form
         const filesToCheck = [
-            { id: 'file_id', name: 'ID_Passport', label: 'ID / Passport' },
-            { id: 'file_matric', name: 'Matric_Certificate', label: 'Matric Certificate' },
-            { id: 'file_grade11', name: 'Grade_11_Results', label: 'Grade 11 Results' },
-            { id: 'file_transcripts', name: 'Transcripts', label: 'Academic Transcripts' }
+            { name: 'ID_Passport', label: 'ID / Passport' },
+            { name: 'Birth_Certificate', label: 'Birth Certificate' },
+            { name: 'Marriage_Certificate', label: 'Marriage Certificate' },
+            { name: 'Matric_Certificate', label: 'Matric Certificate' },
+            { name: 'Grade_11_Results', label: 'Grade 11 Results' },
+            { name: 'Transcripts', label: 'Academic Transcripts' },
+            { name: 'Proof_of_Address', label: 'Proof of Address' },
+            { name: 'Proof_of_Payment', label: 'Proof of Payment' },
+            { name: 'Sponsor_Parent_ID', label: 'Sponsor / Parent ID' },
+            { name: 'Motivation_Letter', label: 'Motivation Letter' },
+            { name: 'Curriculum_Vitae', label: 'Curriculum Vitae (CV)' }
         ];
 
         filesToCheck.forEach(f => {
             const fileUrl = savedDocs[f.name];
+            // Looks for "ID_Passport_size" etc. in your Firestore data
+            const fileSize = savedDocs[`${f.name}_size`] || "---"; 
             const hasFile = !!fileUrl;
 
             vaultHTML += `
                 <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 12px 10px;">${f.label}</td>
+                    <td style="padding: 12px 10px; font-weight: 600; font-size: 0.9rem;">${f.label}</td>
+                    <td style="padding: 12px 10px; color: #777; font-size: 0.8rem;">${fileSize}</td>
                     <td style="padding: 12px 10px;">
-                        ${hasFile ? '<span style="color: #2e7d32;">✅ Uploaded</span>' : '<span style="color: #d32f2f;">❌ Missing</span>'}
+                        ${hasFile ? '<span style="color: #2e7d32; font-weight: 600;">✅ Uploaded</span>' : '<span style="color: #d32f2f;">❌ Missing</span>'}
                     </td>
                     <td style="padding: 12px 10px;">
-                        ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600;">View</a>` : ''}
-                        ${!isLocked ? `<button onclick="window.location.href='apply.html'" style="margin-left: 10px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer;">${hasFile ? 'Re-upload' : 'Upload Now'}</button>` : ''}
+                        ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600; margin-right: 10px;"><i class="fas fa-eye"></i> View</a>` : ''}
+                        ${!isLocked ? `
+                            <button onclick="window.location.href='apply.html'" style="padding: 5px 10px; font-size: 0.75rem; cursor: pointer; border: 1px solid #ddd; background: #fff; border-radius: 4px;">
+                                ${hasFile ? 'Replace' : 'Upload Now'}
+                            </button>` : ''}
                     </td>
                 </tr>
             `;
@@ -390,6 +403,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         body.innerHTML = vaultHTML;
     });
 });
+
 
 
 
