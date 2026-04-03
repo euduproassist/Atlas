@@ -687,4 +687,39 @@ setTimeout(() => {
     }
 }, 1000);
 
+async function processFile(file) {
+    if (file.size <= 204800) return file; // 200KB in bytes
+    
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Start quality at 0.7 and drop until under 200KB
+                let quality = 0.7;
+                let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                while (dataUrl.length > 204800 && quality > 0.1) {
+                    quality -= 0.1;
+                    dataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+                
+                fetch(dataUrl).then(res => res.blob()).then(blob => {
+                    resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                });
+            };
+        };
+    });
+}
+
+
 
