@@ -416,116 +416,93 @@ mainForm.addEventListener('submit', async (e) => {
         }
 
         } else if (currentStep === 3) {
+        const uploadBtn = document.getElementById('uploadBtn');
+        uploadBtn.innerText = "Please wait...";
+        uploadBtn.disabled = true;
 
-    const uploadBtn = document.getElementById('uploadBtn');
-    uploadBtn.innerText = "Please wait...";
-    uploadBtn.disabled = true;
-
-    const uploadPromises = filesToUpload.map(async (f) => {
-        const fileInput = document.getElementById(f.id);
-        if (fileInput.files[0]) {
-            const file = fileInput.files[0];
-            const academicFiles = document.querySelectorAll('.academic-req');
-const hasAcademic = Array.from(academicFiles).some(input => input.files.length > 0);
-if (!hasAcademic) {
-    alert("Please upload either your Matric Certificate or Grade 11 Results.");
-    uploadBtn.disabled = false; uploadBtn.innerText = "Upload & Continue";
-    return;
-}
-
-const fileInput = document.getElementById(f.id);
-if (fileInput.files[0]) {
-    let file = fileInput.files[0];
-    
-    // Compress if image and over 200KB
-    if (file.type.startsWith('image/') && file.size > 204800) {
-        file = await processFile(file);
-    }
-
-    // Fixed Path (Removing Date.now() so it overwrites the exact same file name)
-    const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
-    await uploadBytes(storageRef, file);
-    return await getDownloadURL(storageRef);
-}
+        // 1. Validation Check: Ensure they uploaded at least one academic doc
+        const academicFiles = document.querySelectorAll('.academic-req');
+        const hasAcademic = Array.from(academicFiles).some(input => input.files.length > 0);
+        
+        if (!hasAcademic) {
+            alert("Please upload either your Matric Certificate or Grade 11 Results.");
+            uploadBtn.disabled = false; 
+            uploadBtn.innerText = "Upload & Continue";
+            return;
         }
-        return null;
-    });
 
-    try {
-        const urls = await Promise.all(uploadPromises);
-        const documentData = {};
-        filesToUpload.forEach((f, index) => {
-            if (urls[index]) documentData[f.name] = urls[index];
+        // 2. Upload Files
+        const uploadPromises = filesToUpload.map(async (f) => {
+            const inputEl = document.getElementById(f.id); 
+            if (inputEl && inputEl.files[0]) {
+                let file = inputEl.files[0];
+                
+                if (file.type.startsWith('image/') && file.size > 204800) {
+                    file = await processFile(file);
+                }
+
+                const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
+                await uploadBytes(storageRef, file);
+                return await getDownloadURL(storageRef);
+            }
+            return null;
         });
 
-        await setDoc(doc(db, "drafts", user.uid), {
-            documents: documentData,
-            lastUpdated: new Date()
-        }, { merge: true });
-
-  // At the very end of your final step logic:
-const [draftSnap, appSnap] = await Promise.all([
-    getDoc(doc(db, "drafts", user.uid)),
-    getDoc(doc(db, "applications", user.uid))
-]);
-
-if (draftSnap.exists()) {
-    const existingData = appSnap.exists() ? appSnap.data() : {};
-    
-    // Only reset status to pending if it doesn't exist yet 
-    // or if it was previously "Missing Info"
-    let finalStatus = existingData.status1 || "pending";
-    if (existingData.status1 === "missing info") {
-        finalStatus = "pending"; // Re-submit for review
-    }  
-
-  // Get last two digits of current year (e.g., 2026 -> 26, 2027 -> 27)
-const yearSuffix = new Date().getFullYear().toString().slice(-2);
-    let finalAppId = existingData.applicationId;
-
-if (!finalAppId) {
-    let isUnique = false;
-    while (!isUnique) {
-        // Generates exactly 6 random digits (100000 to 999999)
-        const randomDigits = Math.floor(100000 + Math.random() * 900000);
-        const candidateId = `APP-${yearSuffix}${randomDigits}`;
-        
         try {
-            const duplicateCheck = await getDoc(doc(db, "applications", candidateId));
-            if (!duplicateCheck.exists()) {
-                finalAppId = candidateId;
-                isUnique = true;
+            const urls = await Promise.all(uploadPromises);
+            const documentData = {};
+            filesToUpload.forEach((f, index) => {
+                if (urls[index]) documentData[f.name] = urls[index];
+            });
+
+            // Save document metadata to drafts
+            await setDoc(doc(db, "drafts", user.uid), {
+                documents: documentData,
+                lastUpdated: new Date()
+            }, { merge: true });
+
+            // 3. Final Application Submission Logic
+            const [draftSnap, appSnap] = await Promise.all([
+                getDoc(doc(db, "drafts", user.uid)),
+                getDoc(doc(db, "applications", user.uid))
+            ]);
+
+            if (draftSnap.exists()) {
+                const existingData = appSnap.exists() ? appSnap.data() : {};
+                
+                // Set Status
+                let finalStatus = existingData.status === "missing info" ? "pending" : (existingData.status || "pending");
+
+                // Generate or keep Application ID
+                const yearSuffix = new Date().getFullYear().toString().slice(-2);
+                let finalAppId = existingData.applicationId;
+
+                if (!finalAppId) {
+                    const randomDigits = Math.floor(100000 + Math.random() * 900000);
+                    finalAppId = `APP-${yearSuffix}${randomDigits}`;
+                }
+
+                // Push to final applications collection
+                await setDoc(doc(db, "applications", user.uid), {
+                    ...draftSnap.data(),
+                    applicationId: finalAppId,
+                    status: finalStatus,
+                    submittedAt: existingData.submittedAt || new Date(),
+                    lastUpdated: new Date()
+                }, { merge: true });
+
+                alert("Application Submitted Successfully!");
+                goToStep(4);
+                if (typeof renderReviewSummary === "function") renderReviewSummary();
             }
-        } catch (err) {
-            console.error("Critical: Error checking Application ID uniqueness:", err);
-            break; 
+
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Upload failed: " + error.message);
+            uploadBtn.innerText = "Upload & Continue";
+            uploadBtn.disabled = false;
         }
     }
-}
-
-await setDoc(doc(db, "applications", user.uid), {
-    ...draftSnap.data(),
-    applicationId: finalAppId, // This saves the ID permanently
-    status: finalStatus,
-    submittedAt: existingData.submittedAt || new Date(),
-    lastUpdated: new Date()
-}, { merge: true });
-
-    alert("Application Submitted Successfully!");
-}
-
-
-       // PASTE THIS INSTEAD:
-        goToStep(4);
-        if (typeof renderReviewSummary === "function") renderReviewSummary();
-
-    } catch (error) {
-        alert("Upload failed: " + error.message);
-        uploadBtn.innerText = "Upload & Continue";
-        uploadBtn.disabled = false;
-    }
-}
-
 });
 
 function populateMatricYears() {
