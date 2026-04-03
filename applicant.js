@@ -324,4 +324,72 @@ document.getElementById('closeGuide').onclick = () => {
     document.body.style.overflow = 'auto'; // Re-enable scroll
 };
 
+// --- DOCUMENT VAULT LOGIC ---
+document.getElementById('openVaultBtn').addEventListener('click', async () => {
+    const user = auth.currentUser;
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+
+    body.innerHTML = "<p style='text-align:center;'>Opening Vault...</p>";
+    modal.style.display = 'flex';
+
+    // Use onSnapshot for real-time status & document tracking
+    onSnapshot(doc(db, "applications", user.uid), (docSnap) => {
+        if (!docSnap.exists()) {
+            body.innerHTML = "<p style='text-align:center;'>Please submit Step 1-3 first to activate the vault.</p>";
+            return;
+        }
+
+        const data = docSnap.data();
+        const currentStatus = data.status1 || "pending";
+        const savedDocs = data.documents || {};
+        const isLocked = currentStatus !== "pending";
+
+        let vaultHTML = `
+            <div style="margin-bottom: 20px; padding: 10px; background: ${isLocked ? '#fff3e0' : '#e8f5e9'}; border-radius: 6px; font-size: 0.9rem;">
+                <strong>Vault Status:</strong> ${isLocked ? 'READ-ONLY (Locked by Admin)' : 'ACTIVE (Uploads Allowed)'}
+            </div>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #eee; text-align: left; font-size: 0.8rem;">
+                        <th style="padding: 10px;">Document Name</th>
+                        <th style="padding: 10px;">Status</th>
+                        <th style="padding: 10px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        // Loop through the files you defined at the top of your code
+        const filesToCheck = [
+            { id: 'file_id', name: 'ID_Passport', label: 'ID / Passport' },
+            { id: 'file_matric', name: 'Matric_Certificate', label: 'Matric Certificate' },
+            { id: 'file_grade11', name: 'Grade_11_Results', label: 'Grade 11 Results' },
+            { id: 'file_transcripts', name: 'Transcripts', label: 'Academic Transcripts' }
+        ];
+
+        filesToCheck.forEach(f => {
+            const fileUrl = savedDocs[f.name];
+            const hasFile = !!fileUrl;
+
+            vaultHTML += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px 10px;">${f.label}</td>
+                    <td style="padding: 12px 10px;">
+                        ${hasFile ? '<span style="color: #2e7d32;">✅ Uploaded</span>' : '<span style="color: #d32f2f;">❌ Missing</span>'}
+                    </td>
+                    <td style="padding: 12px 10px;">
+                        ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600;">View</a>` : ''}
+                        ${!isLocked ? `<button onclick="window.location.href='apply.html'" style="margin-left: 10px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer;">${hasFile ? 'Re-upload' : 'Upload Now'}</button>` : ''}
+                    </td>
+                </tr>
+            `;
+        });
+
+        vaultHTML += `</tbody></table>`;
+        body.innerHTML = vaultHTML;
+    });
+});
+
+
 
