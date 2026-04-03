@@ -728,4 +728,28 @@ window.saveStatusUpdate = async () => {
     }
 };
 
+window.handleDocAction = async (appId, docName, action) => {
+    if (!confirm(`Are you sure you want to ${action} this document?`)) return;
+    
+    const appRef = doc(db, "applications", appId);
+    const updates = {};
+    
+    if (action === 'rejected') {
+        // Remove the file reference from 'documents' map so student can re-upload
+        updates[`documents.${docName}`] = null;
+        updates[`documentStatuses.${docName}`] = 'rejected';
+    } else {
+        // Lock the file by setting status to accepted
+        updates[`documentStatuses.${docName}`] = 'accepted';
+    }
+
+    try {
+        await updateDoc(appRef, updates);
+        alert(`Document ${action} successfully.`);
+    } catch (err) {
+        console.error("Doc Action Failed:", err);
+    }
+};
+
+
 
