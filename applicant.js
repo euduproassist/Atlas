@@ -324,18 +324,25 @@ document.getElementById('closeGuide').onclick = () => {
     document.body.style.overflow = 'auto'; // Re-enable scroll
 };
 
-// --- DOCUMENT VAULT LOGIC (Full Updated Version) ---
+// --- DOCUMENT VAULT LOGIC (Full Layout & Sync) ---
 document.getElementById('openVaultBtn').addEventListener('click', async () => {
     const user = auth.currentUser;
     const modal = document.getElementById('statusModal');
     const body = document.getElementById('statusModalBody');
 
-    body.innerHTML = "<p style='text-align:center;'>Opening Vault...</p>";
+    // Show loading state and reset zoom to default for better viewing
+    body.innerHTML = "<p style='text-align:center;'>Opening Document Vault...</p>";
+    body.style.transform = "scale(1)"; 
+    currentZoom = 1.0; 
     modal.style.display = 'flex';
 
     onSnapshot(doc(db, "applications", user.uid), (docSnap) => {
         if (!docSnap.exists()) {
-            body.innerHTML = "<p style='text-align:center;'>Please submit Step 1-3 first to activate the vault.</p>";
+            body.innerHTML = `
+                <div style="text-align:center; padding: 20px;">
+                    <i class="fas fa-folder-open" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+                    <p style="color: #666;">No application found. Please complete the application steps first to activate your vault.</p>
+                </div>`;
             return;
         }
 
@@ -345,31 +352,36 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         const isLocked = currentStatus !== "pending";
 
         let vaultHTML = `
-            <div style="margin-bottom: 20px; padding: 10px; background: ${isLocked ? '#fff3e0' : '#e8f5e9'}; border-radius: 6px; font-size: 0.9rem;">
-                <strong>Vault Status:</strong> ${isLocked ? 'READ-ONLY (Locked by Admin)' : 'ACTIVE (Uploads Allowed)'}
+            <div style="margin-bottom: 25px; padding: 15px; background: ${isLocked ? '#fff3e0' : '#e8f5e9'}; border-radius: 8px; border-left: 5px solid ${isLocked ? '#ffa000' : '#4caf50'};">
+                <strong style="display:block; color: #333;">Vault Status: ${isLocked ? 'Read-Only' : 'Active'}</strong>
+                <span style="font-size: 0.85rem; color: #666;">
+                    ${isLocked ? 'Your application is under review. Document editing is disabled.' : 'You can still update or replace your documents.'}
+                </span>
             </div>
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="border-bottom: 2px solid #eee; text-align: left; font-size: 0.8rem; text-transform: uppercase; color: #666;">
-                        <th style="padding: 10px;">Document Name</th>
-                        <th style="padding: 10px;">Size</th>
-                        <th style="padding: 10px;">Status</th>
-                        <th style="padding: 10px;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+
+            <div style="width: 100%; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #eee; text-align: left; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
+                            <th style="padding: 12px 10px;">Document Name</th>
+                            <th style="padding: 12px 10px;">File Size</th>
+                            <th style="padding: 12px 10px;">Current Status</th>
+                            <th style="padding: 12px 10px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 0.9rem;">
         `;
 
-        // All documents matching your apply.html form
+        // FULL DOCUMENT LIST
         const filesToCheck = [
-            { name: 'ID_Passport', label: 'ID / Passport' },
+            { name: 'ID_Passport', label: 'Certified ID / Passport' },
             { name: 'Birth_Certificate', label: 'Birth Certificate' },
             { name: 'Marriage_Certificate', label: 'Marriage Certificate' },
-            { name: 'Matric_Certificate', label: 'Matric Certificate' },
-            { name: 'Grade_11_Results', label: 'Grade 11 Results' },
+            { name: 'Matric_Certificate', label: 'Matric / Grade 12 Certificate' },
+            { name: 'Grade_11_Results', label: 'Grade 11 Final Results' },
             { name: 'Transcripts', label: 'Academic Transcripts' },
-            { name: 'Proof_of_Address', label: 'Proof of Address' },
-            { name: 'Proof_of_Payment', label: 'Proof of Payment' },
+            { name: 'Proof_of_Address', label: 'Proof of Residence' },
+            { name: 'Proof_of_Payment', label: 'Proof of Payment (POP)' },
             { name: 'Sponsor_Parent_ID', label: 'Sponsor / Parent ID' },
             { name: 'Motivation_Letter', label: 'Motivation Letter' },
             { name: 'Curriculum_Vitae', label: 'Curriculum Vitae (CV)' }
@@ -377,32 +389,46 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
 
         filesToCheck.forEach(f => {
             const fileUrl = savedDocs[f.name];
-            // Looks for "ID_Passport_size" etc. in your Firestore data
             const fileSize = savedDocs[`${f.name}_size`] || "---"; 
             const hasFile = !!fileUrl;
 
             vaultHTML += `
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 12px 10px; font-weight: 600; font-size: 0.9rem;">${f.label}</td>
-                    <td style="padding: 12px 10px; color: #777; font-size: 0.8rem;">${fileSize}</td>
-                    <td style="padding: 12px 10px;">
-                        ${hasFile ? '<span style="color: #2e7d32; font-weight: 600;">✅ Uploaded</span>' : '<span style="color: #d32f2f;">❌ Missing</span>'}
+                <tr style="border-bottom: 1px solid #f0f0f0; transition: background 0.2s;">
+                    <td style="padding: 15px 10px; color: #333; font-weight: 600;">${f.label}</td>
+                    <td style="padding: 15px 10px; color: #777; font-size: 0.8rem;">${fileSize}</td>
+                    <td style="padding: 15px 10px;">
+                        ${hasFile 
+                            ? '<span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">✅ UPLOADED</span>' 
+                            : '<span style="background: #ffebee; color: #c62828; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">❌ MISSING</span>'}
                     </td>
-                    <td style="padding: 12px 10px;">
-                        ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600; margin-right: 10px;"><i class="fas fa-eye"></i> View</a>` : ''}
+                    <td style="padding: 15px 10px; text-align: center; white-space: nowrap;">
+                        ${hasFile ? `
+                            <a href="${fileUrl}" target="_blank" style="color: #4a90e2; text-decoration: none; font-weight: 600; margin-right: 15px;">
+                                <i class="fas fa-download"></i> View
+                            </a>` : ''}
+                        
                         ${!isLocked ? `
-                            <button onclick="window.location.href='apply.html'" style="padding: 5px 10px; font-size: 0.75rem; cursor: pointer; border: 1px solid #ddd; background: #fff; border-radius: 4px;">
-                                ${hasFile ? 'Replace' : 'Upload Now'}
+                            <button onclick="window.location.href='apply.html'" style="padding: 6px 12px; border: 1px solid #4a90e2; background: white; color: #4a90e2; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                                ${hasFile ? 'Replace' : 'Upload'}
                             </button>` : ''}
                     </td>
                 </tr>
             `;
         });
 
-        vaultHTML += `</tbody></table>`;
+        vaultHTML += `
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px; font-size: 0.8rem; color: #999; text-align: center;">
+                <i class="fas fa-lock"></i> All documents are stored in a secure encrypted vault.
+            </div>
+        `;
+
         body.innerHTML = vaultHTML;
     });
 });
+
 
 
 
