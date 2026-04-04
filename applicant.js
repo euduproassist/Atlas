@@ -323,3 +323,86 @@ document.getElementById('closeGuide').onclick = () => {
     document.getElementById('guideOverlay').style.display = 'none';
     document.body.style.overflow = 'auto'; // Re-enable scroll
 };
+
+// --- DOCUMENT VAULT LOGIC ---
+document.getElementById('openVaultBtn').addEventListener('click', async () => {
+    const user = auth.currentUser;
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+
+    body.innerHTML = "<p style='text-align:center;'>Opening Vault...</p>";
+    modal.style.display = 'flex';
+
+    // Real-time listener to check application status and documents
+    onSnapshot(doc(db, "applications", user.uid), (docSnap) => {
+        if (!docSnap.exists()) {
+            body.innerHTML = "<p style='text-align:center;'>Please submit your application first to activate the vault.</p>";
+            return;
+        }
+
+        const data = docSnap.data();
+        const currentStatus = data.status1 || "pending";
+        const savedDocs = data.documents || {};
+        const docStatuses = data.documentStatuses || {}; // Moved outside loop
+        const isLocked = currentStatus !== "pending";
+
+        let vaultHTML = `
+            <div style="margin-bottom: 20px; padding: 10px; background: ${isLocked ? '#fff3e0' : '#e8f5e9'}; border-radius: 6px; font-size: 0.9rem;">
+                <strong>Vault Status:</strong> ${isLocked ? 'READ-ONLY (Application in Review)' : 'ACTIVE (Uploads Allowed)'}
+            </div>
+            <div style="width: 100%; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
+                            <th style="padding: 10px;">Document Name</th>
+                            <th style="padding: 10px;">Size</th>
+                            <th style="padding: 10px;">Status</th>
+                            <th style="padding: 10px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 0.9rem;">
+        `;
+
+        const filesToCheck = [
+            { name: 'ID_Passport', label: 'ID / Passport' },
+            { name: 'Birth_Certificate', label: 'Birth Certificate' },
+            { name: 'Marriage_Certificate', label: 'Marriage Certificate' },
+            { name: 'Matric_Certificate', label: 'Matric Certificate' },
+            { name: 'Grade_11_Results', label: 'Grade 11 Results' },
+            { name: 'Transcripts', label: 'Academic Transcripts' },
+            { name: 'Proof_of_Address', label: 'Proof of Address' },
+            { name: 'Proof_of_Payment', label: 'Proof of Payment' },
+            { name: 'Sponsor_Parent_ID', label: 'Sponsor / Parent ID' },
+            { name: 'Motivation_Letter', label: 'Motivation Letter' },
+            { name: 'Curriculum_Vitae', label: 'CV' }
+        ];
+
+        // ONLY ONE LOOP HERE
+        filesToCheck.forEach(f => {
+            const fileUrl = savedDocs[f.name];
+            const fileSize = savedDocs[`${f.name}_size`] || "N/A";
+            const status = docStatuses[f.name] || 'pending';
+            const isAccepted = status === 'accepted';
+            const hasFile = !!fileUrl;
+
+            vaultHTML += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+                    <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+                    <td style="padding: 12px 10px;">
+                        ${isAccepted ? '<span style="color: #16a34a; font-weight:700;">APPROVED</span>' : 
+                          (hasFile ? '<span style="color: #2e7d32;">✅ Uploaded</span>' : '<span style="color: #d32f2f;">❌ Missing</span>')}
+                    </td>
+                    <td style="padding: 12px 10px;">
+                        ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600;">View</a>` : ''}
+                        ${(!isLocked && !isAccepted) ? `<button onclick="window.location.href='apply.html'" style="margin-left: 10px; padding: 5px; cursor: pointer;">${hasFile ? 'Replace' : 'Upload'}</button>` : ''}
+                    </td>
+                </tr>
+            `;
+        });
+
+        vaultHTML += `</tbody></table></div>`;
+        body.innerHTML = vaultHTML;
+    }); // This closes onSnapshot
+}); // This closes the Click Event
+
