@@ -375,10 +375,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
             { name: 'Motivation_Letter', label: 'Motivation Letter' },
             { name: 'Curriculum_Vitae', label: 'CV' }
         ];
-
-        filesToCheck.forEach(f => {
-            const fileUrl = savedDocs[f.name];
-            const fileSize = savedDocs[`${f.name}_size`] || "N/A";
             const docStatuses = data.documentStatuses || {}; // Get statuses
            filesToCheck.forEach(f => {
             const fileUrl = savedDocs[f.name];
