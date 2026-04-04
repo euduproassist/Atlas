@@ -433,7 +433,7 @@ window.handleVaultUpload = function(docName) {
         const storage = getStorage();
         const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
 
-        let blob toUpload = file;
+        let toUpload = file;
 
         // Compression Logic: If > 200KB and is an image, compress it
         if (file.size > 200 * 1024 && file.type.startsWith('image/')) {
