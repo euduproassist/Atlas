@@ -108,7 +108,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
         const data = doc.data();
         const id = doc.id;
         const docs = data.documents || {};
-        const requiredDocs = ['idCopy', 'matricResults', 'proofOfAddress']; // Add your specific requirements here
+        const requiredDocs = ['ID_Passport', 'Matric_Certificate', 'Proof_Of_Address']; // Add your specific requirements here
         const uploadedCount = Object.keys(docs).length;
         const isComplete = uploadedCount >= requiredDocs.length; 
           
