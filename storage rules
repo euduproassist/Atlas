@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+
+  match /databases/{database}/documents {
+
+    
+
+    // FIX: Add this so the Dashboard can show the User's Name
+
+    match /users/{userId} {
+
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      allow write: if false; // Only Staff/Auth should write to the main User profile
+
+    }
+
+    match /drafts/{userId} {
+
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+    }
+
+    match /applications/{userId} {
+
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+    }
+
+  }
+
+}
