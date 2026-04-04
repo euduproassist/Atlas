@@ -447,7 +447,7 @@ window.handleVaultUpload = function(docName) {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
             toUpload = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
-        } else if (file.size > 200 * 1024 && file.type === 'application/pdf') {
+        } if (file.size > 200 * 1024 && file.type === 'application/pdf') {
             alert("PDF is over 200KB. Please compress it manually before uploading.");
             return;
         }
