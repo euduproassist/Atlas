@@ -462,8 +462,8 @@ window.handleVaultUpload = function(docName) {
             await updateDoc(appRef, {
                 [`documents.${docName}`]: url,
                 [`documents.${docName}_size`]: (toUpload.size / 1024).toFixed(1) + " KB",
-                [`documentStatuses.${docName}`]: 'pending' // Reset status for staff to re-check
-            });
+                [`documentStatuses.${docName}`]: 'pending' 
+            }, {merge: true});
             alert("Success! Document updated.");
         } catch (err) {
             console.error(err);
