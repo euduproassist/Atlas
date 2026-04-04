@@ -374,8 +374,8 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
             { name: 'Matric_Certificate', label: 'Matric Certificate' },
             { name: 'Grade_11_Results', label: 'Grade 11 Results' },
             { name: 'Transcripts', label: 'Academic Transcripts' },
-            { name: 'Proof_of_Address', label: 'Proof of Address' },
-            { name: 'Proof_of_Payment', label: 'Proof of Payment' },
+            { name: 'Proof_Of_Address', label: 'Proof of Address' },
+            { name: 'Proof_Of_Payment', label: 'Proof of Payment' },
             { name: 'Sponsor_Parent_ID', label: 'Sponsor / Parent ID' },
             { name: 'Motivation_Letter', label: 'Motivation Letter' },
             { name: 'Curriculum_Vitae', label: 'CV' }
