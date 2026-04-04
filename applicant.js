@@ -330,6 +330,12 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
     const modal = document.getElementById('statusModal');
     const body = document.getElementById('statusModalBody');
 
+    body.innerHTML = `
+    <div id="vaultHeaderInfo" style="display: flex; gap: 40px; margin-bottom: 30px; text-align: left;">
+        <p style='text-align:center; width: 100%;'>Loading Vault Data...</p>
+    </div>
+    <div id="vaultTableContainer" style="width: 100%; overflow-x: auto;"></div>
+    `;
     modal.style.display = 'flex';
 
     // Real-time listener to check application status and documents
