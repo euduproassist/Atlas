@@ -406,4 +406,4 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         vaultHTML += `</tbody></table></div>`;
         body.innerHTML = vaultHTML;
     });
-});
+
