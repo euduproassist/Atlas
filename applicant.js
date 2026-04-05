@@ -370,15 +370,11 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
     const filesToCheck = [
     { name: 'ID_Passport', label: 'ID / Passport' },
     { name: 'Birth_Certificate', label: 'Birth Certificate' },
-    { name: 'Marriage_Certificate', label: 'Marriage Certificate' },
     { name: 'Matric_Certificate', label: 'Matric Certificate' },
     { name: 'Grade_11_Results', label: 'Grade 11 Results' },
     { name: 'Transcripts', label: 'Academic Transcripts' },
-    { name: 'Proof_of_Address', label: 'Proof of Address' }, 
-    { name: 'Proof_of_Payment', label: 'Proof of Payment' }, 
-    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' },    
-    { name: 'Motivation_Letter', label: 'Motivation Letter' },
-    { name: 'CV', label: 'CV' }                             
+    { name: 'Proof_of_Address', label: 'Proof of Residence' }, 
+    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' }    
 ];
 
             const docStatuses = data.documentStatuses || {}; // Get statuses
