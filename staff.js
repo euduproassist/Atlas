@@ -382,15 +382,11 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
     const allPossibleDocs = [
     { id: 'ID_Passport', label: 'ID / Passport' },
     { id: 'Birth_Certificate', label: 'Birth Certificate' },
-    { id: 'Marriage_Certificate', label: 'Marriage Certificate' },
     { id: 'Matric_Certificate', label: 'Matric Certificate' },
     { id: 'Grade_11_Results', label: 'Grade 11 Results' },
     { id: 'Transcripts', label: 'Academic Transcripts' },
-    { id: 'Proof_of_Address', label: 'Proof of Address' },
-    { id: 'Proof_of_Payment', label: 'Proof of Payment' },
-    { id: 'Sponsor_ID', label: 'Sponsor / Parent ID' },
-    { id: 'Motivation_Letter', label: 'Motivation Letter' },
-    { id: 'CV', label: 'CV' }
+    { id: 'Proof_of_Address', label: 'Proof of Residence' },
+    { id: 'Sponsor_ID', label: 'Sponsor / Parent ID' }
 ];
 
 secDocs.innerHTML = `
