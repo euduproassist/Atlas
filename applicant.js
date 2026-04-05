@@ -400,7 +400,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                     </td>
                     <td style="padding: 12px 10px;">
                         ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600;">View</a>` : ''}
-                        ${(!isLocked && !isAccepted) ? `<button onclick="handleVaultUpload('${f.name}')" style="margin-left: 10px; padding: 5px; cursor: pointer;">${hasFile ? 'Replace' : 'Upload'}</button>` : ''}
+
                     </td>
                 </tr>
             `;
