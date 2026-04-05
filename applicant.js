@@ -374,18 +374,18 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
     { name: 'Matric_Certificate', label: 'Matric Certificate' },
     { name: 'Grade_11_Results', label: 'Grade 11 Results' },
     { name: 'Transcripts', label: 'Academic Transcripts' },
-    { name: 'Proof_of_Address', label: 'Proof of Address' }, // Fixed naming
-    { name: 'Proof_of_Payment', label: 'Proof of Payment' }, // Fixed naming
-    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' },    // Fixed naming
+    { name: 'Proof_of_Address', label: 'Proof of Address' }, 
+    { name: 'Proof_of_Payment', label: 'Proof of Payment' }, 
+    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' },    
     { name: 'Motivation_Letter', label: 'Motivation Letter' },
-    { name: 'CV', label: 'CV' }                             // Fixed naming
+    { name: 'CV', label: 'CV' }                             
 ];
 
             const docStatuses = data.documentStatuses || {}; // Get statuses
            filesToCheck.forEach(f => {
             const fileUrl = savedDocs[f.name];
             const fileSize = savedDocs[`${f.name}_size`] || "N/A";
-            const status = docStatuses[f.name] || 'pending';
+            
             const isAccepted = status === 'accepted';
             const hasFile = !!fileUrl;
 
