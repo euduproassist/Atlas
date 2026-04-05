@@ -748,10 +748,6 @@ window.handleDocAction = async (appId, docName, action) => {
     const appRef = doc(db, "applications", appId);
     const updates = {};
     
-    if (action === 'rejected') {
-        // Remove the file reference from 'documents' map so student can re-upload
-        updates[`documents.${docName}`] = null;
-        updates[`documentStatuses.${docName}`] = 'rejected';
     } else {
         // Lock the file by setting status to accepted
         updates[`documentStatuses.${docName}`] = 'accepted';
