@@ -379,7 +379,45 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
      // NEW: Documents Section Logic
     const docs = data.documents || {};
     const docStatuses = data.documentStatuses || {}; // NEW: Track which are accepted/rejected
+    const allPossibleDocs = [
+    { id: 'ID_Passport', label: 'ID / Passport' },
+    { id: 'Birth_Certificate', label: 'Birth Certificate' },
+    { id: 'Marriage_Certificate', label: 'Marriage Certificate' },
+    { id: 'Matric_Certificate', label: 'Matric Certificate' },
+    { id: 'Grade_11_Results', label: 'Grade 11 Results' },
+    { id: 'Transcripts', label: 'Academic Transcripts' },
+    { id: 'Proof_of_Address', label: 'Proof of Address' },
+    { id: 'Proof_of_Payment', label: 'Proof of Payment' },
+    { id: 'Sponsor_ID', label: 'Sponsor / Parent ID' },
+    { id: 'Motivation_Letter', label: 'Motivation Letter' },
+    { id: 'CV', label: 'CV' }
+];
 
+secDocs.innerHTML = `
+    <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Document Verification</h3>
+    <div style="display: grid; gap: 12px;">
+        ${allPossibleDocs.map(docSlot => {
+            const url = docs[docSlot.id];
+            const status = docStatuses[docSlot.id] || (url ? 'pending' : 'missing');
+            const bg = status === 'accepted' ? '#f0fdf4' : (status === 'rejected' ? '#fef2f2' : (url ? '#fffbeb' : '#f8f9fa'));
+            
+            return `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #eee; border-radius: 8px; background: ${bg}">
+                <div>
+                    <span style="font-size: 0.85rem; font-weight: 600; display:block;">${docSlot.label}</span>
+                    <span style="font-size: 0.65rem; font-weight: 800; color: ${status === 'accepted' ? '#16a34a' : (status === 'rejected' || status === 'missing' ? '#dc2626' : '#d97706')}">
+                        ${status.toUpperCase()}
+                    </span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    ${url ? `<a href="${url}" target="_blank" style="padding: 6px 12px; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 0.65rem; text-decoration: none; color: #444;">VIEW</a>` : ''}
+                    ${url && status !== 'accepted' ? `<button onclick="handleDocAction('${id}', '${docSlot.id}', 'accepted')" style="background: #22c55e; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 0.65rem; cursor: pointer;">ACCEPT</button>` : ''}
+                    ${url ? `<button onclick="handleDocAction('${id}', '${docSlot.id}', 'rejected')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 0.65rem; cursor: pointer;">REJECT</button>` : ''}
+                </div>
+            </div>`;
+        }).join('')}
+    </div>
+`;
 
     const historyData = data.actionHistory || [];
     secHistory.innerHTML = `
