@@ -367,6 +367,20 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         <tbody style="font-size: 0.9rem;">
 `;
 
+    const filesToCheck = [
+    { name: 'ID_Passport', label: 'ID / Passport' },
+    { name: 'Birth_Certificate', label: 'Birth Certificate' },
+    { name: 'Marriage_Certificate', label: 'Marriage Certificate' },
+    { name: 'Matric_Certificate', label: 'Matric Certificate' },
+    { name: 'Grade_11_Results', label: 'Grade 11 Results' },
+    { name: 'Transcripts', label: 'Academic Transcripts' },
+    { name: 'Proof_of_Address', label: 'Proof of Address' }, // Fixed naming
+    { name: 'Proof_of_Payment', label: 'Proof of Payment' }, // Fixed naming
+    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' },    // Fixed naming
+    { name: 'Motivation_Letter', label: 'Motivation Letter' },
+    { name: 'CV', label: 'CV' }                             // Fixed naming
+];
+
             const docStatuses = data.documentStatuses || {}; // Get statuses
            filesToCheck.forEach(f => {
             const fileUrl = savedDocs[f.name];
