@@ -49,7 +49,12 @@ match /applications/{applicationId} {
     allow create: if request.auth != null && request.auth.uid == applicationId;
 
     // UPDATE: Remains the same as your current logic
-
+    allow update: if request.auth != null && (
+  request.auth.uid == applicationId || 
+  exists(/databases/$(database)/documents/staff/$(request.auth.uid)) ||
+  exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+) && request.resource.data.diff(resource.data).affectedKeys()
+  .hasAny(['step1', 'step2', 'documents', 'documentStatuses', 'draft', 'lastUpdated', 'status1', 'adminNote', 'studentNumber', 'processedBy', 'actionHistory']);
 }
 
     // 6. DOCUMENT VAULT
