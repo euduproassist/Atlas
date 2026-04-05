@@ -25,8 +25,8 @@ service cloud.firestore {
     allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-// 5. APPLICATIONS 
-match /applications/{applicationId} {
+    // 5. APPLICATIONS 
+    match /applications/{applicationId} {
     
     // allow get: This lets the "Duplicate Check" work. 
     // It only confirms if a document exists; it does NOT show the data inside.
