@@ -467,7 +467,7 @@ mainForm.addEventListener('submit', async (e) => {
                 const existingData = appSnap.exists() ? appSnap.data() : {};
                 
                 // Set Status
-                let finalStatus = existingData.status === "missing info" ? "pending" : (existingData.status || "pending");
+                let finalStatus = existingData.status1 === "missing info" ? "pending" : (existingData.status1 || "pending");
 
                 // Generate or keep Application ID
                 const yearSuffix = new Date().getFullYear().toString().slice(-2);
@@ -482,7 +482,7 @@ mainForm.addEventListener('submit', async (e) => {
                 await setDoc(doc(db, "applications", user.uid), {
                     ...draftSnap.data(),
                     applicationId: finalAppId,
-                    status: finalStatus,
+                    status1: finalStatus,
                     submittedAt: existingData.submittedAt || new Date(),
                     lastUpdated: new Date()
                 }, { merge: true });
