@@ -385,7 +385,8 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
            filesToCheck.forEach(f => {
             const fileUrl = savedDocs[f.name];
             const fileSize = savedDocs[`${f.name}_size`] || "N/A";
-            
+            const status = docStatuses[f.name] || (hasFile ? 'pending' : 'missing');
+            const isRejected = status === 'rejected';
             const isAccepted = status === 'accepted';
             const hasFile = !!fileUrl;
 
