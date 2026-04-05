@@ -747,6 +747,11 @@ window.handleDocAction = async (appId, docName, action) => {
     
     const appRef = doc(db, "applications", appId);
     const updates = {};
+
+    if (action === 'rejected') {
+    updates[`documents.${docName}`] = deleteField(); // This physically removes the URL
+    updates[`documents.${docName}_size`] = deleteField(); // Removes the size info
+    updates[`documentStatuses.${docName}`] = 'rejected';
     
     } else {
         // Lock the file by setting status to accepted
