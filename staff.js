@@ -379,29 +379,6 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
      // NEW: Documents Section Logic
     const docs = data.documents || {};
     const docStatuses = data.documentStatuses || {}; // NEW: Track which are accepted/rejected
-    secDocs.innerHTML = `
-        <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Uploaded Documents</h3>
-        <div style="display: grid; gap: 15px;">
-            ${Object.keys(docs).length > 0 ? Object.entries(docs).map(([name, url]) => {
-                const status = docStatuses[name] || 'pending';
-                return `
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #eee; border-radius: 8px; background: ${status === 'accepted' ? '#f0fdf4' : (status === 'rejected' ? '#fef2f2' : 'white')}">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-file-pdf" style="color: #e74c3c; font-size: 1.2rem;"></i>
-                        <div>
-                            <span style="font-size: 0.85rem; font-weight: 500; display:block;">${name.replace(/([A-Z])/g, ' $1').trim()}</span>
-                            <span style="font-size: 0.65rem; font-weight: 700; color: ${status === 'accepted' ? '#16a34a' : (status === 'rejected' ? '#dc2626' : '#999')}">${status.toUpperCase()}</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <a href="${url}" target="_blank" style="padding: 5px 10px; border: 1px solid #eee; border-radius: 4px; font-size: 0.65rem; color: #666; text-decoration: none; font-weight: 700;">VIEW</a>
-                        <button onclick="handleDocAction('${id}', '${name}', 'accepted')" style="background: #22c55e; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.65rem; cursor: pointer;">ACCEPT</button>
-                        <button onclick="handleDocAction('${id}', '${name}', 'rejected')" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.65rem; cursor: pointer;">REJECT</button>
-                    </div>
-                </div>`;
-            }).join('') : '<p style="color: #999; text-align: center; padding: 20px;">No documents have been uploaded yet.</p>'}
-        </div>
-    `;
 
 
     const historyData = data.actionHistory || [];
