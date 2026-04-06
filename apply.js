@@ -53,13 +53,13 @@ filesToUpload.forEach(f => {
                     finalFile = await processFile(file);
                 }
             } catch (err) {
-                console.warn("Compression failed, moving to secondary safety logic.");
+                console.warn("Compression failed, moving to secondary logic.");
                 // We don't block yet; we let the 500KB logic decide.
             } finally {
                 // --- THE 500KB FALLBACK LOGIC ---
                 // This ONLY acts if the result is still too big after the system tried its best
                 if (finalFile.size > 512000) { 
-                    alert("The system attempted to compress this file but it remains over the 500KB limit. Please upload a smaller version or a different format.");
+                    alert("Compression failed, Please upload a file less than 500KB");
                     input.value = ""; 
                     toggleGlobalLoader(false);
                 } else {
