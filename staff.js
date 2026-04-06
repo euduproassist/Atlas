@@ -393,7 +393,7 @@ const filesToCheck = [
 
 let vaultHTML = `
     <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Document Vault</h3>
-    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <table style="padding: 12px 10px; padding-right: 25px; width: 100%; border-collapse: collapse; text-align: right;">
         <thead>
             <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
                 <th style="padding: 10px;">Document Name</th>
