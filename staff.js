@@ -105,6 +105,8 @@ document.getElementById('archivedCount').innerText = archivedCount;
 
     // If there IS data, loop through and build the rows
     snapshot.forEach((doc) => {
+        const data = doc.data(); 
+        const id = doc.id;
         const docs = data.documents || {};
         const hasID = docs.ID_Passport;
         const hasAddress = docs.Proof_of_Address;
