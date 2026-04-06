@@ -452,6 +452,18 @@ mainForm.addEventListener('submit', async (e) => {
         });
 
         try {
+            const urls = await Promise.all(uploadPromises);
+            const documentData = {};
+            for (let i = 0; i < filesToUpload.length; i++) {
+                const f = filesToUpload[i];
+                const inputEl = document.getElementById(f.id);
+                if (urls[i] && inputEl.files[0]) {
+                    documentData[f.name] = urls[i];
+                    documentData[`${f.name}_filename`] = inputEl.files[0].name;
+                    // Save the size in KB to the database
+                    documentData[`${f.name}_size`] = (inputEl.files[0].size / 1024).toFixed(1) + " KB";
+                }
+            }
 
             // Save document metadata to drafts
             await setDoc(doc(db, "drafts", user.uid), {
