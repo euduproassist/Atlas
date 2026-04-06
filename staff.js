@@ -711,7 +711,7 @@ window.saveStatusUpdate = async () => {
             'deregistered': 'Deregistered',
             'rejected': 'Rejected',
             'withdrawn_expired': 'Withdrawn/Expired',
-            'waiting': 'Moved to Waiting List'
+            'waiting': 'Waiting List'
         };
 
         const historyLog = {
