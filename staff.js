@@ -377,6 +377,50 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
     </div>
 `;
 
+    // UPDATED CODE:
+const savedDocs = data.documents || {};
+const filesToCheck = [
+    { name: 'ID_Passport', label: 'ID / Passport' },
+    { name: 'Birth_Certificate', label: 'Birth Certificate' },
+    { name: 'Matric_Certificate', label: 'Matric Certificate' },
+    { name: 'Grade_11_Results', label: 'Grade 11 Results' },
+    { name: 'Transcripts', label: 'Academic Transcripts' },
+    { name: 'Proof_of_Address', label: 'Proof of Residence' },
+    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' }
+];
+
+let vaultHTML = `
+    <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Document Vault</h3>
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
+                <th style="padding: 10px;">Document Name</th>
+                <th style="padding: 10px;">Size</th>
+                <th style="padding: 10px;">File Name</th>
+                <th style="padding: 10px;">Action</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 0.9rem;">`;
+
+filesToCheck.forEach(f => {
+    const fileUrl = savedDocs[f.name];
+    const fileSize = savedDocs[`${f.name}_size`] || "N/A";
+    const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
+    const hasFile = !!fileUrl;
+
+    vaultHTML += `
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+            <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+            <td style="padding: 12px 10px; color: #444;">${fileName}</td>
+            <td style="padding: 12px 10px;">
+                ${hasFile ? `<a href="${fileUrl}" target="_blank" style="background: #4a90e2; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8rem;">View</a>` : '<span style="color: #ccc;">Missing</span>'}
+            </td>
+        </tr>`;
+});
+
+secDocs.innerHTML = vaultHTML + `</tbody></table>`;
+
     const historyData = data.actionHistory || [];
     secHistory.innerHTML = `
         <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Action History</h3>
