@@ -382,25 +382,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
            filesToCheck.forEach(f => {
             const fileUrl = savedDocs[f.name];
             const fileSize = savedDocs[`${f.name}_size`] || "N/A";
-            const status = docStatuses[f.name] || (hasFile ? 'pending' : 'missing');
-            const isRejected = status === 'rejected';
-            const isAccepted = status === 'accepted';
-            const hasFile = !!fileUrl;
-
-            vaultHTML += `
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
-                    <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
-                    <td style="padding: 12px 10px;">
-                        ${isAccepted ? '<span style="color: #16a34a; font-weight:700;">APPROVED</span>' : 
-                          (status === 'rejected' ? '<span style="color: #d32f2f;">❌ Rejected/Missing</span>' : (hasFile ? '<span style="color: #2e7d32;">✅ Uploaded</span>' : '<span style="color: #d32f2f;">❌ Missing</span>'))}
-                    </td>
-                    <td style="padding: 12px 10px;">
-                        ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #1976d2; text-decoration: none; font-weight: 600;">View</a>` : ''}
-                        ${( (!isLocked || isRejected) && !isAccepted ) ? `<button onclick="handleVaultUpload('${f.name}')" style="margin-left: 10px; padding: 5px; cursor: pointer;">${hasFile ? 'Replace' : (isRejected ? 'Re-upload' : 'Upload')}</button>` : ''}
-                    </td>
-                </tr>
-            `;
         });
 
         vaultHTML += `</tbody></table></div>`;
