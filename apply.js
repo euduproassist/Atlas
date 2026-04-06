@@ -428,6 +428,21 @@ mainForm.addEventListener('submit', async (e) => {
         }
 
         // 2. Upload Files
+        const uploadPromises = filesToUpload.map(async (f) => {
+            const inputEl = document.getElementById(f.id); 
+            if (inputEl && inputEl.files[0]) {
+                let file = inputEl.files[0];
+                
+                // FORCE check: if > 200KB, compress.
+                if (file.size > 200 * 1024) {
+                    if (file.type.startsWith('image/')) {
+                        file = await processFile(file);
+                    } else {
+                        // For PDFs/others, we can't auto-compress easily via Canvas
+                        alert(`${f.name} is too large. Please upload a version under 200KB.`);
+                        throw new Error("File too large");
+                    }
+                }
 
                 const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
                 await uploadBytes(storageRef, file);
