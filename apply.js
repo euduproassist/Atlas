@@ -446,6 +446,15 @@ mainForm.addEventListener('submit', async (e) => {
 
         try {
             const urls = await Promise.all(uploadPromises);
+            const documentData = {};
+              filesToUpload.forEach((f, index) => {
+           if (urls[index]) {
+               const fileInput = document.getElementById(f.id);
+              documentData[f.name] = urls[index];
+              // Capture the actual name from the file explorer
+              documentData[`${f.name}_filename`] = fileInput.files[0].name; 
+              }
+           });
 
             // Save document metadata to drafts
             await setDoc(doc(db, "drafts", user.uid), {
