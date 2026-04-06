@@ -4,6 +4,21 @@ import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/f
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 const storage = getStorage();
 
+// Function to show/hide the global processing loader
+const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
+    let loader = document.getElementById('global-file-loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'global-file-loader';
+        loader.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:10000;color:white;font-family:sans-serif;";
+        loader.innerHTML = `<div class="spinner" style="border:4px solid #f3f3f3;border-top:4px solid #3498db;border-radius:50%;width:40px;height:40px;animation:spin 2s linear infinite;"></div><p id="loader-text" style="margin-top:15px;"></p><style>@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>`;
+        document.body.appendChild(loader);
+    }
+    document.getElementById('loader-text').innerText = text;
+    loader.style.display = show ? 'flex' : 'none';
+};
+
+
 const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
 let syncTimer;
