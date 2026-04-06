@@ -744,29 +744,3 @@ window.saveStatusUpdate = async () => {
     }
 };
 
-window.handleDocAction = async (appId, docName, action) => {
-    if (!confirm(`Are you sure you want to ${action} this document?`)) return;
-    
-    const appRef = doc(db, "applications", appId);
-    const updates = {};
-
-    if (action === 'rejected') {
-    updates[`documents.${docName}`] = deleteField(); // This physically removes the URL
-    updates[`documents.${docName}_size`] = deleteField(); // Removes the size info
-    updates[`documentStatuses.${docName}`] = 'rejected';
-    
-    } else {
-        // Lock the file by setting status to accepted
-        updates[`documentStatuses.${docName}`] = 'accepted';
-    }
-
-    try {
-        await updateDoc(appRef, updates);
-        alert(`Document ${action} successfully.`);
-    } catch (err) {
-        console.error("Doc Action Failed:", err);
-    }
-};
-
-
-
