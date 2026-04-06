@@ -730,3 +730,62 @@ setTimeout(() => {
     }
 }, 1000);
 
+async function processFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        
+        img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let width = img.width;
+            let height = img.height;
+
+            // STAGE 1: Aggressive Resizing
+            // If the file is massive, we keep halving dimensions until it's manageable
+            // This is the "No Matter What" logic for 1000MB+ files
+            const MAX_PIXELS = 1200; 
+            if (width > MAX_PIXELS || height > MAX_PIXELS) {
+                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
+                width *= ratio;
+                height *= ratio;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // STAGE 2: The 200KB Quality Loop
+            let quality = 0.8;
+            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            
+            // Keep dropping quality until we hit 200KB (204800 bytes)
+            while (blob.size > 204800 && quality > 0.1) {
+                quality -= 0.1; 
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            }
+
+            // STAGE 3: Emergency Dimension Shrink 
+            // If quality 0.1 is STILL over 200KB, we shrink the pixels further
+            let scaleFactor = 0.8;
+            while (blob.size > 204800 && scaleFactor > 0.2) {
+                canvas.width *= scaleFactor;
+                canvas.height *= scaleFactor;
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.1));
+                scaleFactor -= 0.1;
+            }
+
+            URL.revokeObjectURL(img.src);
+            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
+        };
+
+        img.onerror = () => {
+            URL.revokeObjectURL(img.src);
+            reject("Compression Failed: Format not supported or file corrupted.");
+        };
+    });
+}
+
+
