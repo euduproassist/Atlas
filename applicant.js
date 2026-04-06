@@ -352,9 +352,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         const isLocked = currentStatus !== "pending"; // Lock if NOT pending
 
         let vaultHTML = `
-    <div style="margin-bottom: 20px; padding: 10px; background: ${isLocked ? '#fff3e0' : '#e8f5e9'}; border-radius: 6px; font-size: 0.9rem; text-align: left;">
-        <strong>Vault Status:</strong> ${isLocked ? 'READ-ONLY (Application in Review)' : 'ACTIVE (Uploads Allowed)'}
-    </div>
     <table style="width: 100%; border-collapse: collapse; text-align: left;">
         <thead>
             <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
