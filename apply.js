@@ -684,6 +684,39 @@ setTimeout(() => {
     }
 }, 1000);
 
+async function processFile(file) {
+    // If already 200KB or less, return original
+    if (file.size <= 200 * 1024) return file;
+
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            // Scale down dimensions if file is huge to aid compression
+            let width = img.width;
+            let height = img.height;
+            if (width > 1500) { height *= 1500 / width; width = 1500; }
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let min = 0.1, max = 0.9, quality = 0.5;
+            // Binary search for the best quality to hit exactly ~200KB
+            for (let i = 0; i < 5; i++) { 
+                canvas.toBlob((blob) => {
+                    if (blob.size > 200 * 1024) { max = quality; } 
+                    else { min = quality; }
+                    quality = (min + max) / 2;
+                }, 'image/jpeg', quality);
+            }
+            canvas.toBlob((finalBlob) => {
+                resolve(new File([finalBlob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
+            }, 'image/jpeg', quality);
+        };
+    });
+}
 
 
 
