@@ -479,50 +479,6 @@ mainForm.addEventListener('submit', async (e) => {
             return;
         }
 
-        // 2. Upload Files
-        const uploadPromises = filesToUpload.map(async (f) => {
-            const inputEl = document.getElementById(f.id); 
-            if (inputEl && inputEl.files[0]) {
-                let file = inputEl.files[0];
-                
-                // FORCE check: if > 200KB, compress.
-                if (file.size > 200 * 1024) {
-                    if (file.type.startsWith('image/')) {
-                        file = await processFile(file);
-                    } else {
-                        // For PDFs/others, we can't auto-compress easily via Canvas
-                        alert(`${f.name} is too large. Please upload a version under 200KB.`);
-                        throw new Error("File too large");
-                    }
-                }
-
-                const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
-                await uploadBytes(storageRef, file);
-                return await getDownloadURL(storageRef);
-            }
-            return null;
-        });
-
-        try {
-            const urls = await Promise.all(uploadPromises);
-            const documentData = {};
-            for (let i = 0; i < filesToUpload.length; i++) {
-                const f = filesToUpload[i];
-                const inputEl = document.getElementById(f.id);
-                if (urls[i] && inputEl.files[0]) {
-                    documentData[f.name] = urls[i];
-                    documentData[`${f.name}_filename`] = inputEl.files[0].name;
-                    // Save the size in KB to the database
-                    documentData[`${f.name}_size`] = (inputEl.files[0].size / 1024).toFixed(1) + " KB";
-                }
-            }
-
-            // Save document metadata to drafts
-            await setDoc(doc(db, "drafts", user.uid), {
-                documents: documentData,
-                lastUpdated: new Date()
-            }, { merge: true });
-
             // 3. Final Application Submission Logic
             const [draftSnap, appSnap] = await Promise.all([
                 getDoc(doc(db, "drafts", user.uid)),
