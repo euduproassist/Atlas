@@ -410,6 +410,27 @@ filesToCheck.forEach(f => {
     const fileSize = savedDocs[`${f.name}_size`] || "N/A";
     const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
     const hasFile = !!fileUrl;
+    const docStatus = (data.documentStatuses && data.documentStatuses[f.name]) || 'awaiting_verification';
+    const hasViewed = (data.viewedDocs && data.viewedDocs.includes(f.name));
+
+// Change the File Name link to trigger a "Mark as Viewed" function
+const fileLink = hasFile ? `<a href="${fileUrl}" target="_blank" onclick="markAsViewed('${id}', '${f.name}')" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`;
+
+// Logic for the Action Column
+let actionContent = '';
+if (!hasFile) {
+    actionContent = '--';
+} else if (docStatus === 'approved') {
+    actionContent = '<span style="color: #2e7d32; font-weight: bold;">APPROVED ✅</span>';
+} else if (docStatus === 'disapproved') {
+    actionContent = `<span style="color: #d32f2f; font-weight: bold;">REJECTED: ${data.disapproveReasons[f.name]}</span>`;
+} else {
+    actionContent = `
+        <div style="display: flex; gap: 5px;">
+            <button onclick="verifyDoc('${id}', '${f.name}', 'approve', ${hasViewed})" style="padding: 4px 8px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Approve</button>
+            <button onclick="verifyDoc('${id}', '${f.name}', 'disapprove', ${hasViewed})" style="padding: 4px 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Reject</button>
+        </div>`;
+}
 
     vaultHTML += `
         <tr style="border-bottom: 1px solid #eee;">
