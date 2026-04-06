@@ -105,11 +105,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
 
     // If there IS data, loop through and build the rows
     snapshot.forEach((doc) => {
-        const data = doc.data();
-        const id = doc.id;
-        const docs = data.documents || {};
-        const uploadedCount = Object.keys(docs).length;
-        const isComplete = uploadedCount >= requiredDocs.length; 
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
