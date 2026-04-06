@@ -428,14 +428,6 @@ mainForm.addEventListener('submit', async (e) => {
         }
 
         // 2. Upload Files
-        const uploadPromises = filesToUpload.map(async (f) => {
-            const inputEl = document.getElementById(f.id); 
-            if (inputEl && inputEl.files[0]) {
-                let file = inputEl.files[0];
-                
-                if (file.type.startsWith('image/') && file.size > 204800) {
-                    file = await processFile(file);
-                }
 
                 const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
                 await uploadBytes(storageRef, file);
