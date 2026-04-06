@@ -479,6 +479,35 @@ mainForm.addEventListener('submit', async (e) => {
             return;
         }
 
+        try {
+            const documentData = {};
+            
+            // Loop through each file one by one
+            for (const f of filesToUpload) {
+                const inputEl = document.getElementById(f.id);
+                
+                if (inputEl && inputEl.files[0]) {
+                    const file = inputEl.files[0];
+                    const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
+                    
+                    // Upload the file (which was already compressed by the listener)
+                    await uploadBytes(storageRef, file);
+                    const url = await getDownloadURL(storageRef);
+                    
+                    // Prepare data for Firestore
+                    documentData[f.name] = url;
+                    documentData[`${f.name}_filename`] = file.name;
+                    // SAVE FILE SIZE TO DATABASE
+                    documentData[`${f.name}_size`] = Math.round(file.size / 1024) + " KB";
+                }
+            }
+
+            // Save document metadata to drafts collection
+            await setDoc(doc(db, "drafts", user.uid), {
+                documents: documentData,
+                lastUpdated: new Date()
+            }, { merge: true });
+
             // 3. Final Application Submission Logic
             const [draftSnap, appSnap] = await Promise.all([
                 getDoc(doc(db, "drafts", user.uid)),
