@@ -730,39 +730,3 @@ setTimeout(() => {
     }
 }, 1000);
 
-async function processFile(file) {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = async () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Step 1: Scale down dimensions aggressively if the file is large
-            let width = img.width;
-            let height = img.height;
-            const maxDimension = 1200; 
-            if (width > maxDimension || height > maxDimension) {
-                const ratio = Math.min(maxDimension / width, maxDimension / height);
-                width *= ratio;
-                height *= ratio;
-            }
-            canvas.width = width;
-            canvas.height = height;
-            ctx.drawImage(img, 0, 0, width, height);
-
-            // Step 2: Loop compression to hit exactly <= 200KB
-            let quality = 0.8;
-            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
-            
-            while (blob.size > 204800 && quality > 0.1) {
-                quality -= 0.15; // Drop quality quickly
-                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
-            }
-
-            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
-        };
-    });
-}
-
-
