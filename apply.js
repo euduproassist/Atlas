@@ -34,41 +34,6 @@ let syncTimer;
     ];
 
 // Attach listeners to every file input for immediate background processing
-filesToUpload.forEach(f => {
-    const input = document.getElementById(f.id);
-    if (input) {
-        input.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            toggleGlobalLoader(true, `Processing ${f.name}...`);
-            
-            try {
-                let finalFile = file;
-                // If it's an image and over 200KB, compress it
-                if (file.type.startsWith('image/') && file.size > 204800) {
-                    finalFile = await processFile(file);
-                }
-
-                // If still over 200KB (e.g. large PDF), stop it
-                if (finalFile.size > 204800) {
-                    alert("System failed to compress this document to 200KB. Please try a different format.");
-                    input.value = ""; 
-                } else {
-                    // Store the processed file back into the input or a global variable
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(finalFile);
-                    input.files = dataTransfer.files;
-                    console.log(`${f.name} ready: ${Math.round(finalFile.size/1024)}KB`);
-                }
-            } catch (err) {
-                console.error(err);
-            } finally {
-                toggleGlobalLoader(false);
-            }
-        });
-    }
-});
 
 window.toggleOtherNationality = function(value) {
     const otherGroup = document.getElementById('otherNationalityGroup');
