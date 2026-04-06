@@ -446,10 +446,6 @@ mainForm.addEventListener('submit', async (e) => {
 
         try {
             const urls = await Promise.all(uploadPromises);
-            const documentData = {};
-            filesToUpload.forEach((f, index) => {
-                if (urls[index]) documentData[f.name] = urls[index];
-            });
 
             // Save document metadata to drafts
             await setDoc(doc(db, "drafts", user.uid), {
