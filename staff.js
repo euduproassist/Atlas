@@ -767,3 +767,33 @@ window.saveStatusUpdate = async () => {
     }
 };
 
+window.markAsViewed = async (appId, docName) => {
+    await updateDoc(doc(db, "applications", appId), {
+        viewedDocs: arrayUnion(docName)
+    });
+};
+
+window.verifyDoc = async (appId, docName, action, hasViewed) => {
+    if (!hasViewed) return alert("You must view the document first by clicking the file name link.");
+    
+    const appRef = doc(db, "applications", appId);
+    if (action === 'approve') {
+        await updateDoc(appRef, { [`documentStatuses.${docName}`]: 'approved' });
+    } else {
+        const reason = prompt("Select Reason:\n1. Blurry document\n2. Wrong document\n3. Uncertified document");
+        const reasonText = reason === "1" ? "Blurry document" : reason === "2" ? "Wrong document" : reason === "3" ? "Uncertified document" : null;
+        if (!reasonText) return;
+
+        // Auto-delete the file from DB as per instructions
+        await updateDoc(appRef, {
+            [`documentStatuses.${docName}`]: 'disapproved',
+            [`disapproveReasons.${docName}`]: reasonText,
+            [`documents.${docName}`]: deleteField(),
+            [`documents.${docName}_size`]: deleteField(),
+            [`documents.${docName}_filename`]: deleteField()
+        });
+        alert("Document rejected. It has been removed from the vault for the student to re-upload.");
+    }
+};
+
+
