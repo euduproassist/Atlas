@@ -34,6 +34,47 @@ let syncTimer;
     ];
 
 // Attach listeners to every file input for immediate background processing
+filesToUpload.forEach(f => {
+    const input = document.getElementById(f.id);
+    if (input) {
+        input.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            toggleGlobalLoader(true, `System is compressing ${f.name}...`);
+            
+            let finalFile = file;
+            let compressionAttempted = false;
+
+            try {
+                // TRY COMPRESSION FIRST (Always for images)
+                if (file.type.startsWith('image/')) {
+                    compressionAttempted = true;
+                    finalFile = await processFile(file);
+                }
+            } catch (err) {
+                console.warn("Compression failed, moving to secondary safety logic.");
+                // We don't block yet; we let the 500KB logic decide.
+            } finally {
+                // --- THE 500KB FALLBACK LOGIC ---
+                // This ONLY acts if the result is still too big after the system tried its best
+                if (finalFile.size > 512000) { 
+                    alert("The system attempted to compress this file but it remains over the 500KB limit. Please upload a smaller version or a different format.");
+                    input.value = ""; 
+                    toggleGlobalLoader(false);
+                } else {
+                    // Success: File is either compressed to ~200KB or naturally under 500KB
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(finalFile);
+                    input.files = dataTransfer.files;
+                    
+                    console.log(`${f.name} processed successfully: ${Math.round(finalFile.size/1024)}KB`);
+                    toggleGlobalLoader(false);
+                }
+            }
+        });
+    }
+});
 
 window.toggleOtherNationality = function(value) {
     const otherGroup = document.getElementById('otherNationalityGroup');
