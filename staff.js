@@ -413,10 +413,6 @@ filesToCheck.forEach(f => {
         <tr style="border-bottom: 1px solid #eee;">
             <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
             <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
-            <td style="padding: 12px 10px; color: #444;">${fileName}</td>
-            <td style="padding: 12px 10px;">
-                ${hasFile ? `<a href="${fileUrl}" target="_blank" style="background: #4a90e2; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8rem;">View</a>` : '<span style="color: #ccc;">Missing</span>'}
-            </td>
         </tr>`;
 });
 
