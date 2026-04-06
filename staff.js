@@ -431,6 +431,14 @@ if (!hasFile) {
             <button onclick="verifyDoc('${id}', '${f.name}', 'disapprove', ${hasViewed})" style="padding: 4px 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Reject</button>
         </div>`;
 }
+    vaultHTML += `
+    <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+        <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+        <td style="padding: 12px 10px;">${fileLink}</td>
+        <td style="padding: 12px 10px; text-transform: capitalize; font-size: 0.75rem;">${docStatus.replace('_', ' ')}</td>
+        <td style="padding: 12px 10px;">${actionContent}</td>
+    </tr>`;
 
 });
 
