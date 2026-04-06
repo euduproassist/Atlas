@@ -627,10 +627,8 @@
 
 
 
-
-
 import { auth, db } from './firebase-config.js';
-import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 const tableBody = document.getElementById('applicationTableBody');
@@ -672,8 +670,8 @@ function loadApplications() {
 
 onSnapshot(q, (snapshot) => {
 const newAppsCount = snapshot.docs.filter(d => ['pending', 'review', 'waiting'].includes(d.data().status1)).length;
-const acceptedCount = snapshot.docs.filter(d => ['prov_accepted', 'uncon_accepted', 'registered'].includes(d.data().status1)).length;
-const rejectedCount = snapshot.docs.filter(d => ['rejected', 'withdrawn_expired', 'student_declined'].includes(d.data().status1)).length;
+const acceptedCount = snapshot.docs.filter(d => ['uncon_accepted', 'registered', 'deregistered'].includes(d.data().status1)).length;
+const rejectedCount = snapshot.docs.filter(d => ['rejected', 'withdrawn_expired'].includes(d.data().status1)).length;
 const archivedCount = snapshot.docs.filter(d => d.data().status1 === 'archived').length; 
 
 document.getElementById('newAppsCount').innerText = newAppsCount;
@@ -688,12 +686,10 @@ document.getElementById('archivedCount').innerText = archivedCount;
     if (activeTabFilter === 'accepted') {
         tableHead.innerHTML = `
             <tr>
-                <th>Application ID</th>
+                <th>Student Number</th>
                 <th>Student Name</th>
                 <th>Course Accepted</th>
                 <th class="hide-mobile">Date Submitted</th>
-                <th>Date Accepted</th>
-                <th>Accepted By</th>
                 <th>Action</th>
             </tr>`;
     } else if (activeTabFilter === 'rejected') {
@@ -701,11 +697,8 @@ document.getElementById('archivedCount').innerText = archivedCount;
     <tr>
     <th>Application ID</th>
     <th>Student Name</th>
-    <th>Course 1 Declined</th>
-    <th>Course 2 Declined</th>
+    <th>Course Declined</th>
     <th class="hide-mobile">Date Submitted</th>
-    <th>Date Declined</th>
-    <th>Declined By</th>
     <th>Action</th>
     </tr>`;
         
@@ -718,10 +711,8 @@ document.getElementById('archivedCount').innerText = archivedCount;
                 </button>
                 Application ID
                 </th>                
-                <th>Course 1</th>
-                <th>Status 1</th>
-                <th>Course 2</th>
-                <th>Status 2</th>
+                <th>Course</th>
+                <th>Status</th>
                 <th class="hide-mobile">Date Submitted</th>
                 <th>Action</th>
             </tr>`;
@@ -743,12 +734,14 @@ document.getElementById('archivedCount').innerText = archivedCount;
 
     // If there IS data, loop through and build the rows
     snapshot.forEach((doc) => {
-        const data = doc.data();
+        const data = doc.data(); 
         const id = doc.id;
         const docs = data.documents || {};
-        const requiredDocs = ['idCopy', 'matricResults', 'proofOfAddress']; // Add your specific requirements here
-        const uploadedCount = Object.keys(docs).length;
-        const isComplete = uploadedCount >= requiredDocs.length; 
+        const hasID = docs.ID_Passport;
+        const hasAddress = docs.Proof_of_Address;
+        const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results;
+
+       const isComplete = hasID && hasAddress && hasAcademic;
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
@@ -756,27 +749,14 @@ document.getElementById('archivedCount').innerText = archivedCount;
 
             const studentName = s1.fullNames + " " + (s1.surname || "");
             const course = s2.choice1 || "Not Selected";
-            const course2 = s2.choice2 || "Not Selected"; 
             const status1 = data.status1 || "pending";
-            const status2 = data.status2 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
             const docLabel = isComplete ? "CD" : "MD";
             const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; padding: 3px 8px; font-size: 0.65rem;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 3px 8px; font-size: 0.65rem;";
-            // Format ID like the photo (APP23-001) using last 4 digits of UID
-            const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
-
-            // Status 2 Logic: If Status 1 isn't 'rejected', Status 2 is inactive (Grey)
-            let status2HTML;
-            const isStatus1Accepted = ["prov_accepted", "uncon_accepted"].includes(status1);
-
-            if (status1 !== "rejected") {
-            const reason = isStatus1Accepted ? "ST1 ACCEPTED" : "WAITING FOR ST1";
-            status2HTML = `<span style="color: #999; font-size: 0.6rem; font-weight: 500; border: 1px solid #ddd; padding: 2px 4px; border-radius: 3px;">
-                    <i class="fas fa-clock"></i> ${reason}</span>`;
-            } else {
-            // If Status 1 IS rejected, Status 2 becomes active and colored
-            status2HTML = `<span class="status status-${status2}">${status2.toUpperCase()}</span>`;
-            }
+            const displayId = data.applicationId;
+            if (!displayId) {
+            console.error("System Error: Application found without a generated ID for Student:", studentName);
+              }
 
            const row = document.createElement('tr');
            row.setAttribute('data-status', status1.toLowerCase());
@@ -784,29 +764,23 @@ document.getElementById('archivedCount').innerText = archivedCount;
             // REPLACE YOUR OLD row.innerHTML WITH THIS:
             if (activeTabFilter === 'accepted') {
                 row.innerHTML = `
-                    <td><strong>${displayId}</strong></td>
+                    <td><strong>${data.studentNumber || '<span style="color:red">No Student Number</span>'}</strong></td>
                     <td>${studentName}</td>
                     <td>${course}</td>
-                    <td class="hide-mobile">${data.submittedAt ? new Date(data.submittedAt.seconds * 1000).toLocaleDateString() : dateSub}</td>
-                    <td>${data.dateAccepted ? new Date(data.dateAccepted.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
-                    <td><span style="font-size: 0.8rem; color: #666;">${data.acceptedBy || 'Staff User'}</span></td>
-                    <td>
+                    <td class="hide-mobile">${data.submittedAt ? new Date(data.submittedAt.seconds * 1000).toLocaleDateString() : dateSub}</td>                    <td>
                     <button class="view-btn" style="background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; cursor: pointer;" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
                     VIEW
                     </button>
                     </td>
                 `;
-            }  else if (activeTabFilter === 'rejected') {
-                  row.innerHTML = `
-                  <td><strong>${displayId}</strong></td>
-                  <td>${studentName}</td>
-                  <td>${course}</td>
-                  <td>${course2}</td>
-                  <td class="hide-mobile">${dateSub}</td>
-                  <td>${data.dateDeclined || 'N/A'}</td>
-                  <td><span style="font-size: 0.8rem; color: #666;">${data.declinedBy || 'Staff User'}</span></td>
-                  <td>
-                  <button class="view-btn" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+                }  else if (activeTabFilter === 'rejected') {
+                     row.innerHTML = `
+                     <td><strong>${displayId}</strong></td>
+                     <td>${studentName}</td>
+                     <td>${course}</td>
+                     <td class="hide-mobile">${data.submittedAt ? new Date(data.submittedAt.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+                     <td>
+                  <button class="view-btn" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; cursor: pointer;" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
               VIEW
              </button>
              </td>
@@ -815,9 +789,13 @@ document.getElementById('archivedCount').innerText = archivedCount;
                     row.innerHTML = `
                     <td><strong>${displayId}</strong></td>
                     <td>${course}</td>
-                    <td><span class="status status-${status1}">${status1.toUpperCase()}</span></td>
-                    <td>${course2}</td>
-                    <td>${status2HTML}</td>
+                    <td>
+                   <span class="status status-${status1}">
+                        ${status1 === 'review' ? 'UNDER REVIEW' : 
+                        status1 === 'waiting' ? 'WAITING LIST' : 
+                        status1.toUpperCase()}
+                       </span>
+                    </td>
                     <td class="hide-mobile">${dateSub}</td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -839,28 +817,63 @@ document.getElementById('archivedCount').innerText = archivedCount;
 window.showDetails = showDetails;
 
 // Professional Summary Modal Logic
-function showDetails(id, data) {
+async function showDetails(id, data) {
     currentAppId = id;
+    const appRef = doc(db, "applications", id);
+    
+    // 1. Prepare the log
+    const logEntry = {
+        staffName: window.currentStaffName || "Staff",
+        action: "Viewed Application",
+        date: new Date().toLocaleString(),
+        timestamp: new Date()
+    };
+
+    // 2. Prepare Payload
+    let updatePayload = {
+        actionHistory: arrayUnion(logEntry)
+    };
+
+    // CRITICAL: Force the change from 'pending' to 'review'
     if (data.status1 === 'pending') {
-    updateDoc(doc(db, "applications", id), { 
-        status1: 'review',
-        lastUpdated: new Date() 
-    }).catch(err => console.error("Auto-review failed:", err));
+        updatePayload.status1 = 'review';
+        updatePayload.lastUpdated = new Date();
+        
+        // Optimistic UI: Update the local data object so the modal reflects it immediately
+        data.status1 = 'review'; 
     }
+
+    // 3. Execute Update
+    try {
+        await updateDoc(appRef, updatePayload);
+        // Because loadApplications() uses onSnapshot, the table will auto-refresh 
+        // to "UNDER REVIEW" in the background while the modal is open.
+    } catch (err) {
+        console.error("Auto-Review Update Failed:", err);
+    }
+
     const modal = document.getElementById('appModal');
-    const displayId = `APP-${id.substring(0, 5).toUpperCase()}`;
+    const displayId = data.applicationId;
+if (!displayId) {
+    console.error("System Error: Application found without a generated ID for Student:", studentName);
+}
     const s1 = data.step1 || {};
     const s2 = data.step2 || {};
 
     // Update Sidebar Header
-    document.getElementById('modalIdBadge').innerText = displayId;
-    document.getElementById('modalStudentName').innerText = `${s1.fullNames} ${s1.surname}`;
+    const isAdmissions = ['uncon_accepted', 'registered', 'deregistered'].includes(data.status1);
+document.getElementById('modalIdBadge').innerHTML = `
+    ID: ${displayId} 
+    ${isAdmissions ? `<br><span style="color:#2e7d32">Student No: ${data.studentNumber || 'Not Assigned'}</span>` : ''}
+`;
+document.getElementById('modalStudentName').innerText = `${s1.fullNames} ${s1.surname}`;
 
     // Define Sections
     const secPers = document.getElementById('sec-personal');
     const secAcad = document.getElementById('sec-academic');
     const secDocs = document.getElementById('sec-documents');
     const secApp = document.getElementById('sec-application');
+    const secHistory = document.getElementById('sec-history');
 
     // Helper to hide empty fields - if value is missing, it returns empty string
     const row = (label, value) => value ? `
@@ -966,8 +979,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px;">
                 ${row("Academic Year", s2.acadYear)}
                 ${row("Campus Selection", s2.campus)}
-                ${row("First Choice", s2.choice1)}
-                ${row("Second/Third Choice", s2.choice2)}
+                ${row("Course Selection", s2.choice1)}
                 ${row("Need Student Accommodation", s2.housing)}
                 ${row("Need Financial Support", s2.nsfas)}
             </div>
@@ -977,29 +989,16 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                     <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e1e4e8;">
-                        <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 700;">Status: Choice 1</span>
+                        <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 700;">Application Status</span>
                         <select id="updateStatus1" style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-weight: 600; font-size: 0.8rem;">
-                            <option value="review" ${data.status1 === 'review' ? 'selected' : ''}>Under Review</option>
                             <option value="waiting" ${data.status1 === 'waiting' ? 'selected' : ''}>Waiting List</option>
-                            <option value="prov_accepted" ${data.status1 === 'prov_accepted' ? 'selected' : ''}>Provisional Acceptance</option>
-                            <option value="uncon_accepted" ${data.status1 === 'uncon_accepted' ? 'selected' : ''}>Unconditional Acceptance</option>
+                            <option value="uncon_accepted" ${data.status1 === 'uncon_accepted' ? 'selected' : ''}>Accepted</option>
                             <option value="rejected" ${data.status1 === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            <option value="withdrawn_expired" ${data.status1 === 'withdrawn_expired' ? 'selected' : ''}>Withdrawn/Expired</option>
                             <option value="registered" ${data.status1 === 'registered' ? 'selected' : ''}>Registered</option>
                             <option value="deregistered" ${data.status1 === 'deregistered' ? 'selected' : ''}>Deregistered</option>
                         </select>
                     </div>
-
-                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e1e4e8; ${data.status1 !== 'rejected' ? 'opacity: 0.5;' : ''}">
-                        <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 700;">Status: Choice 2</span>
-                        <select id="updateStatus2" ${data.status1 !== 'rejected' ? 'disabled' : ''} style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-size: 0.8rem;">
-                            <option value="pending" ${data.status2 === 'pending' ? 'selected' : ''}>Pending</option>
-                            <option value="prov_accepted" ${data.status2 === 'prov_accepted' ? 'selected' : ''}>Provisional Acceptance</option>
-                            <option value="uncon_accepted" ${data.status2 === 'uncon_accepted' ? 'selected' : ''}>Unconditional Acceptance</option>
-                            <option value="rejected" ${data.status2 === 'rejected' ? 'selected' : ''}>Rejected</option>
-                        </select>
-                        ${data.status1 !== 'rejected' ? '<p style="font-size: 0.6rem; color: #e74c3c; margin-top: 5px;">Choice 1 must be Rejected first</p>' : ''}
-                    </div>
-                </div>
 
                 <button onclick="saveStatusUpdate()" style="width: 100%; background: #4a90e2; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; font-size: 0.8rem;">
                     UPDATE STATUS
@@ -1009,20 +1008,59 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
     </div>
 `;
 
-     // NEW: Documents Section Logic
-    const docs = data.documents || {};
-    secDocs.innerHTML = `
-        <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Uploaded Documents</h3>
-        <div style="display: grid; gap: 15px;">
-            ${Object.keys(docs).length > 0 ? Object.entries(docs).map(([name, url]) => `
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #eee; border-radius: 8px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-file-pdf" style="color: #e74c3c; font-size: 1.2rem;"></i>
-                        <span style="font-size: 0.85rem; font-weight: 500;">${name.replace(/([A-Z])/g, ' $1').trim()}</span>
-                    </div>
-                    <a href="${url}" target="_blank" style="font-size: 0.7rem; color: var(--primary); text-decoration: none; font-weight: 700;">VIEW DOCUMENT</a>
+    // UPDATED CODE:
+const savedDocs = data.documents || {};
+const filesToCheck = [
+    { name: 'ID_Passport', label: 'ID / Passport' },
+    { name: 'Birth_Certificate', label: 'Birth Certificate' },
+    { name: 'Matric_Certificate', label: 'Matric Certificate' },
+    { name: 'Grade_11_Results', label: 'Grade 11 Results' },
+    { name: 'Transcripts', label: 'Academic Transcripts' },
+    { name: 'Proof_of_Address', label: 'Proof of Residence' },
+    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' }
+];
+
+let vaultHTML = `
+    <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Document Vault</h3>
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
+                <th style="padding: 10px;">Document Name</th>
+                <th style="padding: 10px;">Size</th>
+                <th style="padding: 10px;">File Name</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 0.9rem;">`;
+
+filesToCheck.forEach(f => {
+    const fileUrl = savedDocs[f.name];
+    const fileSize = savedDocs[`${f.name}_size`] || "N/A";
+    const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
+    const hasFile = !!fileUrl;
+
+    vaultHTML += `
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+            <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+            <td style="padding: 12px 10px;">
+            ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
+            </td>
+        </tr>`;
+});
+
+secDocs.innerHTML = vaultHTML + `</tbody></table>`;
+
+    const historyData = data.actionHistory || [];
+    secHistory.innerHTML = `
+        <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Action History</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            ${historyData.length > 0 ? historyData.reverse().map(h => `
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 12px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; font-size: 0.8rem;">
+                    <span style="font-weight: 700; color: #333;">${h.action}</span>
+                    <span style="color: #666;"><i class="fas fa-user-tie"></i> ${h.staffName}</span>
+                    <span style="color: #999; text-align: right;">${h.date}</span>
                 </div>
-            `).join('') : '<p style="color: #999; text-align: center; padding: 20px;">No documents have been uploaded yet.</p>'}
+            `).join('') : '<p style="text-align:center; color:#999; padding:20px;">No history recorded yet.</p>'}
         </div>
     `;
 
@@ -1082,7 +1120,7 @@ if (activeTabFilter === 'new') {
 } 
 else if (activeTabFilter === 'accepted') {
     // Only show if status is one of the "Admissions" types
-    const isAcceptedType = ['prov_accepted', 'uncon_accepted', 'registered'].includes(rowStatus);
+    const isAcceptedType = ['uncon_accepted', 'registered', 'deregistered'].includes(rowStatus);
     if (activeSubFilter === 'all') {
         matchTab = isAcceptedType;
     } else {
@@ -1091,7 +1129,7 @@ else if (activeTabFilter === 'accepted') {
 }
 else if (activeTabFilter === 'rejected') {
     // Only show if status is one of the "Declined" types
-    const isDeclinedType = ['rejected', 'withdrawn_expired', 'student_declined'].includes(rowStatus);
+    const isDeclinedType = ['rejected', 'withdrawn_expired'].includes(rowStatus);
     if (activeSubFilter === 'all') {
         matchTab = isDeclinedType;
     } else {
@@ -1260,36 +1298,81 @@ document.addEventListener('click', (e) => {
 
 window.saveStatusUpdate = async () => {
     const s1Value = document.getElementById('updateStatus1').value;
-    const s2Value = document.getElementById('updateStatus2').value;
-    const btn = event.target;
+    const btn = event.currentTarget || event.target;
 
     try {
         btn.innerText = "UPDATING...";
         btn.disabled = true;
 
-const isAdmissionStatus = ['prov_accepted', 'uncon_accepted', 'registered'].includes(s1Value);
+        // 1. Get the latest data for this specific application first
+        const appRef = doc(db, "applications", currentAppId);
+        const appSnap = await getDoc(appRef);
+        
+        if (!appSnap.exists()) {
+            throw new Error("Application document not found in database.");
+        }
+        
+        const currentData = appSnap.data();
 
-await updateDoc(doc(db, "applications", currentAppId), {
-    status1: s1Value,
-    status2: s2Value,
-    lastUpdated: new Date(),
-    // Only update these if the status is an admission status
-    ...(isAdmissionStatus && { 
-        dateAccepted: new Date(), 
-        acceptedBy: window.currentStaffName 
-    }),
-    processedBy: auth.currentUser.email
-});
+        const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
+        const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
+
+        // 2. Logic for Student Number
+        let studentNum = currentData.studentNumber || null; 
+
+        if (isAdmissionStatus && !studentNum) {
+            studentNum = prompt("Enter the Student Number for this applicant:");
+            // If they cancel or leave it blank, stop the update
+            if (!studentNum) {
+                alert("Update cancelled. A student number is required for acceptance.");
+                btn.innerText = "UPDATE STATUS";
+                btn.disabled = false;
+                return; 
+            }
+        }
+
+        // 3. Perform the update
+        const statusMap = {
+            'uncon_accepted': 'Accepted',
+            'registered': 'Registered',
+            'deregistered': 'Deregistered',
+            'rejected': 'Rejected',
+            'withdrawn_expired': 'Withdrawn/Expired',
+            'waiting': 'Waiting List'
+        };
+
+        const historyLog = {
+            staffName: window.currentStaffName || "Staff",
+            action: `Status changed to: ${statusMap[s1Value] || s1Value}`,
+            date: new Date().toLocaleString(),
+            timestamp: new Date()
+        };
+
+        await updateDoc(appRef, {
+            status1: s1Value,
+            lastUpdated: new Date(),
+            actionHistory: arrayUnion(historyLog),
+            ...(isAdmissionStatus && { studentNumber: studentNum }),
+            processedBy: auth.currentUser.email
+        });
 
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
+
     } catch (error) {
-        alert("Error: " + error.message);
+        // --- THIS SECTION SHOWS THE ERROR IN YOUR CONSOLE ---
+        console.error("--- STATUS UPDATE ERROR ---");
+        console.error("Message:", error.message);
+        console.error("Stack Trace:", error.stack);
+        console.error("Application ID:", currentAppId);
+        
+        alert("Error: " + error.message + ". Check console for details.");
     } finally {
-        btn.innerText = "UPDATE STUDENT APPLICATION STATUS";
+        btn.innerText = "UPDATE STATUS";
         btn.disabled = false;
     }
 };
+
 
 
 
