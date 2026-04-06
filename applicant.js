@@ -357,7 +357,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
             <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
                 <th style="padding: 10px;">Document Name</th>
                 <th style="padding: 10px;">Size</th>
-                <th style="padding: 10px;">Status</th>
+                <th style="padding: 10px;">File Reference</th>
                 <th style="padding: 10px;">Action</th>
             </tr>
         </thead>
