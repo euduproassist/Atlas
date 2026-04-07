@@ -349,7 +349,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         const data = docSnap.data();
         const currentStatus = data.status1 || "pending";
         const savedDocs = data.documents || {};
-        const isLocked = currentStatus !== "pending"; // Lock if NOT pending
+       
 
         let vaultHTML = `
     <table style="width: 100%; border-collapse: collapse; text-align: left;">
