@@ -407,3 +407,86 @@ document.getElementById('vaultHeaderInfo').innerHTML = `
 document.getElementById('vaultTableContainer').innerHTML = vaultHTML + `</tbody></table>`;
     });
 });
+
+// Integrated Compression Logic (Identical to apply.js)
+async function processFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            let width = img.width;
+            let height = img.height;
+            const MAX_PIXELS = 1200; 
+            if (width > MAX_PIXELS || height > MAX_PIXELS) {
+                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
+                width *= ratio; height *= ratio;
+            }
+            canvas.width = width; canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            let quality = 0.8;
+            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            while (blob.size > 204800 && quality > 0.1) {
+                quality -= 0.1; 
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            }
+            URL.revokeObjectURL(img.src);
+            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
+        };
+        img.onerror = () => { URL.revokeObjectURL(img.src); reject("Error"); };
+    });
+}
+
+window.handleVaultUpload = function(docName) {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*,application/pdf';
+    
+    fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+        const storage = getStorage();
+        const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
+
+        try {
+            // 1. Double check status in Firestore before proceeding (Security bypass prevention)
+            const appCheck = await getDoc(doc(db, "applications", user.uid));
+            if (appCheck.data().status1 !== "pending") {
+                alert("Upload locked. Application is no longer pending.");
+                return;
+            }
+
+            alert("Processing and compressing...");
+            let toUpload = file;
+            if (file.type.startsWith('image/')) {
+                toUpload = await processFile(file);
+            } else if (file.size > 512000) {
+                alert("PDF too large. Please keep it under 500KB.");
+                return;
+            }
+
+            // 2. Upload and automatically overwrite in Storage
+            const snapshot = await uploadBytes(fileRef, toUpload);
+            const url = await getDownloadURL(snapshot.ref);
+            
+            // 3. Update Firestore with identical metadata logic as apply.js
+            const appRef = doc(db, "applications", user.uid);
+            await updateDoc(appRef, {
+                [`documents.${docName}`]: url,
+                [`documents.${docName}_filename`]: file.name,
+                [`documents.${docName}_size`]: Math.round(toUpload.size / 1024) + " KB",
+                "lastUpdated": new Date()
+            });
+            
+            alert("Document replaced successfully!");
+        } catch (err) {
+            console.error(err);
+            alert("Upload failed. Please try again.");
+        }
+    };
+    fileInput.click();
+};
+
