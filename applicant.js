@@ -384,9 +384,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
                     <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
-                    <td style="padding: 12px 10px; font-size: 0.85rem;">
-                    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
-                    </td>
                 </tr>
             `; 
         });
