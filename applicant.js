@@ -349,7 +349,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         const data = docSnap.data();
         const currentStatus = data.status1 || "pending";
         const savedDocs = data.documents || {};
-        const isLocked = (currentStatus !== "pending"); // Lock if NOT pending
+        const isLocked = currentStatus !== "pending"; // Lock if NOT pending
 
         let vaultHTML = `
     <table style="width: 100%; border-collapse: collapse; text-align: left;">
@@ -385,14 +385,8 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                     <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
                     <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
                     <td style="padding: 12px 10px; font-size: 0.85rem;">
-    ${hasFile ? 
-        `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : 
-        (docStatuses[f.name] === 'disapproved' ? `<button onclick="handleVaultUpload('${f.name}')" style="color: #d32f2f; font-weight: bold; background: none; border: 1px solid #d32f2f; padding: 4px; border-radius: 4px; cursor: pointer;">RE-UPLOAD REQUIRED</button>` : '<span style="color: #999;">Awaiting Upload</span>')
-    }
-    <div style="font-size: 0.7rem; margin-top: 4px; font-weight: bold; color: ${docStatuses[f.name] === 'approved' ? '#2e7d32' : '#d32f2f'}">
-        ${docStatuses[f.name] === 'approved' ? 'Verified ✅' : (docStatuses[f.name] === 'disapproved' ? 'Rejected: ' + data.disapproveReasons[f.name] : 'Awaiting Verification')}
-    </div>
-</td>
+                    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
+                    </td>
                 </tr>
             `; 
         });
@@ -465,6 +459,4 @@ window.handleVaultUpload = function(docName) {
     };
     fileInput.click();
 };
-
-
 
