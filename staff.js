@@ -399,8 +399,6 @@ let vaultHTML = `
                 <th style="padding: 10px;">Document Name</th>
                 <th style="padding: 10px;">Size</th>
                 <th style="padding: 10px;">File Name</th>
-                <th style="padding: 10px;">Status</th>
-                <th style="padding: 10px;">Action</th>
             </tr>
         </thead>
         <tbody style="font-size: 0.9rem;">`;
@@ -410,36 +408,15 @@ filesToCheck.forEach(f => {
     const fileSize = savedDocs[`${f.name}_size`] || "N/A";
     const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
     const hasFile = !!fileUrl;
-    const docStatus = (data.documentStatuses && data.documentStatuses[f.name]) || 'awaiting_verification';
-    const hasViewed = (data.viewedDocs && data.viewedDocs.includes(f.name));
 
-// Change the File Name link to trigger a "Mark as Viewed" function
-const fileLink = hasFile ? `<a href="${fileUrl}" target="_blank" onclick="markAsViewed('${id}', '${f.name}')" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`;
-
-// Logic for the Action Column
-let actionContent = '';
-if (!hasFile) {
-    actionContent = '--';
-} else if (docStatus === 'approved') {
-    actionContent = '<span style="color: #2e7d32; font-weight: bold;">APPROVED ✅</span>';
-} else if (docStatus === 'disapproved') {
-    actionContent = `<span style="color: #d32f2f; font-weight: bold;">REJECTED: ${data.disapproveReasons[f.name]}</span>`;
-} else {
-    actionContent = `
-        <div style="display: flex; gap: 5px;">
-            <button onclick="verifyDoc('${id}', '${f.name}', 'approve', ${hasViewed})" style="padding: 4px 8px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Approve</button>
-            <button onclick="verifyDoc('${id}', '${f.name}', 'disapprove', ${hasViewed})" style="padding: 4px 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Reject</button>
-        </div>`;
-}
     vaultHTML += `
-    <tr style="border-bottom: 1px solid #eee;">
-        <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
-        <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
-        <td style="padding: 12px 10px;">${fileLink}</td>
-        <td style="padding: 12px 10px; text-transform: capitalize; font-size: 0.75rem;">${docStatus.replace('_', ' ')}</td>
-        <td style="padding: 12px 10px;">${actionContent}</td>
-    </tr>`;
-
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+            <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+            <td style="padding: 12px 10px;">
+            ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
+            </td>
+        </tr>`;
 });
 
 secDocs.innerHTML = vaultHTML + `</tbody></table>`;
@@ -766,34 +743,3 @@ window.saveStatusUpdate = async () => {
         btn.disabled = false;
     }
 };
-
-window.markAsViewed = async (appId, docName) => {
-    await updateDoc(doc(db, "applications", appId), {
-        viewedDocs: arrayUnion(docName)
-    });
-};
-
-window.verifyDoc = async (appId, docName, action, hasViewed) => {
-    if (!hasViewed) return alert("You must view the document first by clicking the file name link.");
-    
-    const appRef = doc(db, "applications", appId);
-    if (action === 'approve') {
-        await updateDoc(appRef, { [`documentStatuses.${docName}`]: 'approved' });
-    } else {
-        const reason = prompt("Select Reason:\n1. Blurry document\n2. Wrong document\n3. Uncertified document");
-        const reasonText = reason === "1" ? "Blurry document" : reason === "2" ? "Wrong document" : reason === "3" ? "Uncertified document" : null;
-        if (!reasonText) return;
-
-        // Auto-delete the file from DB as per instructions
-        await updateDoc(appRef, {
-            [`documentStatuses.${docName}`]: 'disapproved',
-            [`disapproveReasons.${docName}`]: reasonText,
-            [`documents.${docName}`]: deleteField(),
-            [`documents.${docName}_size`]: deleteField(),
-            [`documents.${docName}_filename`]: deleteField()
-        });
-        alert("Document rejected. It has been removed from the vault for the student to re-upload.");
-    }
-};
-
-
