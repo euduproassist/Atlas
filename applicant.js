@@ -349,7 +349,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         const data = docSnap.data();
         const currentStatus = data.status1 || "pending";
         const savedDocs = data.documents || {};
-        const isLocked = currentStatus.toLowerCase() !== "pending"; 
+        const isLocked = currentStatus !== "pending"; // Lock if NOT pending
 
         let vaultHTML = `
     <table style="width: 100%; border-collapse: collapse; text-align: left;">
@@ -385,8 +385,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                     <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
                     <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
                     <td style="padding: 12px 10px; font-size: 0.85rem;">
-                    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none; margin-right:10px;">${data.documents[`${f.name}_filename`] || 'View'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
-                    ${!isLocked ? `<button onclick="handleVaultUpload('${f.name}')" style="padding: 4px 8px; font-size: 0.7rem; cursor: pointer; background: #e3f2fd; border: 1px solid #4a90e2; border-radius: 4px; color: #4a90e2;">${hasFile ? 'Replace' : 'Upload'}</button>` : ''}
+                    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
                     </td>
                 </tr>
             `; 
@@ -408,36 +407,6 @@ document.getElementById('vaultTableContainer').innerHTML = vaultHTML + `</tbody>
     });
 });
 
-// Integrated Compression Logic (Identical to apply.js)
-async function processFile(file) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = async () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            let width = img.width;
-            let height = img.height;
-            const MAX_PIXELS = 1200; 
-            if (width > MAX_PIXELS || height > MAX_PIXELS) {
-                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
-                width *= ratio; height *= ratio;
-            }
-            canvas.width = width; canvas.height = height;
-            ctx.drawImage(img, 0, 0, width, height);
-            let quality = 0.8;
-            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
-            while (blob.size > 204800 && quality > 0.1) {
-                quality -= 0.1; 
-                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
-            }
-            URL.revokeObjectURL(img.src);
-            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
-        };
-        img.onerror = () => { URL.revokeObjectURL(img.src); reject("Error"); };
-    });
-}
-
 window.handleVaultUpload = function(docName) {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -451,42 +420,45 @@ window.handleVaultUpload = function(docName) {
         const storage = getStorage();
         const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
 
+        let toUpload = file;
+
+        // Compression Logic: If > 200KB and is an image, compress it
+        if (file.size > 200 * 1024 && file.type.startsWith('image/')) {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            await new Promise(resolve => img.onload = resolve);
+            const canvas = document.createElement('canvas');
+            let quality = 0.7;
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            toUpload = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
+        } else if (file.size > 200 * 1024 && file.type === 'application/pdf') {
+            alert("PDF is over 200KB. Please compress it manually before uploading.");
+            return;
+        }
+
         try {
-            // 1. Double check status in Firestore before proceeding (Security bypass prevention)
-            const appCheck = await getDoc(doc(db, "applications", user.uid));
-            if (appCheck.data().status1 !== "pending") {
-                alert("Upload locked. Application is no longer pending.");
-                return;
-            }
-
-            alert("Processing and compressing...");
-            let toUpload = file;
-            if (file.type.startsWith('image/')) {
-                toUpload = await processFile(file);
-            } else if (file.size > 512000) {
-                alert("PDF too large. Please keep it under 500KB.");
-                return;
-            }
-
-            // 2. Upload and automatically overwrite in Storage
+            alert("Uploading and replacing old file...");
             const snapshot = await uploadBytes(fileRef, toUpload);
             const url = await getDownloadURL(snapshot.ref);
             
-            // 3. Update Firestore with identical metadata logic as apply.js
+            // Update Firestore (This replaces the old URL and updates the size)
             const appRef = doc(db, "applications", user.uid);
             await updateDoc(appRef, {
                 [`documents.${docName}`]: url,
-                [`documents.${docName}_filename`]: file.name,
-                [`documents.${docName}_size`]: Math.round(toUpload.size / 1024) + " KB",
-                "lastUpdated": new Date()
-            });
-            
-            alert("Document replaced successfully!");
+                [`documents.${docName}_size`]: (toUpload.size / 1024).toFixed(1) + " KB",
+                [`documentStatuses.${docName}`]: 'pending' 
+            }, {merge: true});
+            alert("Success! Document updated.");
         } catch (err) {
             console.error(err);
-            alert("Upload failed. Please try again.");
+            alert("Upload failed.");
         }
     };
     fileInput.click();
 };
+
+
 
