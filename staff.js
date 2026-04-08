@@ -400,6 +400,8 @@ let vaultHTML = `
                 <th style="padding: 10px;">Document Name</th>
                 <th style="padding: 10px;">Size</th>
                 <th style="padding: 10px;">File Name</th>
+                <th style="padding: 10px;">Status</th>
+                <th style="padding: 10px;">Action</th>
             </tr>
         </thead>
         <tbody style="font-size: 0.9rem;">`;
