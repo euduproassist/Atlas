@@ -416,6 +416,22 @@ filesToCheck.forEach(f => {
         <tr style="border-bottom: 1px solid #eee;">
             <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
             <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+            <td style="padding: 12px 10px;">
+    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
+</td>
+<td style="padding: 12px 10px;" id="status-cell-${f.name}">
+    <span style="font-weight:600; color: #555;">${(data.documentStatuses && data.documentStatuses[f.name]) ? data.documentStatuses[f.name].toUpperCase().replace(/_/g, ' ') : 'NO ACTION YET'}</span>
+</td>
+<td style="padding: 12px 10px;">
+    <select onchange="stageDocStatus('${f.name}', this.value)" style="padding: 4px; font-size: 0.75rem; border-radius: 4px; border: 1px solid #ccc;">
+        <option value="">Set As...</option>
+        <option value="verified">Verified</option>
+        <option value="poor_quality">Poor Quality</option>
+        <option value="incorrect_document">Incorrect Document</option>
+        <option value="missing_scans">Missing Scans</option>
+        <option value="invalid_expired">Invalid/Expired</option>
+    </select>
+</td>
         </tr>`;
 });
 
