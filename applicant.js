@@ -380,6 +380,8 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
             const fileUrl = savedDocs[f.name];
             const fileSize = savedDocs[`${f.name}_size`] || "N/A";
             const hasFile = !!fileUrl;
+            const docStatus = (data.documentStatuses && data.documentStatuses[f.name]) ? data.documentStatuses[f.name] : "awaiting_verification";
+            const isVerified = docStatus === 'verified';
 
   vaultHTML += `
     <tr style="border-bottom: 1px solid #eee;">
