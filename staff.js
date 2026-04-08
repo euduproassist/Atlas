@@ -403,21 +403,6 @@ let vaultHTML = `
         </thead>
         <tbody style="font-size: 0.9rem;">`;
 
-filesToCheck.forEach(f => {
-    const fileUrl = savedDocs[f.name];
-    const fileSize = savedDocs[`${f.name}_size`] || "N/A";
-    const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
-    const hasFile = !!fileUrl;
-
-    vaultHTML += `
-        <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
-            <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
-            <td style="padding: 12px 10px;">
-            ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
-            </td>
-        </tr>`;
-});
 
 secDocs.innerHTML = vaultHTML + `</tbody></table>`;
 
