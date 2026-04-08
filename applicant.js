@@ -464,7 +464,7 @@ window.handleVaultUpload = function(docName) {
                 [`documents.${docName}`]: url,
                 [`documents.${docName}_filename`]: file.name,
                 [`documents.${docName}_size`]: (toUpload.size / 1024).toFixed(1) + " KB",
-                [`documentStatuses.${docName}`]: 'pending' 
+                [`documentStatuses.${docName}`]: 'awaiting_verification' 
             });
             alert("Document updated successfully!");
         } catch (err) {
