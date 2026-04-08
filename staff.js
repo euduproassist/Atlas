@@ -403,6 +403,33 @@ let vaultHTML = `
         </thead>
         <tbody style="font-size: 0.9rem;">`;
 
+    filesToCheck.forEach(f => {
+    const fileUrl = savedDocs[f.name];
+    const fileSize = savedDocs[`${f.name}_size`] || "N/A";
+    const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
+    const hasFile = !!fileUrl;
+    const currentDocStatus = (data.documentStatuses && data.documentStatuses[f.name]) || "Awaiting Review";
+
+    vaultHTML += `
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+            <td style="padding: 12px 10px; color: #666;">${currentDocStatus}</td>
+            <td style="padding: 12px 10px;">
+                ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">No File</span>`}
+            </td>
+            <td style="padding: 12px 10px;">
+                ${hasFile ? `
+                <select onchange="updateDocStatus('${id}', '${f.name}', this.value)" style="font-size:0.75rem; padding:4px; border-radius:4px; border:1px solid #ddd;">
+                    <option value="" selected disabled>Set As...</option>
+                    <option value="Verified">Verified</option>
+                    <option value="Poor Quality">Poor Quality</option>
+                    <option value="Incorrect Document">Incorrect Document</option>
+                    <option value="Missing Documents">Missing Documents</option>
+                    <option value="Invalid/Expired">Invalid/Expired</option>
+                </select>` : '--'}
+            </td>
+        </tr>`;
+});
 
 secDocs.innerHTML = vaultHTML + `</tbody></table>`;
 
