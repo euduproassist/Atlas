@@ -760,3 +760,51 @@ window.saveStatusUpdate = async () => {
     }
 };
 
+window.stageDocStatus = (docName, status) => {
+    if (!status) return;
+    pendingDocChanges[docName] = status;
+    document.getElementById(`status-cell-${docName}`).innerHTML = `<span style="color: #e67e22; font-weight:bold;">PENDING: ${status.toUpperCase().replace(/_/g, ' ')}</span>`;
+};
+
+window.saveDocumentEvaluations = async () => {
+    if (Object.keys(pendingDocChanges).length === 0) {
+        alert("No changes made to document statuses.");
+        return;
+    }
+
+    const appRef = doc(db, "applications", currentAppId);
+    const btn = document.getElementById('btnUpdateDocs');
+    
+    try {
+        btn.innerText = "UPDATING...";
+        btn.disabled = true;
+
+        const appSnap = await getDoc(appRef);
+        const currentData = appSnap.data();
+        const currentDocs = currentData.documents || {};
+        const updates = {};
+
+        for (const [docName, newStatus] of Object.entries(pendingDocChanges)) {
+            updates[`documentStatuses.${docName}`] = newStatus;
+
+            // If status is NOT verified, delete the file references so student can re-upload
+            if (newStatus !== 'verified') {
+                updates[`documents.${docName}`] = deleteField();
+                updates[`documents.${docName}_filename`] = deleteField();
+                updates[`documents.${docName}_size`] = deleteField();
+            }
+        }
+
+        await updateDoc(appRef, updates);
+        alert("Document statuses updated and invalid files cleared.");
+        pendingDocChanges = {};
+    } catch (err) {
+        console.error("Update Error:", err);
+        alert("Error updating statuses: " + err.message);
+    } finally {
+        btn.innerText = "UPDATE DOCUMENT STATUSES";
+        btn.disabled = false;
+    }
+};
+
+
