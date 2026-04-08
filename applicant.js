@@ -391,17 +391,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         <td style="padding: 12px 10px; font-size: 0.85rem;">
     ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
 </td>
-            <td style="padding: 12px 10px; font-weight: 700; color: ${isVerified ? '#2e7d32' : '#e67e22'};">
-            ${docStatus.toUpperCase().replace(/_/g, ' ')}
-        </td>
-        <td style="padding: 12px 10px;">
-            ${isVerified ? 
-                '<i class="fas fa-check-circle" style="color: #2e7d32;"></i>' : 
-                (currentStatus === 'pending' || docStatus === 'awaiting_verification' || docStatus === 'rejected' ? 
-                    `<button onclick="handleVaultUpload('${f.name}')" style="padding: 5px 10px; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">${hasFile ? 'Replace' : 'Upload'}</button>` : 
-                    '<i class="fas fa-lock" style="color:#ccc;"></i>')
-            }
-        </td>
     </tr>
 `;
         });
