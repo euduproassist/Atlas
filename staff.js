@@ -1,6 +1,7 @@
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getStorage, ref, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 
 const tableBody = document.getElementById('applicationTableBody');
 const filterCourse = document.getElementById('filterCourse');
@@ -755,3 +756,31 @@ window.saveStatusUpdate = async () => {
         btn.disabled = false;
     }
 };
+
+window.updateDocStatus = async (appId, docName, status) => {
+    const appRef = doc(db, "applications", appId);
+    const storage = getStorage();
+
+    try {
+        if (status !== "Verified") {
+            // Delete from Storage if not verified
+            const fileRef = ref(storage, `applications/${appId}/${docName}`);
+            try { await deleteObject(fileRef); } catch (e) { console.log("File already gone or doesn't exist"); }
+
+            // Update Firestore: Set status and DELETE the file URL/Metadata so student can re-upload
+            await updateDoc(appRef, {
+                [`documentStatuses.${docName}`]: status,
+                [`documents.${docName}`]: deleteField(),
+                [`documents.${docName}_filename`]: deleteField(),
+                [`documents.${docName}_size`]: deleteField()
+            });
+        } else {
+            // Just update status to Verified
+            await updateDoc(appRef, { [`documentStatuses.${docName}`]: "Verified" });
+        }
+        alert(`Document marked as ${status}`);
+    } catch (error) {
+        console.error("Error updating doc status:", error);
+    }
+};
+
