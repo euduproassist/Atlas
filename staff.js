@@ -435,6 +435,18 @@ filesToCheck.forEach(f => {
         </tr>`;
 });
 
+    secDocs.innerHTML = vaultHTML + `</tbody></table>
+<div style="margin-top: 20px; text-align: right;">
+    <button id="btnUpdateDocs" onclick="saveDocumentEvaluations()" style="background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+        UPDATE DOCUMENT STATUSES
+    </button>
+</div>`;
+
+// This line ensures that if you switch from one student to another, 
+// any unsaved changes from the previous student are cleared.
+pendingDocChanges = {};
+
+
     const historyData = data.actionHistory || [];
     secHistory.innerHTML = `
         <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Action History</h3>
