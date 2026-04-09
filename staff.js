@@ -816,6 +816,31 @@ window.saveDocumentEvaluations = async () => {
 
           await updateDoc(appRef, updates);
 
+        if (needsEmail) {
+    const studentEmail = currentData.step1.email;
+    const appId = currentData.applicationId || "APP-XXXXX";
+    
+    // Formatting the Master Legend with clear spacing
+    const masterLegend = `
+REJECTION REASON LEGEND:
+--------------------------------------------------
+• POOR QUALITY: The scan is blurry, too dark, or too small to read.
+• INCORRECT DOCUMENT: You uploaded the wrong file (e.g., a CV instead of an ID).
+• MISSING SCANS: The document has multiple pages, but you only sent one.
+• INVALID/EXPIRED: The document is no longer legally valid.
+--------------------------------------------------`;
+
+    const emailParams = {
+        to_email: studentEmail,
+        app_id: appId,
+        applicant_name: currentData.step1.fullNames,
+        message_body: masterLegend,
+        instructions: `1. Log in to your Student Portal.\n2. Open the Document Vault.\n3. Look for documents marked 'Missing Info'.\n4. Click 'Replace' to upload the correct version.`
+    };
+
+    await emailjs.send("service_7puwrax", "template_7jmrawq", emailParams);
+    alert("Document statuses updated. 'Missing Info' email sent to student.");
+
         } else {
             alert("Document statuses updated and invalid files cleared.");
         }
