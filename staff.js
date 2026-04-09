@@ -835,7 +835,7 @@ window.saveDocumentEvaluations = async () => {
                 `
             };
 
-            await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailParams);
+            await emailjs.send("", "YOUR_TEMPLATE_ID", emailParams);
             alert("Document statuses updated. 'Missing Info' email sent to student.");
         } else {
             alert("Document statuses updated and invalid files cleared.");
