@@ -3,7 +3,7 @@ import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUn
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 // EmailJS Integration for Automated Notifications
 import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS Public Key
+emailjs.init("9Dj285YhTTWRf0Qsb"); // Replace with your EmailJS Public Key
 
 
 const tableBody = document.getElementById('applicationTableBody');
