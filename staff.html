@@ -412,7 +412,7 @@
 
 <div class="main-content">
     <div class="sidebar-menu">
-    <div id="tabNew" class="sidebar-folder" onclick="toggleFolder('sideNavNew')">
+    <div id="tabNew" class="sidebar-folder" onclick="toggleFolder('sideNavNew', this)">
         <i class="fas fa-folder"></i> New Applications <i class="fas fa-chevron-down arrow"></i>
     </div>
     <div id="sideNavNew" class="sidebar-section">
@@ -423,7 +423,7 @@
         <div onclick="setSubFilter('missing_info', 'new', event)" class="sub-tab" id="subMissing">Missing Info</div>
     </div>
 
-    <div id="tabAccepted" class="sidebar-folder" onclick="toggleFolder('sideNavAccepted')">
+    <div id="tabAccepted" class="sidebar-folder" onclick="toggleFolder('sideNavAccepted', this)">
         <i class="fas fa-folder"></i> Admissions <i class="fas fa-chevron-down arrow"></i>
     </div>
     <div id="sideNavAccepted" class="sidebar-section" style="display: none;">
@@ -433,7 +433,7 @@
         <div onclick="setSubFilter('deregistered', 'accepted', event)" class="sub-tab" id="subReg">Deregistered</div>
     </div>
 
-    <div id="tabRejected" class="sidebar-folder" onclick="toggleFolder('sideNavRejected')">
+    <div id="tabRejected" class="sidebar-folder" onclick="toggleFolder('sideNavRejected', this)">
         <i class="fas fa-folder"></i> Declined <i class="fas fa-chevron-down arrow"></i>
     </div>
     <div id="sideNavRejected" class="sidebar-section" style="display: none;">
