@@ -125,7 +125,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
             const course = s2.choice1 || "Not Selected";
             const status1 = data.status1 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
-        
+            const btnClass = "background: #eef5ff; color: #4a90e2; border: 1px solid #d1e3f8; padding: 3px 8px; font-size: 0.65rem;";
             const displayId = data.applicationId;
             if (!displayId) {
             console.error("System Error: Application found without a generated ID for Student:", studentName);
