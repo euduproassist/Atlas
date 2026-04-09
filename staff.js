@@ -816,8 +816,6 @@ window.saveDocumentEvaluations = async () => {
             }
         }
 
-        await updateDoc(appRef, updates);
-        alert("Document statuses updated and invalid files cleared.");
         pendingDocChanges = {};
     } catch (err) {
         console.error("Update Error:", err);
