@@ -519,7 +519,8 @@ if (activeSubFilter === 'all') {
         matchTab = isNewType;
     } else if (activeSubFilter === 'missing_info') {
         // Show student in this tab if they are a "New" type AND have Missing Documents (MD)
-        
+        const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
+        matchTab = isNewType && docLabel === 'MD';
     } else {
         matchTab = (rowStatus === activeSubFilter);
     }
