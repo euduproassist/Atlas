@@ -1,6 +1,10 @@
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+// EmailJS Integration for Automated Notifications
+import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS Public Key
+
 
 const tableBody = document.getElementById('applicationTableBody');
 const filterCourse = document.getElementById('filterCourse');
