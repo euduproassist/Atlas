@@ -714,7 +714,23 @@ window.saveStatusUpdate = async () => {
             throw new Error("Application document not found in database.");
         }
 
-        const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
+const currentData = appSnap.data();
+const docStats = currentData.documentStatuses || {};
+const isFinalStatus = ['uncon_accepted', 'registered', 'deregistered', 'rejected', 'withdrawn_expired', 'archived'].includes(s1Value);
+
+const mandatoryVerified = (docStats.ID_Passport === 'verified' || docStats.Birth_Certificate === 'verified') &&
+                          (docStats.Proof_of_Address === 'verified') &&
+                          (docStats.Matric_Certificate === 'verified' || docStats.Grade_11_Results === 'verified');
+
+if (isFinalStatus && !mandatoryVerified) {
+    alert("CRITICAL: You cannot move this student to a final status until ID/Birth Cert, Proof of Address, and Matric/Grade 11 results are all marked as 'VERIFIED' in the Document Vault.");
+    btn.innerText = "UPDATE STATUS";
+    btn.disabled = false;
+    return;
+}
+
+const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
+const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
 
         // 2. Logic for Student Number
         let studentNum = currentData.studentNumber || null; 
