@@ -803,6 +803,8 @@ window.saveDocumentEvaluations = async () => {
 
             if (rejectedTypes.includes(newStatus)) {
                 needsEmail = true;
+
+                updates['status1'] = 'missing_info'; // Auto-set status to missing_info
                 }
 
             // If status is NOT verified, delete the file references so student can re-upload
