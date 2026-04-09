@@ -816,25 +816,6 @@ window.saveDocumentEvaluations = async () => {
 
           await updateDoc(appRef, updates);
 
-        if (needsEmail) {
-            const studentEmail = currentData.step1.email;
-            const appId = currentData.applicationId || "APP-XXXXX";
-            
-            const emailParams = {
-                to_email: studentEmail,
-                app_id: appId,
-                applicant_name: currentData.step1.fullNames,
-                // The Master Legend Content
-                message_body: `
-                Poor Quality: The scan is blurry, too dark, or too small to read.
-                Incorrect Document: You uploaded the wrong file (e.g., uploaded a CV where an ID was requested).
-                Missing Scans: The document is multi-paged, but you only uploaded the first page.
-                Invalid/Expired: The document is no longer legally valid (e.g., an expired Passport).
-                `
-            };
-
-            await emailjs.send("service_7puwrax", "template_7jmrawq", emailParams);
-            alert("Document statuses updated. 'Missing Info' email sent to student.");
         } else {
             alert("Document statuses updated and invalid files cleared.");
         }
