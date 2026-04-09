@@ -713,10 +713,7 @@ window.saveStatusUpdate = async () => {
         if (!appSnap.exists()) {
             throw new Error("Application document not found in database.");
         }
-        
-        const currentData = appSnap.data();
 
-        const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
         const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
 
         // 2. Logic for Student Number
