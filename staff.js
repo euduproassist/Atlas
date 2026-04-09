@@ -508,15 +508,6 @@ const applyFilters = () => {
 // NEW LOGIC:
 let matchTab = false;
 
-if (activeTabFilter === 'new') {
-    // Only show if status is one of the "New" types
-    const isNewType = ['pending', 'review', 'waiting'].includes(rowStatus);
-    if (activeSubFilter === 'all') {
-        matchTab = isNewType;
-    } else {
-        matchTab = (rowStatus === activeSubFilter);
-    }
-} 
 else if (activeTabFilter === 'accepted') {
     // Only show if status is one of the "Admissions" types
     const isAcceptedType = ['uncon_accepted', 'registered', 'deregistered'].includes(rowStatus);
