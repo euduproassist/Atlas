@@ -1,9 +1,8 @@
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { init, send } from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-// Then update your initialization:
-init("9Dj285YhTTWRf0Qsb"); 
+// Access emailjs directly from the window object
+emailjs.init("9Dj285YhTTWRf0Qsb"); 
 
 const tableBody = document.getElementById('applicationTableBody');
 const filterCourse = document.getElementById('filterCourse');
