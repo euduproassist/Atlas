@@ -1,8 +1,6 @@
 import { auth, db } from './firebase-config.js';
 import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-// Access emailjs directly from the window object
-emailjs.init("9Dj285YhTTWRf0Qsb"); 
 
 const tableBody = document.getElementById('applicationTableBody');
 const filterCourse = document.getElementById('filterCourse');
@@ -12,7 +10,6 @@ let selectedAppId = null;
 let currentAppId = null; // To track which student we are looking at
 let activeSubFilter = 'all'; // Tracks Pending, Review, or Waiting
 let activeTabFilter = 'new'; 
-let pendingDocChanges = {};
 
 // 1. Security Check: Ensure user is logged in
 onAuthStateChanged(auth, async (user) => {
@@ -111,19 +108,11 @@ document.getElementById('archivedCount').innerText = archivedCount;
         const data = doc.data(); 
         const id = doc.id;
         const docs = data.documents || {};
-        const hasID = docs.ID_Passport || docs.Birth_Certificate; // Either ID or Birth Cert
-        const hasAddress = docs.Proof_of_Address; // Mandatory
-        const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results; // Either Matric or G11
-        const docStats = data.documentStatuses || {};
-const hasVerifiedID = docStats.ID_Passport === 'verified' || docStats.Birth_Certificate === 'verified';
-const hasVerifiedAddress = docStats.Proof_of_Address === 'verified';
-const hasVerifiedAcademic = docStats.Matric_Certificate === 'verified' || docStats.Grade_11_Results === 'verified';
-const isFullyVerified = hasVerifiedID && hasVerifiedAddress && hasVerifiedAcademic;
+        const hasID = docs.ID_Passport;
+        const hasAddress = docs.Proof_of_Address;
+        const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results;
 
-// Automatic 'missing_info' trigger if mandatory files are missing from the vault
-if ((!hasID || !hasAddress || !hasAcademic) && status1 !== 'missing_info' && !['archived', 'rejected'].includes(status1)) {
-    updateDoc(doc(db, "applications", id), { status1: 'missing_info' });
-}
+       const isComplete = hasID && hasAddress && hasAcademic;
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
@@ -133,7 +122,8 @@ if ((!hasID || !hasAddress || !hasAcademic) && status1 !== 'missing_info' && !['
             const course = s2.choice1 || "Not Selected";
             const status1 = data.status1 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
-            const btnClass = "background: #eef5ff; color: #4a90e2; border: 1px solid #d1e3f8; padding: 3px 8px; font-size: 0.65rem;";
+            const docLabel = isComplete ? "CD" : "MD";
+            const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; padding: 3px 8px; font-size: 0.65rem;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 3px 8px; font-size: 0.65rem;";
             const displayId = data.applicationId;
             if (!displayId) {
             console.error("System Error: Application found without a generated ID for Student:", studentName);
@@ -180,9 +170,10 @@ if ((!hasID || !hasAddress || !hasAcademic) && status1 !== 'missing_info' && !['
                     <td class="hide-mobile">${dateSub}</td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                        <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
-                     VIEW
-                     </button>
+                            <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+                                VIEW
+                            </button>
+                            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
                         </div>
                     </td>
                 `;
@@ -408,8 +399,6 @@ let vaultHTML = `
                 <th style="padding: 10px;">Document Name</th>
                 <th style="padding: 10px;">Size</th>
                 <th style="padding: 10px;">File Name</th>
-                <th style="padding: 10px;">Status</th>
-                <th style="padding: 10px;">Action</th>
             </tr>
         </thead>
         <tbody style="font-size: 0.9rem;">`;
@@ -425,35 +414,12 @@ filesToCheck.forEach(f => {
             <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
             <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
             <td style="padding: 12px 10px;">
-    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
-</td>
-<td style="padding: 12px 10px;" id="status-cell-${f.name}">
-    <span style="font-weight:600; color: #555;">${(data.documentStatuses && data.documentStatuses[f.name]) ? data.documentStatuses[f.name].toUpperCase().replace(/_/g, ' ') : 'NO ACTION YET'}</span>
-</td>
-<td style="padding: 12px 10px;">
-    <select onchange="stageDocStatus('${f.name}', this.value)" style="padding: 4px; font-size: 0.75rem; border-radius: 4px; border: 1px solid #ccc;">
-        <option value="">Set As...</option>
-        <option value="verified">Verified</option>
-        <option value="poor_quality">Poor Quality</option>
-        <option value="incorrect_document">Incorrect Document</option>
-        <option value="missing_scans">Missing Scans</option>
-        <option value="invalid_expired">Invalid/Expired</option>
-    </select>
-</td>
+            ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
+            </td>
         </tr>`;
 });
 
-    secDocs.innerHTML = vaultHTML + `</tbody></table>
-<div style="margin-top: 20px; text-align: right;">
-    <button id="btnUpdateDocs" onclick="saveDocumentEvaluations()" style="background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer;">
-        UPDATE DOCUMENT STATUSES
-    </button>
-</div>`;
-
-// This line ensures that if you switch from one student to another, 
-// any unsaved changes from the previous student are cleared.
-pendingDocChanges = {};
-
+secDocs.innerHTML = vaultHTML + `</tbody></table>`;
 
     const historyData = data.actionHistory || [];
     secHistory.innerHTML = `
@@ -509,20 +475,20 @@ const applyFilters = () => {
         // Get the status from the hidden text or status pill in cell index 2
         const rowStatus = row.getAttribute('data-status') || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
+
         
 // NEW LOGIC:
 let matchTab = false;
-        if (activeTabFilter === 'new') {
-    const isNewType = ['pending', 'review', 'waiting', 'missing_info'].includes(rowStatus);
-    
+
+if (activeTabFilter === 'new') {
+    // Only show if status is one of the "New" types
+    const isNewType = ['pending', 'review', 'waiting'].includes(rowStatus);
     if (activeSubFilter === 'all') {
         matchTab = isNewType;
     } else {
-        // Standard folder filtering (Pending, Review, Waiting)
         matchTab = (rowStatus === activeSubFilter);
     }
-}
-
+} 
 else if (activeTabFilter === 'accepted') {
     // Only show if status is one of the "Admissions" types
     const isAcceptedType = ['uncon_accepted', 'registered', 'deregistered'].includes(rowStatus);
@@ -547,9 +513,12 @@ else if (activeTabFilter === 'archived') {
 
 // We removed the status dropdown, so we can set this to true
 const matchDropdownStatus = true;
+        // Check if row has CD or MD label
+const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
+const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
         // Final Visibility: Must match Tab AND Dropdowns
-        if (matchTab) {
+        if (matchTab && matchDocs) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
@@ -713,24 +682,11 @@ window.saveStatusUpdate = async () => {
         if (!appSnap.exists()) {
             throw new Error("Application document not found in database.");
         }
+        
+        const currentData = appSnap.data();
 
-const currentData = appSnap.data();
-const docStats = currentData.documentStatuses || {};
-const isFinalStatus = ['uncon_accepted', 'registered', 'deregistered', 'rejected', 'withdrawn_expired', 'archived'].includes(s1Value);
-
-const mandatoryVerified = (docStats.ID_Passport === 'verified' || docStats.Birth_Certificate === 'verified') &&
-                          (docStats.Proof_of_Address === 'verified') &&
-                          (docStats.Matric_Certificate === 'verified' || docStats.Grade_11_Results === 'verified');
-
-if (isFinalStatus && !mandatoryVerified) {
-    alert("CRITICAL: You cannot move this student to a final status until ID/Birth Cert, Proof of Address, and Matric/Grade 11 results are all marked as 'VERIFIED' in the Document Vault.");
-    btn.innerText = "UPDATE STATUS";
-    btn.disabled = false;
-    return;
-}
-
-const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
-const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
+        const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
+        const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
 
         // 2. Logic for Student Number
         let studentNum = currentData.studentNumber || null; 
@@ -784,97 +740,6 @@ const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
         alert("Error: " + error.message + ". Check console for details.");
     } finally {
         btn.innerText = "UPDATE STATUS";
-        btn.disabled = false;
-    }
-};
-
-window.stageDocStatus = (docName, status) => {
-    if (!status) return;
-    pendingDocChanges[docName] = status;
-    document.getElementById(`status-cell-${docName}`).innerHTML = `<span style="color: #e67e22; font-weight:bold;">PENDING: ${status.toUpperCase().replace(/_/g, ' ')}</span>`;
-};
-
-window.saveDocumentEvaluations = async () => {
-    if (Object.keys(pendingDocChanges).length === 0) {
-        alert("No changes made to document statuses.");
-        return;
-    }
-
-    const appRef = doc(db, "applications", currentAppId);
-    const btn = document.getElementById('btnUpdateDocs');
-    
-    try {
-        btn.innerText = "UPDATING...";
-        btn.disabled = true;
-
-        const appSnap = await getDoc(appRef);
-        const currentData = appSnap.data();
-        const currentDocs = currentData.documents || {};
-        const updates = {};
-        let needsEmail = false;
-        const rejectedTypes = ['poor_quality', 'incorrect_document', 'missing_scans', 'invalid_expired'];
-
-        for (const [docName, newStatus] of Object.entries(pendingDocChanges)) {
-            updates[`documentStatuses.${docName}`] = newStatus;
-
-            if (rejectedTypes.includes(newStatus)) {
-                needsEmail = true;
-                }
-            if (newStatus !== 'verified') {
-    updates[`documents.${docName}`] = deleteField();
-    updates[`documents.${docName}_filename`] = deleteField();
-    updates[`documents.${docName}_size`] = deleteField();
-    updates.status1 = 'missing_info'; // Auto-move to Missing Info sub-tab
-}
-
-// Check if this update makes them fully verified now
-const updatedStats = { ...currentData.documentStatuses, ...pendingDocChanges };
-const nowVerified = (updatedStats.ID_Passport === 'verified' || updatedStats.Birth_Certificate === 'verified') &&
-                    (updatedStats.Proof_of_Address === 'verified') &&
-                    (updatedStats.Matric_Certificate === 'verified' || updatedStats.Grade_11_Results === 'verified');
-
-if (nowVerified && currentData.status1 === 'missing_info') {
-    updates.status1 = 'review'; // Return to Under Review automatically
-}
-        }
-
-          await updateDoc(appRef, updates);
-
-        if (needsEmail) {
-    const studentEmail = currentData.step1.email;
-    const appId = currentData.applicationId || "APP-XXXXX";
-    
-    // Formatting the Master Legend with clear spacing
-    const masterLegend = `
-REJECTION REASON LEGEND:
---------------------------------------------------
-• POOR QUALITY: The scan is blurry, too dark, or too small to read.
-• INCORRECT DOCUMENT: You uploaded the wrong file (e.g., a CV instead of an ID).
-• MISSING SCANS: The document has multiple pages, but you only sent one.
-• INVALID/EXPIRED: The document is no longer legally valid.
---------------------------------------------------`;
-
-    const emailParams = {
-        to_email: studentEmail,
-        app_id: appId,
-        applicant_name: currentData.step1.fullNames,
-        message_body: masterLegend,
-        instructions: `1. Log in to your Student Portal.\n2. Open the Document Vault.\n3. Look for documents marked 'Missing Info'.\n4. Click 'Replace' to upload the correct version.`
-    };
-
-    await emailjs.send("service_7puwrax", "template_7jmrawq", emailParams);
-    alert("Document statuses updated. 'Missing Info' email sent to student.");
-
-        } else {
-            alert("Document statuses updated and invalid files cleared.");
-        }
-
-        pendingDocChanges = {};
-    } catch (err) {
-        console.error("Update Error:", err);
-        alert("Error updating statuses: " + err.message);
-    } finally {
-        btn.innerText = "UPDATE DOCUMENT STATUSES";
         btn.disabled = false;
     }
 };
