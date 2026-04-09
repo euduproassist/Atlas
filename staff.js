@@ -797,6 +797,8 @@ window.saveDocumentEvaluations = async () => {
         const currentData = appSnap.data();
         const currentDocs = currentData.documents || {};
         const updates = {};
+        let needsEmail = false;
+        const rejectedTypes = ['poor_quality', 'incorrect_document', 'missing_scans', 'invalid_expired'];
 
         for (const [docName, newStatus] of Object.entries(pendingDocChanges)) {
             updates[`documentStatuses.${docName}`] = newStatus;
