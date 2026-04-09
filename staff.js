@@ -110,6 +110,16 @@ document.getElementById('archivedCount').innerText = archivedCount;
     snapshot.forEach((doc) => {
         const data = doc.data(); 
         const id = doc.id;
+        const docs = data.documents || {};
+        // 1. ID or Birth Certificate
+        const hasID = docs.ID_Passport || docs.Birth_Certificate;
+        // 2. Matric or Grade 11
+        const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results;
+        // 3. Proof of Residence
+        const hasAddress = docs.Proof_of_Address;
+
+        // MD vs CD calculation (Sponsor ID and Transcripts are ignored as per your request)
+        const isComplete = hasID && hasAcademic && hasAddress;
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
