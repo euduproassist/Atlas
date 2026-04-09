@@ -114,6 +114,16 @@ document.getElementById('archivedCount').innerText = archivedCount;
         const hasID = docs.ID_Passport || docs.Birth_Certificate; // Either ID or Birth Cert
         const hasAddress = docs.Proof_of_Address; // Mandatory
         const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results; // Either Matric or G11
+        const docStats = data.documentStatuses || {};
+const hasVerifiedID = docStats.ID_Passport === 'verified' || docStats.Birth_Certificate === 'verified';
+const hasVerifiedAddress = docStats.Proof_of_Address === 'verified';
+const hasVerifiedAcademic = docStats.Matric_Certificate === 'verified' || docStats.Grade_11_Results === 'verified';
+const isFullyVerified = hasVerifiedID && hasVerifiedAddress && hasVerifiedAcademic;
+
+// Automatic 'missing_info' trigger if mandatory files are missing from the vault
+if ((!hasID || !hasAddress || !hasAcademic) && status1 !== 'missing_info' && !['archived', 'rejected'].includes(status1)) {
+    updateDoc(doc(db, "applications", id), { status1: 'missing_info' });
+}
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
