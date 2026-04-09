@@ -114,8 +114,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
         const hasID = docs.ID_Passport || docs.Birth_Certificate; // Either ID or Birth Cert
         const hasAddress = docs.Proof_of_Address; // Mandatory
         const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results; // Either Matric or G11
-
-       const isComplete = hasID && hasAddress && hasAcademic;
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
