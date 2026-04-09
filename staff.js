@@ -507,6 +507,20 @@ const applyFilters = () => {
         
 // NEW LOGIC:
 let matchTab = false;
+        if (activeTabFilter === 'new') {
+    const isNewType = ['pending', 'review', 'waiting', 'missing_info'].includes(rowStatus);
+    
+    if (activeSubFilter === 'all') {
+        matchTab = isNewType;
+    } else if (activeSubFilter === 'missing_info') {
+        // This shows the student in 'Missing Info' IF they have the MD label 
+        // regardless of if their status is pending, review, or waiting.
+        matchTab = isNewType && docLabel === "MD";
+    } else {
+        // Standard folder filtering (Pending, Review, Waiting)
+        matchTab = (rowStatus === activeSubFilter);
+    }
+}
 
 else if (activeTabFilter === 'accepted') {
     // Only show if status is one of the "Admissions" types
