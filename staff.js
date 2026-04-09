@@ -503,7 +503,7 @@ const applyFilters = () => {
         // Get the status from the hidden text or status pill in cell index 2
         const rowStatus = row.getAttribute('data-status') || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
-
+        const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
         
 // NEW LOGIC:
 let matchTab = false;
@@ -547,7 +547,6 @@ else if (activeTabFilter === 'archived') {
 // We removed the status dropdown, so we can set this to true
 const matchDropdownStatus = true;
         // Check if row has CD or MD label
-const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
 const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
         // Final Visibility: Must match Tab AND Dropdowns
