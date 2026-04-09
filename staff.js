@@ -820,13 +820,6 @@ window.saveDocumentEvaluations = async () => {
             if (rejectedTypes.includes(newStatus)) {
                 needsEmail = true;
                 }
-
-            // If status is NOT verified, delete the file references so student can re-upload
-            if (newStatus !== 'verified') {
-                updates[`documents.${docName}`] = deleteField();
-                updates[`documents.${docName}_filename`] = deleteField();
-                updates[`documents.${docName}_size`] = deleteField();
-            }
         }
 
           await updateDoc(appRef, updates);
