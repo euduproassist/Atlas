@@ -1,7 +1,7 @@
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { doc, getDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 
 const loader = document.getElementById('loader');
 const userNameDisplay = document.getElementById('userNameDisplay');
@@ -148,7 +148,6 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
       currentStatus === 'waiting' ? 'WAITING LIST' : 
       currentStatus === 'uncon_accepted' ? 'ACCEPTED' :
       currentStatus === 'withdrawn_expired' ? 'WITHDRAWN' :
-      currentStatus === 'missing_info' ? 'MISSING INFO' :
       currentStatus.replace('_', ' ').toUpperCase()}
      </td>
         <td style="padding: 15px 10px;">
@@ -359,8 +358,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                 <th style="padding: 10px;">Document Name</th>
                 <th style="padding: 10px;">Size</th>
                 <th style="padding: 10px;">File Name</th>
-                <th style="padding: 10px;">Status</th>
-                <th style="padding: 10px;">Action</th>
             </tr>
         </thead>
         <tbody style="font-size: 0.9rem;">
@@ -382,29 +379,16 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
             const fileUrl = savedDocs[f.name];
             const fileSize = savedDocs[`${f.name}_size`] || "N/A";
             const hasFile = !!fileUrl;
-            const docStatus = (data.documentStatuses && data.documentStatuses[f.name]) ? data.documentStatuses[f.name] : "awaiting_verification";
-            const isVerified = docStatus === 'verified';
 
-  vaultHTML += `
-    <tr style="border-bottom: 1px solid #eee;">
-        <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
-        <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
-        <td style="padding: 12px 10px; font-size: 0.85rem;">
-    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
-</td>
-<td style="padding: 12px 10px; font-weight: 700; color: ${isVerified ? '#2e7d32' : '#e67e22'};">
-    ${docStatus.toUpperCase().replace(/_/g, ' ')}
-</td>
-        <td style="padding: 12px 10px;">
-    ${isVerified ? 
-        '<span style="color: #2e7d32; font-weight: bold;"><i class="fas fa-check-circle"></i> VERIFIED</span>' : 
-        (currentStatus === 'pending' || docStatus !== 'awaiting_verification' ? 
-            `<button onclick="handleVaultUpload('${f.name}')" style="padding: 5px 10px; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">${hasFile ? 'Replace' : 'Upload'}</button>` : 
-            '<i class="fas fa-lock" style="color:#ccc;"></i>')
-    }
-</td>
-    </tr>
-`;
+            vaultHTML += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+                    <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+                    <td style="padding: 12px 10px; font-size: 0.85rem;">
+                    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
+                    </td>
+                </tr>
+            `; 
         });
 
         vaultHTML += `</tbody></table></div>`;
@@ -436,77 +420,46 @@ window.handleVaultUpload = function(docName) {
         const storage = getStorage();
         const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
 
+        let toUpload = file;
+
+        // Compression Logic: If > 200KB and is an image, compress it
+        if (file.size > 200 * 1024 && file.type.startsWith('image/')) {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            await new Promise(resolve => img.onload = resolve);
+            const canvas = document.createElement('canvas');
+            let quality = 0.7;
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            toUpload = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
+        } else if (file.size > 200 * 1024 && file.type === 'application/pdf') {
+            alert("PDF is over 200KB. Please compress it manually before uploading.");
+            return;
+        }
+
         try {
-            alert("Processing & Compressing...");
-            let toUpload = file;
-
-            // Apply.js Compression Logic
-            if (file.type.startsWith('image/')) {
-                toUpload = await processFile(file); 
-            } else if (file.size > 512000) {
-                alert("PDF is over 500KB. Please compress it manually.");
-                return;
-            }
-
-            // PERMANENTLY DELETE OLD FILE FIRST (If it exists)
-            try {
-                await deleteObject(fileRef);
-                console.log("Old file deleted.");
-            } catch (err) {
-                console.log("No old file to delete or already removed.");
-            }
-
-            // UPLOAD NEW FILE
+            alert("Uploading and replacing old file...");
             const snapshot = await uploadBytes(fileRef, toUpload);
             const url = await getDownloadURL(snapshot.ref);
             
-            // UPDATE FIRESTORE
+            // Update Firestore (This replaces the old URL and updates the size)
             const appRef = doc(db, "applications", user.uid);
             await updateDoc(appRef, {
                 [`documents.${docName}`]: url,
-                [`documents.${docName}_filename`]: file.name,
                 [`documents.${docName}_size`]: (toUpload.size / 1024).toFixed(1) + " KB",
-                [`documentStatuses.${docName}`]: 'awaiting_verification' 
-            });
-            alert("Document updated successfully!");
+                [`documentStatuses.${docName}`]: 'pending' 
+            }, {merge: true});
+            alert("Success! Document updated.");
         } catch (err) {
             console.error(err);
-            alert("Error: " + err.message);
+            alert("Upload failed.");
         }
     };
     fileInput.click();
 };
 
-// Paste the helper function at the bottom of applicant.js
-async function processFile(file) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = async () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            let width = img.width;
-            let height = img.height;
-            const MAX_PIXELS = 1200; 
-            if (width > MAX_PIXELS || height > MAX_PIXELS) {
-                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
-                width *= ratio;
-                height *= ratio;
-            }
-            canvas.width = width;
-            canvas.height = height;
-            ctx.drawImage(img, 0, 0, width, height);
-            let quality = 0.8;
-            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
-            while (blob.size > 204800 && quality > 0.1) {
-                quality -= 0.1; 
-                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
-            }
-            URL.revokeObjectURL(img.src);
-            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
-        };
-        img.onerror = () => reject("Compression Failed.");
-    });
-              }
+
 
 
