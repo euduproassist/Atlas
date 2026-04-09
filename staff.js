@@ -699,7 +699,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-window.saveStatusUpdate = async () => {
+window.saveStatusUpdate = async (btn) => {
     const s1Value = document.getElementById('updateStatus1').value;
     const btn = event.currentTarget || event.target;
 
