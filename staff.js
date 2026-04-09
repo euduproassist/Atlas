@@ -172,7 +172,9 @@ document.getElementById('archivedCount').innerText = archivedCount;
                     <td class="hide-mobile">${dateSub}</td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px;">
-
+                        <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+                     VIEW
+                     </button>
                         </div>
                     </td>
                 `;
