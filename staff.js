@@ -803,6 +803,11 @@ window.saveDocumentEvaluations = async () => {
         for (const [docName, newStatus] of Object.entries(pendingDocChanges)) {
             updates[`documentStatuses.${docName}`] = newStatus;
 
+            if (rejectedTypes.includes(newStatus)) {
+                needsEmail = true;
+                updates['status1'] = 'missing_info'; // Auto-set status to missing_info
+                }
+
             // If status is NOT verified, delete the file references so student can re-upload
             if (newStatus !== 'verified') {
                 updates[`documents.${docName}`] = deleteField();
