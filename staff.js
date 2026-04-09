@@ -820,6 +820,22 @@ window.saveDocumentEvaluations = async () => {
             if (rejectedTypes.includes(newStatus)) {
                 needsEmail = true;
                 }
+            if (newStatus !== 'verified') {
+    updates[`documents.${docName}`] = deleteField();
+    updates[`documents.${docName}_filename`] = deleteField();
+    updates[`documents.${docName}_size`] = deleteField();
+    updates.status1 = 'missing_info'; // Auto-move to Missing Info sub-tab
+}
+
+// Check if this update makes them fully verified now
+const updatedStats = { ...currentData.documentStatuses, ...pendingDocChanges };
+const nowVerified = (updatedStats.ID_Passport === 'verified' || updatedStats.Birth_Certificate === 'verified') &&
+                    (updatedStats.Proof_of_Address === 'verified') &&
+                    (updatedStats.Matric_Certificate === 'verified' || updatedStats.Grade_11_Results === 'verified');
+
+if (nowVerified && currentData.status1 === 'missing_info') {
+    updates.status1 = 'review'; // Return to Under Review automatically
+}
         }
 
           await updateDoc(appRef, updates);
