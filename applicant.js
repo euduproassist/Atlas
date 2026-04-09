@@ -148,6 +148,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
       currentStatus === 'waiting' ? 'WAITING LIST' : 
       currentStatus === 'uncon_accepted' ? 'ACCEPTED' :
       currentStatus === 'withdrawn_expired' ? 'WITHDRAWN' :
+      currentStatus === 'missing_info' ? 'MISSING INFO' :
       currentStatus.replace('_', ' ').toUpperCase()}
      </td>
         <td style="padding: 15px 10px;">
