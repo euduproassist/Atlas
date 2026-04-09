@@ -670,7 +670,7 @@ function setupProfile(user) {
 
 window.toggleFolder = (sectionId, element) => {
     const target = document.getElementById(sectionId);
-    const arrow = event.currentTarget.querySelector('.arrow');
+    const arrow = element.querySelector('.arrow');
     
     // Toggle visibility without closing others or changing the table
     if (target.style.display === 'none' || target.style.display === '') {
