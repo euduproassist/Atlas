@@ -507,7 +507,7 @@ const applyFilters = () => {
         // Get the status from the hidden text or status pill in cell index 2
         const rowStatus = row.getAttribute('data-status') || "";
         const rowCourse = row.cells[1]?.innerText.toLowerCase() || "";
-
+        const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
         
 // NEW LOGIC:
 let matchTab = false;
@@ -519,7 +519,6 @@ if (activeSubFilter === 'all') {
         matchTab = isNewType;
     } else if (activeSubFilter === 'missing_info') {
         // Show student in this tab if they are a "New" type AND have Missing Documents (MD)
-        const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
         matchTab = isNewType && docLabel === 'MD';
     } else {
         matchTab = (rowStatus === activeSubFilter);
