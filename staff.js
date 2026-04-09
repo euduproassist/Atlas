@@ -668,7 +668,7 @@ function setupProfile(user) {
     };
 }
 
-window.toggleFolder = (sectionId) => {
+window.toggleFolder = (sectionId, element) => {
     const target = document.getElementById(sectionId);
     const arrow = event.currentTarget.querySelector('.arrow');
     
