@@ -476,6 +476,40 @@ window.handleVaultUpload = function(docName) {
     fileInput.click();
 };
 
+async function processFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            let width = img.width;
+            let height = img.height;
+            const MAX_PIXELS = 1200; 
+            if (width > MAX_PIXELS || height > MAX_PIXELS) {
+                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
+                width *= ratio;
+                height *= ratio;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            let quality = 0.8;
+            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            while (blob.size > 204800 && quality > 0.1) {
+                quality -= 0.1; 
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            }
+            URL.revokeObjectURL(img.src);
+            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(img.src);
+            reject("Compression Failed.");
+        };
+    });
+}
+
 
 
 
