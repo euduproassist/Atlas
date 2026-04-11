@@ -721,14 +721,6 @@ window.saveStatusUpdate = async () => {
             timestamp: new Date()
         };
 
-        await updateDoc(appRef, {
-            status1: s1Value,
-            lastUpdated: new Date(),
-            actionHistory: arrayUnion(historyLog),
-            ...(isAdmissionStatus && { studentNumber: studentNum }),
-            processedBy: auth.currentUser.email
-        });
-
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
 
