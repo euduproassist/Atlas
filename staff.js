@@ -787,16 +787,6 @@ window.updateVaultStatuses = async (data) => {
     });
 
     try {
-        if (rejectedReasons.length > 0) {
-            // This triggers the Firebase Extension you just installed
-            updates.mail = {
-                to: data.step1.email,
-                message: {
-                    subject: "Action Required: Document Issue",
-                    html: `Hi ${data.step1.fullNames},<br><br>The following documents were rejected:<br><ul>${rejectedReasons.map(r => `<li>${r}</li>`).join('')}</ul>Please re-upload them.`
-                }
-            };
-        }
 
         await updateDoc(appRef, updates);
         alert("Documents updated and email triggered!");
