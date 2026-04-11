@@ -427,7 +427,7 @@ vaultHTML += `
 
     secDocs.innerHTML = vaultHTML + `</tbody></table>
 <div id="saveVaultChanges" style="display:none; margin-top:20px; text-align:right;">
-    <button onclick="updateVaultStatuses()" style="background:#27ae60; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:700; cursor:pointer;">UPDATE DOCUMENTS</button>
+    <button onclick="updateVaultStatuses(${JSON.stringify(data).replace(/"/g, '&quot;')})" style="background:#27ae60; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:700; cursor:pointer;">UPDATE DOCUMENTS</button>
 </div>`;
 
     const historyData = data.actionHistory || [];
