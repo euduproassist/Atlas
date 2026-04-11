@@ -688,9 +688,6 @@ window.saveStatusUpdate = async () => {
         
         const currentData = appSnap.data();
 
-        const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
-        const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
-
         // 2. Logic for Student Number
         let studentNum = currentData.studentNumber || null; 
 
