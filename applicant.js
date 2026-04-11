@@ -401,7 +401,9 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
     ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
 </td>
 <td style="padding: 12px 10px; text-align: center;">
-    
+         <span onclick="handleVaultUpload('${f.name}')" style="color: #1976d2; cursor: pointer; font-weight: 600; text-decoration: underline; font-size: 0.8rem;">
+        ${hasFile ? 'RE-UPLOAD' : 'UPLOAD'}
+    </span>    
 </td>
                 </tr>
             `; 
