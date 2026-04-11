@@ -107,12 +107,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
     snapshot.forEach((doc) => {
         const data = doc.data(); 
         const id = doc.id;
-        const docs = data.documents || {};
-        const hasID = docs.ID_Passport;
-        const hasAddress = docs.Proof_of_Address;
-        const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results;
-
-       const isComplete = hasID && hasAddress && hasAcademic;
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
