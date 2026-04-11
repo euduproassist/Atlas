@@ -628,7 +628,7 @@
 
 
 import { auth, db } from './firebase-config.js';
-import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 const tableBody = document.getElementById('applicationTableBody');
@@ -736,12 +736,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
     snapshot.forEach((doc) => {
         const data = doc.data(); 
         const id = doc.id;
-        const docs = data.documents || {};
-        const hasID = docs.ID_Passport;
-        const hasAddress = docs.Proof_of_Address;
-        const hasAcademic = docs.Matric_Certificate || docs.Grade_11_Results;
-
-       const isComplete = hasID && hasAddress && hasAcademic;
           
             // Map data from your Student Portal structure
             const s1 = data.step1 || {};
@@ -751,8 +745,6 @@ document.getElementById('archivedCount').innerText = archivedCount;
             const course = s2.choice1 || "Not Selected";
             const status1 = data.status1 || "pending";
             const dateSub = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString() : "N/A";
-            const docLabel = isComplete ? "CD" : "MD";
-            const btnClass = isComplete ? "background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; padding: 3px 8px; font-size: 0.65rem;" : "background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 3px 8px; font-size: 0.65rem;";
             const displayId = data.applicationId;
             if (!displayId) {
             console.error("System Error: Application found without a generated ID for Student:", studentName);
@@ -798,13 +790,10 @@ document.getElementById('archivedCount').innerText = archivedCount;
                     </td>
                     <td class="hide-mobile">${dateSub}</td>
                     <td>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
-                                VIEW
-                            </button>
-                            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
-                        </div>
-                    </td>
+    <button class="view-btn" style="background: #f0f0f0; color: #333; border: 1px solid #ddd;" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+        VIEW
+    </button>
+</td>                  
                 `;
             }
 
@@ -1028,6 +1017,7 @@ let vaultHTML = `
                 <th style="padding: 10px;">Document Name</th>
                 <th style="padding: 10px;">Size</th>
                 <th style="padding: 10px;">File Name</th>
+                <th style="padding: 10px;">Action</th>
             </tr>
         </thead>
         <tbody style="font-size: 0.9rem;">`;
@@ -1037,18 +1027,37 @@ filesToCheck.forEach(f => {
     const fileSize = savedDocs[`${f.name}_size`] || "N/A";
     const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
     const hasFile = !!fileUrl;
+    const currentDocStatus = (data.documentStatuses && data.documentStatuses[f.name]) || (hasFile ? 'uploaded' : 'missing');
 
-    vaultHTML += `
-        <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
-            <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
-            <td style="padding: 12px 10px;">
+vaultHTML += `
+    <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+        <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+        <td style="padding: 12px 10px;">
             ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
-            </td>
-        </tr>`;
+        </td>
+        <td style="padding: 12px 10px;">
+            <select class="doc-action-select" data-docname="${f.name}" onchange="document.getElementById('saveVaultChanges').style.display='block'" style="font-size:0.75rem; padding:4px; border-radius:4px;">
+                <option value="" disabled selected>Select Action</option>
+                ${hasFile ? `
+                    <option value="processed" ${currentDocStatus === 'processed' ? 'selected' : ''}>Processed</option>
+                    <option value="blurry">Blurry or unreadable</option>
+                    <option value="expired">Expired document</option>
+                    <option value="old">Document is older than 3 months</option>
+                    <option value="format">Incorrect file format</option>
+                    <option value="invalid">Invalid document</option>
+                ` : `
+                    <option value="missing" ${currentDocStatus === 'missing' ? 'selected' : ''}>Missing Documents</option>
+                `}
+            </select>
+        </td>
+    </tr>`;
 });
 
-secDocs.innerHTML = vaultHTML + `</tbody></table>`;
+    secDocs.innerHTML = vaultHTML + `</tbody></table>
+<div id="saveVaultChanges" style="display:none; margin-top:20px; text-align:right;">
+    <button onclick="updateVaultStatuses(${JSON.stringify(data).replace(/"/g, '&quot;')})" style="background:#27ae60; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:700; cursor:pointer;">UPDATE DOCUMENTS</button>
+</div>`;
 
     const historyData = data.actionHistory || [];
     secHistory.innerHTML = `
@@ -1097,7 +1106,6 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 
 // Update your existing applyFilters function to include the Tab logic
 const applyFilters = () => {
-    const docsFilterVal = document.getElementById('filterDocs').value;
     const rows = tableBody.getElementsByTagName('tr');
 
     for (let row of rows) {
@@ -1142,12 +1150,9 @@ else if (activeTabFilter === 'archived') {
 
 // We removed the status dropdown, so we can set this to true
 const matchDropdownStatus = true;
-        // Check if row has CD or MD label
-const docLabel = row.querySelector('span[style*="font-weight: 800"]')?.innerText || "";
-const matchDocs = docsFilterVal === "all" || docLabel === docsFilterVal;
 
         // Final Visibility: Must match Tab AND Dropdowns
-        if (matchTab && matchDocs) {
+        if (matchTab) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
@@ -1238,9 +1243,6 @@ document.getElementById('sortDate').addEventListener('change', (e) => {
 
     rows.forEach(row => tableBody.appendChild(row));
 });
-
-// Re-attach Document Filter listener
-document.getElementById('filterDocs').addEventListener('change', applyFilters);
 
 function setupProfile(user) {
     const trigger = document.getElementById('profileTrigger');
@@ -1372,6 +1374,80 @@ window.saveStatusUpdate = async () => {
         btn.disabled = false;
     }
 };
+
+window.updateVaultStatuses = async (data) => {
+    const selects = document.querySelectorAll('.doc-action-select');
+    const appRef = doc(db, "applications", currentAppId);
+    let updates = {};
+    let rejectedReasons = [];
+    let deletePaths = [];
+
+        const reasonMap = {
+        'blurry': 'Blurry or Unreadable: The photo or scan is too fuzzy to read. We need a clear, sharp image where all the text—especially names and dates—is easy to see so we can verify your details.',
+        'expired': 'Expired Document: The document you provided has expired and is no longer valid. Please upload a current version of this document that has not yet reached its "expiry" or "valid to" date.',
+        'old': 'Document is Older Than 3 Months: We need a more recent record. For documents like proof of residence or bank statements, the date on the page must be from within the last three months to show your current information.',
+        'format': 'Incorrect File Format: The type of file you uploaded cannot be opened by our system. Please save your document as a PDF, JPEG, or PNG and try uploading it again.',
+        'invalid': 'Invalid Document: The document provided is not the one we asked for. For example, if we requested an ID, a school report cannot be used instead. Please make sure you are uploading the specific document requested in the instructions.',
+        'missing': 'Missing Documents: Your submission is incomplete. Either a page is missing from your file (like the back of an ID), or you forgot to attach one of the required documents for your registration'
+    };
+
+    selects.forEach(sel => {
+        const action = sel.value;
+        const docName = sel.dataset.docname;
+        // Get the label (e.g., "ID / Passport") from the table row
+        const label = sel.closest('tr').cells[0].innerText; 
+
+        if (!action || action === 'processed') {
+            if(action === 'processed') updates[`documentStatuses.${docName}`] = 'processed';
+            return;
+        }
+
+        if (['blurry', 'expired', 'old', 'format', 'invalid', 'missing'].includes(action)) {
+            rejectedReasons.push(`${label}: ${reasonMap[action]}`);
+            
+            if (action !== 'missing') {
+                updates[`documents.${docName}`] = deleteField();
+                updates[`documents.${docName}_filename`] = deleteField();
+                updates[`documents.${docName}_size`] = deleteField();
+            }
+            updates[`documentStatuses.${docName}`] = 'rejected';
+            deletePaths.push(`applications/${currentAppId}/${docName}`);
+        }
+    });
+
+    try {
+        // 1. First, update the application document as usual
+        await updateDoc(appRef, updates);
+
+        // 2. If there are rejections, trigger the actual email via the 'mail' collection
+        if (rejectedReasons.length > 0) {
+            await addDoc(collection(db, "mail"), {
+                to: data.step1.email,
+                from: "Atlas Admissions <eduproassist44@gmail.com>",
+                
+                message: {
+                    subject: "Action Required: Document Update for Your Application",
+                    html: `
+                        <h3>Hello ${data.step1.fullNames},</h3>
+                        <p>Our admissions team has reviewed your documents. Some items require your attention:</p>
+                        <ul>
+                            ${rejectedReasons.map(r => `<li>${r}</li>`).join('')}
+                        </ul>
+                        <p>Please log in to the Student Portal and visit the <b>Document Vault</b> to re-upload the correct files.</p>
+                        <p>Regards,<br>Admissions Team</p>`
+                }
+            });
+        }
+        alert("Documents updated and email triggered!");
+        document.getElementById('saveVaultChanges').style.display = 'none';
+    } catch (err) { 
+        console.error(err);
+        alert("Error: " + err.message); 
+    }
+};
+
+
+
 
 
 
