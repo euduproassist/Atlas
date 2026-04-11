@@ -721,6 +721,79 @@ window.saveStatusUpdate = async () => {
             timestamp: new Date()
         };
 
+                // Prepare the base update object
+        let finalUpdate = {
+            status1: s1Value,
+            lastUpdated: new Date(),
+            actionHistory: arrayUnion(historyLog),
+            processedBy: auth.currentUser.email
+        };
+
+        // If Accepted, Generate the Letter and Email
+        if (s1Value === 'uncon_accepted') {
+            finalUpdate.studentNumber = studentNum;
+            
+            // 1. Generate Acceptance Letter HTML for the PDF-view
+            const letterHTML = `
+                <html>
+                <body style="font-family: Arial, sans-serif; padding: 40px; line-height: 1.6;">
+                    <div style="display:flex; justify-content: space-between;">
+                        <i class="fas fa-graduation-cap" style="font-size: 40px; color: #4a90e2;"></i>
+                        <div style="text-align: right;"><strong>OFFICE OF THE REGISTRAR</strong></div>
+                    </div>
+                    <hr>
+                    <p><strong>DATE:</strong> ${new Date().toLocaleDateString()}<br>
+                    <strong>STUDENT NUMBER:</strong> ${studentNum}<br>
+                    <strong>APPLICATION ID:</strong> ${currentData.applicationId}</p>
+                    <h2 style="text-align: center;">OFFER OF ADMISSION: 2026 ACADEMIC SESSION</h2>
+                    <p>To: ${currentData.step1.fullNames} ${currentData.step1.surname}<br>
+                    ${currentData.step1.address.street}, ${currentData.step1.address.suburb}<br>
+                    ${currentData.step1.address.province}, ${currentData.step1.address.postalCode}</p>
+                    <p>Dear Mr/Ms ${currentData.step1.surname},</p>
+                    <p>Following your recent application, it is a pleasure to offer you <strong>Provisional Admission</strong> to study at Atlas Independent School for the 2026 academic year.</p>
+                    <p><strong>Programme Details:</strong><br>
+                    Qualification: ${currentData.step2.choice1}<br>
+                    Registration Status: Full-Time<br>
+                    Method of Study: Contact Classes (3 days per week)</p>
+                    <p><strong>Conditions of Admission:</strong><br>
+                    1. Verification of original Matric results.<br>
+                    2. Payment of non-refundable registration fee.<br>
+                    3. Adherence to Student Code of Conduct.</p>
+                    <p><strong>Important:</strong> This letter serves as official proof for NSFAS or bursary applications.</p>
+                    <p>Yours Sincerely,<br><br><strong>The Registrar</strong><br>Atlas Independent School</p>
+                </body>
+                </html>`;
+
+            // 2. Upload the Letter to Storage so it behaves like a real document
+            const storage = Q.getStorage(); // Ensure storage is imported
+            const letterRef = Q.ref(storage, `applications/${currentAppId}/Acceptance_Letter.html`);
+            const blob = new Blob([letterHTML], { type: 'text/html' });
+            await Q.uploadBytes(letterRef, blob);
+            const letterURL = await Q.getDownloadURL(letterRef);
+            
+            finalUpdate["adminDocs.acceptanceLetter"] = letterURL;
+
+            // 3. Trigger the Email via 'mail' collection
+            await addDoc(collection(db, "mail"), {
+                to: currentData.step1.email,
+                from: "Atlas Admissions <eduproassist44@gmail.com>",
+                message: {
+                    subject: "CONGRATULATIONS: Admission Offer for 2026 Academic Year",
+                    html: `<h3>Dear ${currentData.step1.fullNames},</h3>
+                           <p>We are pleased to inform you that your application for admission to <b>Atlas Independent School</b> has been successful.</p>
+                           <p><b>Course:</b> ${currentData.step2.choice1}<br>
+                           <b>Campus:</b> ${currentData.step2.campus}<br>
+                           <b>Year:</b> 2026</p>
+                           <p>To secure your place, please log in to the Student Portal and officially "Accept" this offer within 48 hours.</p>
+                           <p>Your formal Acceptance Letter is now available for download in your <b>Document Vault</b>.</p>
+                           <p>Regards,<br>Atlas Admissions Office</p>`
+                }
+            });
+        }
+
+        // Apply final update to Firestore
+        await updateDoc(appRef, finalUpdate);
+
         alert("Application status updated successfully.");
         document.getElementById('appModal').style.display = 'none';
 
