@@ -424,8 +424,6 @@ vaultHTML += `
     </tr>`;
 });
 
-secDocs.innerHTML = vaultHTML + `</tbody></table>`;
-
     const historyData = data.actionHistory || [];
     secHistory.innerHTML = `
         <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Action History</h3>
