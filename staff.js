@@ -794,6 +794,7 @@ window.updateVaultStatuses = async (data) => {
         if (rejectedReasons.length > 0) {
             await addDoc(collection(db, "mail"), {
                 to: data.step1.email,
+                from: "Atlas Admissions <noreply@eduproassist.com>",
                 message: {
                     subject: "Action Required: Document Update for Your Application",
                     html: `
