@@ -757,6 +757,24 @@ window.updateVaultStatuses = async () => {
         const action = sel.value;
         const docName = sel.dataset.docname;
         if (!action) return;
+
+        if (['blurry', 'expired', 'old', 'format', 'invalid', 'missing'].includes(action)) {
+    const reasonMap = {
+        'blurry': 'Blurry or Unreadable',
+        'expired': 'Expired Document',
+        'old': 'Document is Older Than 3 Months',
+        'format': 'Incorrect File Format',
+        'invalid': 'Invalid Document',
+        'missing': 'Missing Documents'
+    };
+    rejectedReasons.push(`${f.label}: ${reasonMap[action]}`);
+    
+    if (action !== 'missing') {
+        updates[`documents.${docName}`] = deleteField();
+        updates[`documents.${docName}_filename`] = deleteField();
+        updates[`documents.${docName}_size`] = deleteField();
+    }
+    updates[`documentStatuses.${docName}`] = 'rejected';
             deletePaths.push(`applications/${currentAppId}/${docName}`);
         } else {
             updates[`documentStatuses.${docName}`] = action;
