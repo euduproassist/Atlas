@@ -787,16 +787,6 @@ window.updateVaultStatuses = async (data) => {
     });
 
     try {
-        if (rejectedReasons.length > 0) {
-    updates.emailTrigger = {
-        recipientEmail: data.step1.email,
-        studentName: data.step1.fullNames,
-        reasons: rejectedReasons, // This sends the array the function expects
-        timestamp: new Date()
-    };
-        }
-
-        await updateDoc(appRef, updates);
         alert("Documents updated and email triggered!");
         document.getElementById('saveVaultChanges').style.display = 'none';
     } catch (err) { 
