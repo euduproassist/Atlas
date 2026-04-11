@@ -1,3 +1,6 @@
+smtps://eduproassist44@gmail.com:odozijwkxmingtig@smtp.gmail.com:465
+
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
