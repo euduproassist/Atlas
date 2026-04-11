@@ -397,7 +397,31 @@ filesToCheck.forEach(f => {
     const fileSize = savedDocs[`${f.name}_size`] || "N/A";
     const fileName = savedDocs[`${f.name}_filename`] || (fileUrl ? 'Uploaded File' : 'No File');
     const hasFile = !!fileUrl;
+    const currentDocStatus = (data.documentStatuses && data.documentStatuses[f.name]) || (hasFile ? 'uploaded' : 'missing');
 
+vaultHTML += `
+    <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+        <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+        <td style="padding: 12px 10px;">
+            ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${fileName}</a>` : `<span style="color: #d32f2f;">${fileName}</span>`}
+        </td>
+        <td style="padding: 12px 10px;">
+            <select class="doc-action-select" data-docname="${f.name}" onchange="document.getElementById('saveVaultChanges').style.display='block'" style="font-size:0.75rem; padding:4px; border-radius:4px;">
+                <option value="" disabled selected>Select Action</option>
+                ${hasFile ? `
+                    <option value="processed" ${currentDocStatus === 'processed' ? 'selected' : ''}>Processed</option>
+                    <option value="blurry">Blurry or unreadable</option>
+                    <option value="expired">Expired document</option>
+                    <option value="old">Document is older than 3 months</option>
+                    <option value="format">Incorrect file format</option>
+                    <option value="invalid">Invalid document</option>
+                ` : `
+                    <option value="missing" ${currentDocStatus === 'missing' ? 'selected' : ''}>Missing Documents</option>
+                `}
+            </select>
+        </td>
+    </tr>`;
 });
 
 secDocs.innerHTML = vaultHTML + `</tbody></table>`;
