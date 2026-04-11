@@ -753,15 +753,6 @@ window.updateVaultStatuses = async (data) => {
     let rejectedReasons = [];
     let deletePaths = [];
 
-    const reasonMap = {
-        'blurry': 'Blurry or Unreadable',
-        'expired': 'Expired Document',
-        'old': 'Document is Older Than 3 Months',
-        'format': 'Incorrect File Format',
-        'invalid': 'Invalid Document',
-        'missing': 'Missing Documents'
-    };
-
     selects.forEach(sel => {
         const action = sel.value;
         const docName = sel.dataset.docname;
