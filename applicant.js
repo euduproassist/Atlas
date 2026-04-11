@@ -425,6 +425,57 @@ document.getElementById('vaultTableContainer').innerHTML = vaultHTML + `</tbody>
     });
 });
 
+window.handleVaultUpload = function(docName) {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*,application/pdf';
+    
+    fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        toggleGlobalLoader(true, `Processing ${docName.replace('_', ' ')}...`);
+        
+        let finalFile = file;
+
+        try {
+            if (file.type.startsWith('image/')) {
+                finalFile = await processFile(file);
+            }
+
+            if (finalFile.size > 512000) { 
+                alert("File is still too large. Please upload a file less than 500KB.");
+                toggleGlobalLoader(false);
+                return;
+            }
+
+            const user = auth.currentUser;
+            const storage = getStorage();
+            const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
+
+            // This automatically overwrites and replaces the old file in Storage
+            const snapshot = await uploadBytes(fileRef, finalFile);
+            const url = await getDownloadURL(snapshot.ref);
+            
+            const appRef = doc(db, "applications", user.uid);
+            await updateDoc(appRef, {
+                [`documents.${docName}`]: url,
+                [`documents.${docName}_filename`]: file.name,
+                [`documents.${docName}_size`]: (finalFile.size / 1024).toFixed(1) + " KB",
+                [`documentStatuses.${docName}`]: 'pending' 
+            });
+
+            alert("Document updated successfully!");
+        } catch (err) {
+            console.error(err);
+            alert("Upload failed. Please try a different file.");
+        } finally {
+            toggleGlobalLoader(false);
+        }
+    };
+    fileInput.click();
+};
+
 
 
 
