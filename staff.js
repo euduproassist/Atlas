@@ -757,13 +757,6 @@ window.updateVaultStatuses = async () => {
         const action = sel.value;
         const docName = sel.dataset.docname;
         if (!action) return;
-
-        if (['blurry', 'expired', 'old', 'format', 'invalid'].includes(action)) {
-            // Mark for deletion in Firestore and Storage
-            updates[`documents.${docName}`] = deleteField();
-            updates[`documents.${docName}_filename`] = deleteField();
-            updates[`documents.${docName}_size`] = deleteField();
-            updates[`documentStatuses.${docName}`] = 'rejected';
             deletePaths.push(`applications/${currentAppId}/${docName}`);
         } else {
             updates[`documentStatuses.${docName}`] = action;
