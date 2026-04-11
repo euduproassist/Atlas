@@ -61,6 +61,10 @@ service cloud.firestore {
         resource.data.ownerId == request.auth.uid || isStaffOrAdmin()
       );
     }
+   match /mail/{mailId} {
+      allow read: if false; 
+      allow write: if isStaffOrAdmin(); // Only staff can trigger the write that results in a mail doc
+   }
   }
 }
 
