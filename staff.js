@@ -750,6 +750,7 @@ window.updateVaultStatuses = async () => {
     const selects = document.querySelectorAll('.doc-action-select');
     const appRef = doc(db, "applications", currentAppId);
     let updates = {};
+    let rejectedReasons = [];
     let deletePaths = [];
 
     selects.forEach(sel => {
