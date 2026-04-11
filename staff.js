@@ -744,3 +744,40 @@ window.saveStatusUpdate = async () => {
         btn.disabled = false;
     }
 };
+
+window.updateVaultStatuses = async () => {
+    const selects = document.querySelectorAll('.doc-action-select');
+    const appRef = doc(db, "applications", currentAppId);
+    let updates = {};
+    let deletePaths = [];
+
+    selects.forEach(sel => {
+        const action = sel.value;
+        const docName = sel.dataset.docname;
+        if (!action) return;
+
+        if (['blurry', 'expired', 'old', 'format', 'invalid'].includes(action)) {
+            // Mark for deletion in Firestore and Storage
+            updates[`documents.${docName}`] = deleteField();
+            updates[`documents.${docName}_filename`] = deleteField();
+            updates[`documents.${docName}_size`] = deleteField();
+            updates[`documentStatuses.${docName}`] = 'rejected';
+            deletePaths.push(`applications/${currentAppId}/${docName}`);
+        } else {
+            updates[`documentStatuses.${docName}`] = action;
+        }
+    });
+
+    try {
+        await updateDoc(appRef, updates);
+        // Handle physical file deletion in Storage
+        const { getStorage, ref, deleteObject } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js");
+        const storage = getStorage();
+        for (const path of deletePaths) {
+            try { await deleteObject(ref(storage, path)); } catch(e) { console.warn("File already gone or error:", e); }
+        }
+        alert("Documents updated successfully.");
+        document.getElementById('saveVaultChanges').style.display = 'none';
+    } catch (err) { alert("Error: " + err.message); }
+};
+
