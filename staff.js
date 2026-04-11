@@ -787,6 +787,26 @@ window.updateVaultStatuses = async (data) => {
     });
 
     try {
+        // 1. First, update the application document as usual
+        await updateDoc(appRef, updates);
+
+        // 2. If there are rejections, trigger the actual email via the 'mail' collection
+        if (rejectedReasons.length > 0) {
+            await addDoc(collection(db, "mail"), {
+                to: data.step1.email,
+                message: {
+                    subject: "Action Required: Document Update for Your Application",
+                    html: `
+                        <h3>Hello ${data.step1.fullNames},</h3>
+                        <p>Our admissions team has reviewed your documents. Some items require your attention:</p>
+                        <ul>
+                            ${rejectedReasons.map(r => `<li>${r}</li>`).join('')}
+                        </ul>
+                        <p>Please log in to the Student Portal and visit the <b>Document Vault</b> to re-upload the correct files.</p>
+                        <p>Regards,<br>Admissions Team</p>`
+                }
+            });
+        }
         alert("Documents updated and email triggered!");
         document.getElementById('saveVaultChanges').style.display = 'none';
     } catch (err) { 
