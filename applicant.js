@@ -385,6 +385,14 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
                     <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+                    <td style="padding: 12px 10px; font-size: 0.85rem;">
+    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
+</td>
+<td style="padding: 12px 10px; text-align: center;">
+    <button onclick="handleVaultUpload('${f.name}')" style="padding: 5px 12px; background: ${hasFile ? '#f39c12' : '#27ae60'}; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: 600;">
+        <i class="fas ${hasFile ? 'fa-sync-alt' : 'fa-upload'}"></i> ${hasFile ? 'RE-UPLOAD' : 'UPLOAD'}
+    </button>
+</td>
                 </tr>
             `; 
         });
