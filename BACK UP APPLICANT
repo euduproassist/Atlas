@@ -7,6 +7,18 @@ const loader = document.getElementById('loader');
 const userNameDisplay = document.getElementById('userNameDisplay');
 const welcomeText = document.getElementById('welcomeText');
 const logoutBtn = document.getElementById('logoutBtn');
+const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
+    let loader = document.getElementById('global-file-loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'global-file-loader';
+        loader.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:10000;color:white;font-family:sans-serif;";
+        loader.innerHTML = `<div class="spinner" style="border:4px solid #f3f3f3;border-top:4px solid #3498db;border-radius:50%;width:40px;height:40px;animation:spin 2s linear infinite;"></div><p id="loader-text" style="margin-top:15px;"></p><style>@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>`;
+        document.body.appendChild(loader);
+    }
+    document.getElementById('loader-text').innerText = text;
+    loader.style.display = show ? 'flex' : 'none';
+};
 
 // Monitor Authentication State
 onAuthStateChanged(auth, async (user) => {
@@ -144,9 +156,10 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
         <td style="padding: 15px 10px;">${s2.choice1}</td>
         <td style="padding: 15px 10px;">${s2.campus}</td>
         <td style="padding: 15px 10px; font-weight: 700; color: #1976d2;">
-    ${currentStatus === 'review' ? 'UNDER REVIEW' : 
+            ${currentStatus === 'review' ? 'UNDER REVIEW' : 
       currentStatus === 'waiting' ? 'WAITING LIST' : 
       currentStatus === 'uncon_accepted' ? 'ACCEPTED' :
+      currentStatus === 'rejected' ? '<span style="color:#d32f2f">ACTION REQUIRED</span>' :
       currentStatus === 'withdrawn_expired' ? 'WITHDRAWN' :
       currentStatus.replace('_', ' ').toUpperCase()}
      </td>
@@ -358,6 +371,7 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                 <th style="padding: 10px;">Document Name</th>
                 <th style="padding: 10px;">Size</th>
                 <th style="padding: 10px;">File Name</th>
+                <th style="padding: 10px; text-align: center;">Action</th>
             </tr>
         </thead>
         <tbody style="font-size: 0.9rem;">
@@ -385,8 +399,16 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                     <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
                     <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
                     <td style="padding: 12px 10px; font-size: 0.85rem;">
-                    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
-                    </td>
+    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
+</td>
+                 <td style="padding: 12px 10px; text-align: center;">
+    ${docStatuses[f.name] === 'processed' ? 
+        `<span style="color: #27ae60; font-weight: 800; font-size: 0.75rem;"><i class="fas fa-check-circle"></i> PROCESSED</span>` : 
+        `<span onclick="handleVaultUpload('${f.name}')" style="color: ${hasFile ? '#27ae60' : '#d32f2f'}; cursor: pointer; font-weight: 600; text-decoration: underline; font-size: 0.8rem;">
+            ${hasFile ? 'RE-UPLOAD' : (docStatuses[f.name] === 'missing' ? 'UPLOAD MISSING' : 'UPLOAD')}
+        </span>`
+    }
+</td>
                 </tr>
             `; 
         });
@@ -416,48 +438,85 @@ window.handleVaultUpload = function(docName) {
         const file = e.target.files[0];
         if (!file) return;
 
-        const user = auth.currentUser;
-        const storage = getStorage();
-        const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
-
-        let toUpload = file;
-
-        // Compression Logic: If > 200KB and is an image, compress it
-        if (file.size > 200 * 1024 && file.type.startsWith('image/')) {
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            await new Promise(resolve => img.onload = resolve);
-            const canvas = document.createElement('canvas');
-            let quality = 0.7;
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            toUpload = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
-        } else if (file.size > 200 * 1024 && file.type === 'application/pdf') {
-            alert("PDF is over 200KB. Please compress it manually before uploading.");
-            return;
-        }
+        toggleGlobalLoader(true, `Processing ${docName.replace('_', ' ')}...`);
+        
+        let finalFile = file;
 
         try {
-            alert("Uploading and replacing old file...");
-            const snapshot = await uploadBytes(fileRef, toUpload);
+            if (file.type.startsWith('image/')) {
+                finalFile = await processFile(file);
+            }
+
+            if (finalFile.size > 512000) { 
+                alert("File is still too large. Please upload a file less than 500KB.");
+                toggleGlobalLoader(false);
+                return;
+            }
+
+            const user = auth.currentUser;
+            const storage = getStorage();
+            const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
+
+            // This automatically overwrites and replaces the old file in Storage
+            const snapshot = await uploadBytes(fileRef, finalFile);
             const url = await getDownloadURL(snapshot.ref);
             
-            // Update Firestore (This replaces the old URL and updates the size)
             const appRef = doc(db, "applications", user.uid);
             await updateDoc(appRef, {
                 [`documents.${docName}`]: url,
-                [`documents.${docName}_size`]: (toUpload.size / 1024).toFixed(1) + " KB",
+                [`documents.${docName}_filename`]: file.name,
+                [`documents.${docName}_size`]: (finalFile.size / 1024).toFixed(1) + " KB",
                 [`documentStatuses.${docName}`]: 'pending' 
-            }, {merge: true});
-            alert("Success! Document updated.");
+            });
+
+            alert("Document updated successfully!");
         } catch (err) {
             console.error(err);
-            alert("Upload failed.");
+            alert("Upload failed. Please try a different file.");
+        } finally {
+            toggleGlobalLoader(false);
         }
     };
     fileInput.click();
 };
+
+async function processFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            let width = img.width;
+            let height = img.height;
+            const MAX_PIXELS = 1200; 
+            if (width > MAX_PIXELS || height > MAX_PIXELS) {
+                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
+                width *= ratio;
+                height *= ratio;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            let quality = 0.8;
+            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            while (blob.size > 204800 && quality > 0.1) {
+                quality -= 0.1; 
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            }
+            URL.revokeObjectURL(img.src);
+            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(img.src);
+            reject("Compression Failed.");
+        };
+    });
+}
+
+
+
+
+
 
 
