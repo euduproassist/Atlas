@@ -424,6 +424,11 @@ vaultHTML += `
     </tr>`;
 });
 
+    secDocs.innerHTML = vaultHTML + `</tbody></table>
+<div id="saveVaultChanges" style="display:none; margin-top:20px; text-align:right;">
+    <button onclick="updateVaultStatuses()" style="background:#27ae60; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:700; cursor:pointer;">UPDATE DOCUMENTS</button>
+</div>`;
+
     const historyData = data.actionHistory || [];
     secHistory.innerHTML = `
         <h3 style="color: #4a90e2; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">Action History</h3>
