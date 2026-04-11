@@ -766,11 +766,11 @@ window.saveStatusUpdate = async () => {
                 </html>`;
 
             // 2. Upload the Letter to Storage so it behaves like a real document
-            const storage = Q.getStorage(); // Ensure storage is imported
-            const letterRef = Q.ref(storage, `applications/${currentAppId}/Acceptance_Letter.html`);
+            const storage = getStorage(); 
+            const letterRef = ref(storage, `applications/${currentAppId}/Acceptance_Letter.html`);
             const blob = new Blob([letterHTML], { type: 'text/html' });
-            await Q.uploadBytes(letterRef, blob);
-            const letterURL = await Q.getDownloadURL(letterRef);
+            await uploadBytes(letterRef, blob);
+            const letterURL = await getDownloadURL(letterRef);
             
             finalUpdate["adminDocs.acceptanceLetter"] = letterURL;
 
