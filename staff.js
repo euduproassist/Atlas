@@ -160,7 +160,11 @@ document.getElementById('archivedCount').innerText = archivedCount;
                        </span>
                     </td>
                     <td class="hide-mobile">${dateSub}</td>
-                    
+                    <td>
+    <button class="view-btn" style="background: #f0f0f0; color: #333; border: 1px solid #ddd;" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
+        VIEW
+    </button>
+</td>                  
                 `;
             }
 
