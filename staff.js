@@ -160,14 +160,7 @@ document.getElementById('archivedCount').innerText = archivedCount;
                        </span>
                     </td>
                     <td class="hide-mobile">${dateSub}</td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="view-btn" style="${btnClass}" onclick='showDetails("${id}", ${JSON.stringify(data).replace(/"/g, '&quot;')})'>
-                                VIEW
-                            </button>
-                            <span style="font-size: 0.7rem; font-weight: 800; color: ${isComplete ? '#2e7d32' : '#c62828'}">${docLabel}</span>
-                        </div>
-                    </td>
+                    
                 `;
             }
 
