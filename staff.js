@@ -826,6 +826,30 @@ window.saveStatusUpdate = async () => {
             });
         }
 
+          // If Rejected or Withdrawn, Send Rejection Email
+        if (isDeclinedStatus) {
+            await addDoc(collection(db, "mail"), {
+                to: currentData.step1.email,
+                from: "Atlas Admissions <eduproassist44@gmail.com>",
+                message: {
+                    subject: `ADMISSION UPDATE: Application ${currentData.applicationId}`,
+                    html: `
+                        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                            <h3>Dear ${currentData.step1.fullNames},</h3>
+                            <p>Thank you for your application to <b>Atlas Independent School</b> for the 2026 academic year.</p>
+                            <p>We regret to inform you that your application for <b>${currentData.step2.choice1}</b> has been unsuccessful for the following reason:</p>
+                            <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #e74c3c; margin: 20px 0;">
+                                <strong>Reason: ${rejectionTitle}</strong><br>
+                                <p>${rejectionReasonBody}</p>
+                            </div>
+                            <p>We understand this news may be disappointing. We encourage you to consider our rewrite programs or contact our admissions office for guidance on alternative qualifications.</p>
+                            <p>Your application status has been updated accordingly on the Student Portal.</p>
+                            <p>Regards,<br><b>Atlas Admissions Office</b></p>
+                        </div>`
+                }
+            });
+        }
+
         // Apply final update to Firestore
         await updateDoc(appRef, finalUpdate);
 
