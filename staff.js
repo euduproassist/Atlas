@@ -782,6 +782,15 @@ window.updateVaultStatuses = async () => {
     });
 
     try {
+        if (rejectedReasons.length > 0) {
+    updates.emailTrigger = {
+        recipientEmail: data.step1.email,
+        studentName: data.step1.fullNames,
+        reasons: rejectedReasons,
+        timestamp: new Date()
+    };
+}
+await updateDoc(appRef, updates);
         
         // Handle physical file deletion in Storage
         const { getStorage, ref, deleteObject } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js");
