@@ -595,9 +595,6 @@ document.getElementById('sortDate').addEventListener('change', (e) => {
     rows.forEach(row => tableBody.appendChild(row));
 });
 
-// Re-attach Document Filter listener
-document.getElementById('filterDocs').addEventListener('change', applyFilters);
-
 function setupProfile(user) {
     const trigger = document.getElementById('profileTrigger');
     const overlay = document.getElementById('profileOverlay');
