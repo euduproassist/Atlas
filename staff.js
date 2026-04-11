@@ -746,7 +746,7 @@ window.saveStatusUpdate = async () => {
     }
 };
 
-window.updateVaultStatuses = async () => {
+window.updateVaultStatuses = async (data) => {
     const selects = document.querySelectorAll('.doc-action-select');
     const appRef = doc(db, "applications", currentAppId);
     let updates = {};
