@@ -688,6 +688,43 @@ window.saveStatusUpdate = async () => {
         
         const currentData = appSnap.data();
 
+        const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
+        const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
+
+        // REJECTION REASON LOGIC
+        let rejectionReasonBody = "";
+        let rejectionTitle = "";
+
+        if (isDeclinedStatus) {
+            const reasons = {
+                1: { title: "Course/Programme Full", text: "Although you meet the minimum academic criteria for this qualification, we are unable to offer you a place because the program has reached its maximum enrollment capacity. Admission is highly competitive and is based on a ranking of top-performing applicants." },
+                2: { title: "Academic Non-Compliance", text: "Your application has been unsuccessful as your academic results do not meet the minimum statutory requirements or the faculty-specific criteria (such as APS score or required marks in Mathematics/English) for this program." },
+                3: { title: "Final Results Below Provisional Offer", text: "Your provisional offer of admission has been withdrawn. Upon verification of your final National Senior Certificate (NSC) results, it was determined that you no longer meet the specific entry requirements." },
+                4: { title: "Administrative Non-Compliance", text: "Your application has been rejected because it remained incomplete after the deadline. Required supporting documents were not provided or were submitted in an unreadable format." },
+                5: { title: "Selection Criteria Not Met", text: "This program requires a secondary selection process. After a thorough review by the faculty committee, your application was not selected for the current intake." },
+                6: { title: "Offer Expired", text: "A provisional offer was extended to you via the portal. Because you did not accept the offer within the required 48-hour timeframe, the system has automatically withdrawn the offer." }
+            };
+
+            const choice = prompt(
+                "SELECT REJECTION REASON:\n" +
+                "1. Course Full\n" +
+                "2. Academic Requirements Not Met\n" +
+                "3. Final Results Drop\n" +
+                "4. Missing/Invalid Documents\n" +
+                "5. Faculty Selection\n" +
+                "6. Offer Expired (Withdrawn)"
+            );
+
+            if (!reasons[choice]) {
+                alert("Update cancelled. You must select a valid reason (1-6) to reject an application.");
+                btn.innerText = "UPDATE STATUS";
+                btn.disabled = false;
+                return;
+            }
+            rejectionTitle = reasons[choice].title;
+            rejectionReasonBody = reasons[choice].text;
+        }
+
         // 2. Logic for Student Number
         let studentNum = currentData.studentNumber || null; 
 
