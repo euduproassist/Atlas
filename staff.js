@@ -782,7 +782,7 @@ window.updateVaultStatuses = async () => {
     });
 
     try {
-        await updateDoc(appRef, updates);
+        
         // Handle physical file deletion in Storage
         const { getStorage, ref, deleteObject } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js");
         const storage = getStorage();
