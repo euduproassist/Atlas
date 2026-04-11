@@ -159,7 +159,7 @@ document.getElementById('trackStatusBtn').addEventListener('click', async () => 
             ${currentStatus === 'review' ? 'UNDER REVIEW' : 
       currentStatus === 'waiting' ? 'WAITING LIST' : 
       currentStatus === 'uncon_accepted' ? 'ACCEPTED' :
-      currentStatus === 'rejected' ? '<span style="color:#d32f2f">ACTION REQUIRED</span>' :
+      data.documentStatuses && Object.values(data.documentStatuses).includes('rejected') ? '<span style="color:#d32f2f">ACTION REQUIRED</span>' :
       currentStatus === 'withdrawn_expired' ? 'WITHDRAWN' :
       currentStatus.replace('_', ' ').toUpperCase()}
      </td>
@@ -415,10 +415,11 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
 
         vaultHTML += `</tbody></table></div>`;
         const s1 = data.step1 || {};
-document.getElementById('vaultHeaderInfo').innerHTML = `
+        document.getElementById('vaultHeaderInfo').innerHTML = `
     <div>
         <span style="color: #888; font-size: 0.85rem;">Application ID:</span>
         <strong style="display: block;">${data.applicationId || 'N/A'}</strong>
+        ${data.studentNumber ? `<span style="color: #2e7d32; font-size: 0.8rem; font-weight:bold;">Student No: ${data.studentNumber}</span>` : ''}
     </div>
     <div>
         <span style="color: #888; font-size: 0.85rem;">Name:</span>
@@ -513,6 +514,11 @@ async function processFile(file) {
         };
     });
 }
+
+
+
+
+
 
 
 
