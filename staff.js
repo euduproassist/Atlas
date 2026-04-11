@@ -746,5 +746,67 @@ window.saveStatusUpdate = async () => {
     }
 };
 
+window.updateVaultStatuses = async (data) => {
+    const selects = document.querySelectorAll('.doc-action-select');
+    const appRef = doc(db, "applications", currentAppId);
+    let updates = {};
+    let rejectedReasons = [];
+    let deletePaths = [];
+
+    const reasonMap = {
+        'blurry': 'Blurry or Unreadable',
+        'expired': 'Expired Document',
+        'old': 'Document is Older Than 3 Months',
+        'format': 'Incorrect File Format',
+        'invalid': 'Invalid Document',
+        'missing': 'Missing Documents'
+    };
+
+    selects.forEach(sel => {
+        const action = sel.value;
+        const docName = sel.dataset.docname;
+        // Get the label (e.g., "ID / Passport") from the table row
+        const label = sel.closest('tr').cells[0].innerText; 
+
+        if (!action || action === 'processed') {
+            if(action === 'processed') updates[`documentStatuses.${docName}`] = 'processed';
+            return;
+        }
+
+        if (['blurry', 'expired', 'old', 'format', 'invalid', 'missing'].includes(action)) {
+            rejectedReasons.push(`${label}: ${reasonMap[action]}`);
+            
+            if (action !== 'missing') {
+                updates[`documents.${docName}`] = deleteField();
+                updates[`documents.${docName}_filename`] = deleteField();
+                updates[`documents.${docName}_size`] = deleteField();
+            }
+            updates[`documentStatuses.${docName}`] = 'rejected';
+            deletePaths.push(`applications/${currentAppId}/${docName}`);
+        }
+    });
+
+    try {
+        if (rejectedReasons.length > 0) {
+            // This triggers the Firebase Extension you just installed
+            updates.mail = {
+                to: data.step1.email,
+                message: {
+                    subject: "Action Required: Document Issue",
+                    html: `Hi ${data.step1.fullNames},<br><br>The following documents were rejected:<br><ul>${rejectedReasons.map(r => `<li>${r}</li>`).join('')}</ul>Please re-upload them.`
+                }
+            };
+        }
+
+        await updateDoc(appRef, updates);
+        alert("Documents updated and email triggered!");
+        document.getElementById('saveVaultChanges').style.display = 'none';
+    } catch (err) { 
+        console.error(err);
+        alert("Error: " + err.message); 
+    }
+};
+
+
 
 
