@@ -415,6 +415,17 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
 
         vaultHTML += `</tbody></table></div>`;
         const s1 = data.step1 || {};
+        document.getElementById('vaultHeaderInfo').innerHTML = `
+    <div>
+        <span style="color: #888; font-size: 0.85rem;">Application ID:</span>
+        <strong style="display: block;">${data.applicationId || 'N/A'}</strong>
+        ${data.studentNumber ? `<span style="color: #2e7d32; font-size: 0.8rem; font-weight:bold;">Student No: ${data.studentNumber}</span>` : ''}
+    </div>
+    <div>
+        <span style="color: #888; font-size: 0.85rem;">Name:</span>
+        <strong style="display: block;">${s1.fullNames || ''} ${s1.surname || ''}</strong>
+    </div>
+`;
 document.getElementById('vaultTableContainer').innerHTML = vaultHTML + `</tbody></table>`;
     });
 });
