@@ -753,6 +753,15 @@ window.updateVaultStatuses = async (data) => {
     let rejectedReasons = [];
     let deletePaths = [];
 
+        const reasonMap = {
+        'blurry': 'Blurry or Unreadable: The photo or scan is too fuzzy to read. We need a clear, sharp image where all the text—especially names and dates—is easy to see so we can verify your details.',
+        'expired': 'Expired Document: The document you provided has expired and is no longer valid. Please upload a current version of this document that has not yet reached its "expiry" or "valid to" date.',
+        'old': 'Document is Older Than 3 Months: We need a more recent record. For documents like proof of residence or bank statements, the date on the page must be from within the last three months to show your current information.',
+        'format': 'Incorrect File Format: The type of file you uploaded cannot be opened by our system. Please save your document as a PDF, JPEG, or PNG and try uploading it again.',
+        'invalid': 'Invalid Document: The document provided is not the one we asked for. For example, if we requested an ID, a school report cannot be used instead. Please make sure you are uploading the specific document requested in the instructions.',
+        'missing': 'Missing Documents: Your submission is incomplete. Either a page is missing from your file (like the back of an ID), or you forgot to attach one of the required documents for your registration'
+    };
+
     selects.forEach(sel => {
         const action = sel.value;
         const docName = sel.dataset.docname;
