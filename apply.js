@@ -23,7 +23,6 @@ const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
 let syncTimer;
 let applicationFee = 0;
-let payLink = "";
 
     const filesToUpload = [
         { id: 'file_id', name: 'ID_Passport' },
