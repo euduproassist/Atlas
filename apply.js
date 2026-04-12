@@ -705,7 +705,7 @@ window.goToStep = async function(stepNumber) {
     // Show new step
     document.getElementById(`step${stepNumber}Container`).style.display = 'block';
 
-    if(stepNumber === 5 && typeof window.renderReviewSummary === "function") {
+    if(stepNumber === 5 && typeof renderReviewSummary === "function") {
     window.renderReviewSummary();
     }
     
