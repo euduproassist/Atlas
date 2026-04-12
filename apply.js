@@ -246,8 +246,8 @@ if (docSnap.exists()) {
             document.getElementById('step2Container').style.display = 'none';
             document.getElementById('step3Container').style.display = 'none';
             if(document.getElementById('step4Container')) document.getElementById('step4Container').style.display = 'none';
-
-            
+            if(document.getElementById('step5Container')) document.getElementById('step5Container').style.display = 'none';
+        
             // Show the saved step
             document.getElementById(`step${currentStep}Container`).style.display = 'block';
 
