@@ -557,7 +557,6 @@ mainForm.addEventListener('submit', async (e) => {
                 }, { merge: true });
 
                 goToStep(4);
-                if (typeof renderReviewSummary === "function") renderReviewSummary();
             }
 
         } catch (error) {
