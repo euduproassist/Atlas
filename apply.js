@@ -551,7 +551,6 @@ mainForm.addEventListener('submit', async (e) => {
                     lastUpdated: new Date()
                 }, { merge: true });
 
-                alert("Application Submitted Successfully!");
                 goToStep(4);
                 if (typeof renderReviewSummary === "function") renderReviewSummary();
             }
