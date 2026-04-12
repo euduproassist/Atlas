@@ -166,6 +166,16 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         document.getElementById('email').value = user.email || '';
 
+        // Fetch tamper-proof price and link from Firestore
+        const priceDoc = await getDoc(doc(db, "system_settings", "pricing"));
+        if (priceDoc.exists()) {
+            applicationFee = priceDoc.data().appFee;
+            payLink = priceDoc.data().paystackLink;
+            if(document.getElementById('displayFee')) {
+                document.getElementById('displayFee').innerText = `R${applicationFee}`;
+            }
+        }
+
  // --- LOAD SAVED DATA FROM CLOUD ---
 const docSnap = await getDoc(doc(db, "drafts", user.uid));
 if (docSnap.exists()) {
