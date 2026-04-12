@@ -807,3 +807,46 @@ async function processFile(file) {
     });
 }
 
+window.payWithPaystack = function() {
+    const user = auth.currentUser;
+    if (!user || applicationFee <= 0) return alert("Session error. Please refresh.");
+
+    const handler = PaystackPop.setup({
+        key: 'pk_test_YOUR_ACTUAL_TEST_KEY_HERE', // Replace with your Test Public Key
+        email: user.email,
+        amount: applicationFee * 100, // Paystack counts in cents (R100 = 10000)
+        currency: "ZAR",
+        ref: 'APP_' + Math.floor((Math.random() * 1000000000) + 1), // Unique Ref
+        metadata: {
+            custom_fields: [
+                { display_name: "User ID", variable_name: "user_id", value: user.uid }
+            ]
+        },
+        callback: async function(response) {
+            // SUCCESS: This runs automatically when payment hits 100%
+            toggleGlobalLoader(true, "Verifying Payment...");
+            
+            try {
+                await setDoc(doc(db, "applications", user.uid), {
+                    paymentStatus: 'paid',
+                    transactionId: response.reference,
+                    paymentDate: new Date()
+                }, { merge: true });
+
+                document.getElementById('paySuccessMsg').style.display = 'block';
+                document.getElementById('paymentNextBtn').disabled = false;
+                document.getElementById('payBtn').style.display = 'none';
+                toggleGlobalLoader(false);
+            } catch (err) {
+                console.error("Database sync error:", err);
+                alert("Payment successful, but record update failed. Please contact support with Ref: " + response.reference);
+            }
+        },
+        onClose: function() {
+            alert('Window closed. Payment not completed.');
+        }
+    });
+    handler.openIframe();
+};
+
+
