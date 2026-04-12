@@ -3,6 +3,8 @@ https://dashboard.paystack.com/#/settings/developers
 
 smtps://eduproassist44@gmail.com:odozijwkxmingtig@smtp.gmail.com:465
 
+https://paystack.shop/pay/0ekmkrimwv
+
 
 rules_version = '2';
 service cloud.firestore {
