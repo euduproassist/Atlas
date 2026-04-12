@@ -162,6 +162,11 @@ window.toggleOtherQual = function(value) {
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
+        const priceDoc = await getDoc(doc(db, "system_settings", "pricing"));
+    if (priceDoc.exists()) {
+        applicationFee = priceDoc.data().appFee;
+        payLink = priceDoc.data().paystackLink;
+    }
         window.location.href = "login.html";
     } else {
         document.getElementById('email').value = user.email || '';
