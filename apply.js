@@ -798,3 +798,20 @@ async function processFile(file) {
         };
     });
 }
+
+window.initiatePayment = function() {
+    // 1. Open the secure link fetched from Firestore
+    window.open(payLink, '_blank');
+    
+    // 2. Real-time listener: Unlocks Step 5 ONLY when you manually verify payment in Console
+    const user = auth.currentUser;
+    const unsub = onSnapshot(doc(db, "applications", user.uid), (doc) => {
+        if (doc.exists() && doc.data().paymentStatus === 'paid') {
+            document.getElementById('paySuccessMsg').style.display = 'block';
+            document.getElementById('paymentNextBtn').disabled = false;
+            document.getElementById('payBtn').style.display = 'none';
+            unsub(); 
+        }
+    });
+};
+
