@@ -330,6 +330,21 @@
             </div>
 
             <div id="step4Container" style="display: none;">
+    <h2>Step 4 of 5: Application Fee</h2>
+    <p>Your documents are uploaded! To process your application, a non-refundable fee is required.</p>
+    
+    <div style="background: #fff; border: 1px solid var(--border); padding: 20px; border-radius: 8px; text-align: center;">
+        <h3 style="margin-bottom: 10px;">Amount Due: R<span id="displayFee">...</span></h3>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">Payment Method: Instant EFT (Secure via Paystack)</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button type="button" class="btn btn-next" id="payNowBtn" style="width: 100%; background: #27ae60;">Pay Now</button>
+            <button type="button" class="btn btn-cancel" id="payLaterBtn" style="width: 100%;">Pay Later (Skip for now)</button>
+        </div>
+    </div>
+</div>
+
+            <div id="step4Container" style="display: none;">
                 <h2>Step 4 of 4: Review & Confirm</h2>
                 <p>Please review your details below. Your application has been saved as a draft.</p>
                 
