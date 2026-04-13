@@ -546,7 +546,7 @@ mainForm.addEventListener('submit', async (e) => {
 
                 alert("Application Submitted Successfully!");
                 goToStep(4);
-                if (typeof renderReviewSummary === "function") renderReviewSummary();
+                setupPaymentUI();                
             }
 
         } catch (error) {
