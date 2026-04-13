@@ -690,6 +690,9 @@ window.goToStep = async function(stepNumber) {
     // Save the step progress to Firebase immediately (R0 cost - tiny string)
     if (user) {
         await setDoc(doc(db, "drafts", user.uid), { currentStep: currentStep }, { merge: true });
+    if (stepNumber === 5) {
+            await window.renderReviewSummary();
+        }
     }
     window.scrollTo(0, 0);
 };
