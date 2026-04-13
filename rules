@@ -57,7 +57,7 @@ service cloud.firestore {
   ) && (
     isStaffOrAdmin() || 
     request.resource.data.diff(resource.data).affectedKeys()
-      .hasAny(['step1', 'step2', 'documents', 'documentStatuses', 'draft', 'lastUpdated', 'status1', 'adminNote', 'studentNumber', 'processedBy', 'actionHistory', 'adminDocs'])
+      .hasAny(['step1', 'step2', 'documents', 'paymentStatus', paystackReference', 'paidAt', 'documentStatuses', 'draft', 'lastUpdated', 'status1', 'adminNote', 'studentNumber', 'processedBy', 'actionHistory', 'adminDocs'])
   );
 }
 
