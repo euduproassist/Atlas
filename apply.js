@@ -794,4 +794,54 @@ async function processFile(file) {
     });
     }
 
+async function setupPaymentUI() {
+    const configSnap = await getDoc(doc(db, "system_config", "payments"));
+    if (configSnap.exists()) {
+        const config = configSnap.data();
+        document.getElementById('displayFee').innerText = config.application_fee;
+        
+        document.getElementById('payNowBtn').onclick = () => {
+            processPaystackPayment(config.paystack_pk, config.application_fee);
+        };
+        
+        document.getElementById('payLaterBtn').onclick = async () => {
+            // Update status to unpaid and move to final step
+            await setDoc(doc(db, "applications", auth.currentUser.uid), { 
+                paymentStatus: 'unpaid' 
+            }, { merge: true });
+            goToStep(5);
+        };
+    }
+}
+
+function processPaystackPayment(pk, amount) {
+    const user = auth.currentUser;
+    const handler = PaystackPop.setup({
+        key: pk,
+        email: user.email,
+        amount: amount * 100, // Paystack uses cents
+        currency: "ZAR",
+        channels: ['eft'], // Forces Instant EFT only
+        callback: async function(response) {
+            // SUCCESSFUL PAYMENT - 100% Automated
+            toggleGlobalLoader(true, "Verifying Payment...");
+            await setDoc(doc(db, "applications", user.uid), { 
+                paymentStatus: 'paid',
+                paystackReference: response.reference,
+                paidAt: new Date()
+            }, { merge: true });
+            
+            toggleGlobalLoader(false);
+            goToStep(5); // Automatic redirect to Summary
+        },
+        onClose: function() {
+            alert('Window closed. You can still pay later from your dashboard.');
+        }
+    });
+    handler.openIframe();
+}
+
+
+
+
 
