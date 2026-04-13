@@ -728,6 +728,17 @@ window.renderReviewSummary = async function() {
     }
 };
 
+// Get payment status from the application doc
+const appSnap = await getDoc(doc(db, "applications", user.uid));
+const appData = appSnap.exists() ? appSnap.data() : {};
+const payStatus = appData.paymentStatus || 'unpaid';
+
+const paymentNote = payStatus === 'unpaid' 
+    ? `<p style="color: #d9534f; font-weight: bold; margin-top: 15px;">⚠️ NOTE: Your application fee is UNPAID. Your application will not be processed until payment is received.</p>`
+    : `<p style="color: #27ae60; font-weight: bold; margin-top: 15px;">✅ Application Fee Paid.</p>`;
+
+summaryDiv.innerHTML += paymentNote;
+
 // --- THE STARTUP CHECK ---
 setTimeout(() => {
     const container = document.getElementById('subjectsContainer');
