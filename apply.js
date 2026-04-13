@@ -746,6 +746,10 @@ window.finalSubmitApplication = async function() {
         const yearSuffix = new Date().getFullYear().toString().slice(-2);
         let finalAppId = existingData.applicationId || `APP-${yearSuffix}${Math.floor(100000 + Math.random() * 900000)}`;
 
+        const { draft, ...cleanData } = draftData; 
+        await setDoc(doc(db, "applications", user.uid), {
+            ...cleanData,
+
             applicationId: finalAppId,
             status1: existingData.status1 || "pending",
             submittedAt: existingData.submittedAt || new Date(),
