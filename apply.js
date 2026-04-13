@@ -841,7 +841,6 @@ async function setupPaymentUI() {
                 paymentStatus: 'unpaid' 
             }, { merge: true });
             goToStep(5);
-            window.renderReviewSummary();
         };
     }
 }
