@@ -832,7 +832,8 @@ function processPaystackPayment(pk, amount) {
             }, { merge: true });
             
             toggleGlobalLoader(false);
-            goToStep(5); // Automatic redirect to Summary
+            goToStep(5); 
+            window.renderReviewSummary();
         },
         onClose: function() {
             alert('Window closed. You can still pay later from your dashboard.');
