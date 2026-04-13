@@ -728,6 +728,33 @@ window.renderReviewSummary = async function() {
     }
 };
 
+window.finalSubmitApplication = async function() {
+    const user = auth.currentUser;
+    const [draftSnap, appSnap] = await Promise.all([
+        getDoc(doc(db, "drafts", user.uid)),
+        getDoc(doc(db, "applications", user.uid))
+    ]);
+
+    if (draftSnap.exists()) {
+        const draftData = draftSnap.data();
+        const existingData = appSnap.exists() ? appSnap.data() : {};
+        
+        const yearSuffix = new Date().getFullYear().toString().slice(-2);
+        let finalAppId = existingData.applicationId || `APP-${yearSuffix}${Math.floor(100000 + Math.random() * 900000)}`;
+
+        await setDoc(doc(db, "applications", user.uid), {
+            ...draftData,
+            applicationId: finalAppId,
+            status1: existingData.status1 || "pending",
+            submittedAt: existingData.submittedAt || new Date(),
+            lastUpdated: new Date()
+        }, { merge: true });
+
+        alert("Application Finalized!");
+        location.href = 'dashboard.html';
+    }
+};
+
 // --- THE STARTUP CHECK ---
 setTimeout(() => {
     const container = document.getElementById('subjectsContainer');
