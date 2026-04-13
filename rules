@@ -73,6 +73,12 @@ service cloud.firestore {
       allow read: if false; 
       allow write: if isStaffOrAdmin(); // Only staff can trigger the write that results in a mail doc
    }
+
+    // 7. SYSTEM CONFIG (Read-only for authenticated users)
+    match /system_config/payments {
+      allow read: if request.auth != null;
+      allow write: if false; 
+    }
   }
 }
 
