@@ -534,8 +534,9 @@ mainForm.addEventListener('submit', async (e) => {
                     const randomDigits = Math.floor(100000 + Math.random() * 900000);
                     finalAppId = `APP-${yearSuffix}${randomDigits}`;
                 }
-                goToStep(4);
-                setupPaymentUI();                
+                
+                await setupPaymentUI();
+                goToStep(4);                
             }
 
         } catch (error) {
