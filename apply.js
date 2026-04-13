@@ -534,17 +534,6 @@ mainForm.addEventListener('submit', async (e) => {
                     const randomDigits = Math.floor(100000 + Math.random() * 900000);
                     finalAppId = `APP-${yearSuffix}${randomDigits}`;
                 }
-
-                // Push to final applications collection
-                await setDoc(doc(db, "applications", user.uid), {
-                    ...draftSnap.data(),
-                    applicationId: finalAppId,
-                    status1: finalStatus,
-                    submittedAt: existingData.submittedAt || new Date(),
-                    lastUpdated: new Date()
-                }, { merge: true });
-
-                alert("Application Submitted Successfully!");
                 goToStep(4);
                 setupPaymentUI();                
             }
