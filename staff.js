@@ -949,6 +949,40 @@ window.updateVaultStatuses = async (data) => {
     }
 };
 
+// Function to save the new cycle
+document.getElementById('btnCreateCycle').onclick = async () => {
+    const name = document.getElementById('cycleName').value;
+    const year = document.getElementById('cycleYear').value;
+    const open = document.getElementById('cycleOpen').value;
+    const close = document.getElementById('cycleClose').value;
+
+    if (!name || !open || !close) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    try {
+        const cycleData = {
+            name: name,
+            academicYear: year,
+            openDate: open,
+            closingDate: close,
+            campuses: ["Pretoria", "Soshanguve", "Johannesburg"],
+            modules: ["Computer Science", "Information Technology", "Software Engineering", "Mathematical Sciences", "Actuarial Sciences"],
+            createdAt: new Date()
+        };
+
+        await setDoc(doc(db, "system_config", "active_cycle"), cycleData);
+        
+        document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
+        document.getElementById('cycleOverlay').style.display = 'none';
+        alert("Application Cycle Created Successfully.");
+    } catch (error) {
+        alert("Error creating cycle: " + error.message);
+    }
+};
+
+
 
 
 
