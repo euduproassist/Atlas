@@ -23,6 +23,19 @@ onAuthStateChanged(auth, async (user) => {
     const staffRef = doc(db, "staff", user.uid);
     const staffSnap = await getDoc(staffRef);
 
+        if (staffSnap.exists()) {
+        window.currentStaffName = staffSnap.data().fullName || "Staff";
+
+        const cycleSnap = await getDoc(doc(db, "system_config", "active_cycle"));
+        if (!cycleSnap.exists()) {
+            document.getElementById('cycleOverlay').style.display = 'flex';
+        } else {
+            document.getElementById('portalTitle').innerText = `Staff Management Portal - ${cycleSnap.data().name}`;
+            loadApplications(); // Only load the "Next Page" (Data) if the cycle is found
+        }
+        
+    setupProfile(user);
+
 } else {
     console.warn("Security: UID", user.uid, "not found in staff collection.");
     auth.signOut();
