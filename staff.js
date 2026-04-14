@@ -977,6 +977,7 @@ document.getElementById('btnCreateCycle').onclick = async () => {
         document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
         document.getElementById('cycleOverlay').style.display = 'none';
         alert("Application Cycle Created Successfully.");
+        loadApplications();
     } catch (error) {
         alert("Error creating cycle: " + error.message);
     }
