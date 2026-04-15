@@ -1002,6 +1002,95 @@ document.getElementById('btnCreateCycle').onclick = async () => {
     }
 };
 
+// 1. Render the left-side folder structure
+function renderCycleExplorer(docs) {
+    const list = document.getElementById('cycleExplorerList');
+    list.innerHTML = '';
+    
+    if (docs.length === 0) {
+        list.innerHTML = '<p style="text-align:center; font-size:0.7rem; color:#999; margin-top:20px;">No application cycles found.</p>';
+        return;
+    }
+
+    // Grouping docs by Year
+    const groups = {};
+    docs.forEach(d => {
+        const year = d.data().academicYear;
+        if (!groups[year]) groups[year] = [];
+        groups[year].push({ id: d.id, ...d.data() });
+    });
+
+    Object.keys(groups).sort((a,b) => b-a).forEach(year => {
+        const yearFolder = document.createElement('div');
+        yearFolder.innerHTML = `
+            <div style="font-size:0.75rem; font-weight:700; color:#333; padding:8px 5px; background:#f4f7f9; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Academic Year ${year}
+            </div>
+            <div id="year-${year}" style="padding-left:15px; border-left:1px solid #eee; margin-left:10px;"></div>
+        `;
+        list.appendChild(yearFolder);
+
+        const subContainer = document.getElementById(`year-${year}`);
+        groups[year].forEach(cycle => {
+            const now = new Date();
+            const start = new Date(cycle.openDate);
+            const end = new Date(cycle.closingDate);
+            
+            let status = "SCHEDULED";
+            let color = "#ffa000"; // Orange
+            
+            if (now >= start && now <= end) {
+                status = "OPEN";
+                color = "#2e7d32"; // Green
+            } else if (now > end) {
+                status = "CLOSED";
+                color = "#c62828"; // Red
+            }
+
+            const link = document.createElement('div');
+            link.style = "display:flex; justify-content:space-between; align-items:center; padding:10px 5px; border-bottom:1px solid #f9f9f9; cursor:pointer;";
+            link.onclick = () => fillCycleForm(cycle);
+            link.innerHTML = `
+                <span style="font-size:0.7rem; color:#555; font-weight:600;"><i class="fas fa-link" style="font-size:0.6rem; margin-right:5px; color:#999;"></i> ${cycle.name}</span>
+                <button onclick="event.stopPropagation(); enterCycle('${cycle.id}', '${cycle.name}')" 
+                        style="background:${color}; color:white; border:none; padding:3px 8px; border-radius:3px; font-size:0.6rem; font-weight:700; cursor:pointer;">
+                    ${status}
+                </button>
+            `;
+            subContainer.appendChild(link);
+        });
+    });
+}
+
+// 2. Fill form on the right when sub-link is clicked
+function fillCycleForm(cycle) {
+    document.getElementById('formTitle').innerText = "Cycle Summary";
+    document.getElementById('cycleName').value = cycle.name;
+    document.getElementById('cycleYear').value = cycle.academicYear;
+    document.getElementById('cycleOpen').value = cycle.openDate;
+    document.getElementById('cycleClose').value = cycle.closingDate;
+}
+
+// 3. Clear form when "Create New" is clicked
+document.getElementById('btnNewCycle').onclick = () => {
+    document.getElementById('formTitle').innerText = "Create Application Cycle";
+    document.getElementById('cycleName').value = '';
+    document.getElementById('cycleOpen').value = '';
+    document.getElementById('cycleClose').value = '';
+};
+
+// 4. Enter the cycle to view students
+window.enterCycle = (id, name) => {
+    window.selectedCycleId = id;
+    document.getElementById('cycleOverlay').style.display = 'none';
+    document.getElementById('mainDashboard').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'flex';
+    document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
+    // Re-load apps filtered by this cycle ID
+    loadApplications(id); 
+};
+
+
 
 
 
