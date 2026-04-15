@@ -522,43 +522,6 @@
     </div>
 </div>
 
-    <div id="cycleOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#ffffff; z-index:5000; justify-content:center; align-items:center;">
-    <div style="background:white; padding:25px; border: 1px solid var(--border); border-radius:8px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.08);">
-        <h2 style="margin-bottom:15px; color:#333; font-size:0.95rem; border-bottom:1px solid var(--primary); padding-bottom:8px; font-weight: 700;">Create Application Cycle</h2>
-        
-        <label style="font-size:0.65rem; font-weight:700; color:#999; text-transform: uppercase; letter-spacing: 0.5px;">CYCLE NAME (e.g. 2026 Intake)</label>
-        <input type="text" id="cycleName" style="width:100%; padding:6px 10px; margin:5px 0 15px 0; border:1px solid var(--border); border-radius:4px; font-size:0.75rem;">
-
-        <label style="font-size:0.65rem; font-weight:700; color:#999; text-transform: uppercase; letter-spacing: 0.5px;">ACADEMIC YEAR</label>
-        <input type="number" id="cycleYear" value="2026" style="width:100%; padding:6px 10px; margin:5px 0 15px 0; border:1px solid var(--border); border-radius:4px; font-size:0.75rem;">
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;">
-            <div>
-                <label style="font-size:0.65rem; font-weight:700; color:#999; text-transform: uppercase; letter-spacing: 0.5px;">OPEN DATE</label>
-                <input type="date" id="cycleOpen" style="width:100%; padding:6px 10px; margin:5px 0 15px 0; border:1px solid var(--border); border-radius:4px; font-size:0.75rem;">
-            </div>
-            <div>
-                <label style="font-size:0.65rem; font-weight:700; color:#999; text-transform: uppercase; letter-spacing: 0.5px;">CLOSING DATE</label>
-                <input type="date" id="cycleClose" style="width:100%; padding:6px 10px; margin:5px 0 15px 0; border:1px solid var(--border); border-radius:4px; font-size:0.75rem;">
-            </div>
-        </div>
-
-        <label style="font-size:0.65rem; font-weight:700; color:#999; text-transform: uppercase; letter-spacing: 0.5px;">CAMPUS (Fixed)</label>
-        <select id="cycleCampus" style="width:100%; padding:10px; margin:8px 0 20px 0; border:1px solid #ddd; border-radius:4px; background:#f9f9f9;" disabled>
-            <option>Pretoria, Soshanguve, Johannesburg</option>
-        </select>
-
-        <label style="font-size:0.65rem; font-weight:700; color:#999; text-transform: uppercase; letter-spacing: 0.5px;">MODULES (Fixed)</label>
-        <div style="font-size:0.7rem; color:#666; background:#f8f9fa; padding:8px; border:1px solid var(--border); border-radius:4px; margin:5px 0 15px 0;">
-            CompSci, IT, Software Eng, Math Sciences, Actuarial Sciences
-        </div>
-
-        <div style="display:flex; gap:10px; margin-top:30px;">
-            <button onclick="document.getElementById('cycleName').value=''; document.getElementById('cycleOpen').value=''; document.getElementById('cycleClose').value='';" style="flex:1; padding:8px; border:1px solid var(--border); background:none; cursor:pointer; border-radius:4px; font-weight:700; font-size:0.7rem;">CANCEL</button>
-            <button id="btnCreateCycle" style="flex:2; padding:8px; border:none; background:var(--primary); color:white; cursor:pointer; border-radius:4px; font-weight:700; font-size:0.7rem; letter-spacing:0.5px;">CREATE CYCLE</button>
-        </div>
-    </div>
-</div>
 
 <script type="module" src="staff.js"></script>
 
