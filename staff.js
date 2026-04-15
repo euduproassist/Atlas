@@ -1089,6 +1089,56 @@ window.enterCycle = (id, name) => {
     loadApplications(id); 
 };
 
+// Manual Course Entry Logic
+document.getElementById('btnManualCourse').onclick = async () => {
+    const course = prompt("Enter Course Name:");
+    const campus = prompt("Enter Campus (e.g., Soshanguve):");
+    const mode = prompt("Enter Attendance Mode (e.g., 3 Days a Week):");
+
+    if (course && campus && mode) {
+        try {
+            await addDoc(collection(db, "course_offerings"), {
+                courseName: course,
+                campus: campus,
+                attendanceMode: mode,
+                createdAt: new Date()
+            });
+            alert("Course added successfully.");
+        } catch (e) { alert("Error: " + e.message); }
+    }
+};
+
+// Excel/CSV Upload Simulation (Processes CSV rows)
+document.getElementById('btnUploadExcel').onclick = () => document.getElementById('excelInput').click();
+
+document.getElementById('excelInput').onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+        const text = event.target.result;
+        const rows = text.split('\n').slice(1); // Skip header row
+        
+        let count = 0;
+        for (let row of rows) {
+            const [course, campus, mode] = row.split(',');
+            if (course && campus && mode) {
+                await addDoc(collection(db, "course_offerings"), {
+                    courseName: course.trim(),
+                    campus: campus.trim(),
+                    attendanceMode: mode.trim(),
+                    createdAt: new Date()
+                });
+                count++;
+            }
+        }
+        alert(`${count} Courses imported and sorted by system.`);
+    };
+    reader.readAsText(file);
+};
+
+
 
 
 
