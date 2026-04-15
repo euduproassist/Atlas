@@ -25,6 +25,21 @@ onAuthStateChanged(auth, async (user) => {
 
         if (staffSnap.exists()) {
         window.currentStaffName = staffSnap.data().fullName || "Staff";
+     
+    const cycleSnap = await getDoc(doc(db, "system_config", "active_cycle"));
+        if (!cycleSnap.exists()) {
+            // Hide everything and show only the cycle creator
+            document.getElementById('mainDashboard').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('cycleOverlay').style.display = 'flex';
+        } else {
+            // Show the dashboard and load data
+            document.getElementById('mainDashboard').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'flex';
+            document.getElementById('cycleOverlay').style.display = 'none';
+            document.getElementById('portalTitle').innerText = `Staff Management Portal - ${cycleSnap.data().name}`;
+            loadApplications(); 
+        }
         
     setupProfile(user);
 
