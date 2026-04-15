@@ -979,6 +979,18 @@ document.getElementById('btnCreateCycle').onclick = async () => {
             createdAt: new Date()
         };
 
+        await setDoc(doc(db, "system_config", "active_cycle"), cycleData);
+        
+        document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
+        
+        // FIX: Explicitly show the dashboard and main content layout
+        document.getElementById('mainDashboard').style.display = 'block';
+        document.getElementById('mainContent').style.display = 'flex';
+        
+        document.getElementById('cycleOverlay').style.display = 'none';
+        alert("Application Cycle Created Successfully.");
+        loadApplications();
+
     } catch (error) {
         alert("Error creating cycle: " + error.message);
     }
