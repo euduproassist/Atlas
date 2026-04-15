@@ -975,17 +975,6 @@ document.getElementById('btnCreateCycle').onclick = async () => {
     }
 
     try {
-        const cycleData = {
-            name: name,
-            academicYear: year,
-            openDate: open,
-            closingDate: close,
-            campuses: ["Pretoria", "Soshanguve", "Johannesburg"],
-            modules: ["Computer Science", "Information Technology", "Software Engineering", "Mathematical Sciences", "Actuarial Sciences"],
-            createdAt: new Date()
-        };
-
-        await addDoc(collection(db, "application_cycles"), cycleData);
         
         document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
         
