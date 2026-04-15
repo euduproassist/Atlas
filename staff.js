@@ -975,6 +975,30 @@ document.getElementById('btnCreateCycle').onclick = async () => {
     }
 
     try {
+    const cycleRef = await addDoc(collection(db, "application_cycles"), {
+    name: name,
+    academicYear: year,
+    openDate: open,
+    closingDate: close,
+    createdAt: new Date()
+});
+
+const rows = document.querySelectorAll('#courseTableBody tr');
+for (let row of rows) {
+    const course = row.querySelector('.c-course').value;
+    const campus = row.querySelector('.c-campus').value;
+    const mode = row.querySelector('.c-mode').value;
+
+    if(course && campus && mode) {
+        await addDoc(collection(db, "course_offerings"), {
+            cycleId: cycleRef.id,
+            course: course,
+            campus: campus,
+            attendanceMode: mode,
+            lastUpdated: new Date()
+        });
+    }
+}
         
         document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
         
