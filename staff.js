@@ -636,6 +636,12 @@ function setupProfile(user) {
     const overlay = document.getElementById('profileOverlay');
     const emailDisp = document.getElementById('staffEmailDisplay');
 
+    cycleTrigger.onclick = () => {
+    document.getElementById('cycleOverlay').style.display = 'flex';
+    document.getElementById('mainDashboard').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
+    };
+
     trigger.onclick = () => {
         emailDisp.innerText = user.email;
         overlay.style.display = 'flex';
