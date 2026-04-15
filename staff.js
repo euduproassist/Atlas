@@ -25,7 +25,8 @@ onAuthStateChanged(auth, async (user) => {
 
         if (staffSnap.exists()) {
         window.currentStaffName = staffSnap.data().fullName || "Staff";
-            // Check for cycles in the cycles collection instead of a single config doc
+      
+       // Check for cycles in the cycles collection instead of a single config doc
        const cycleQuery = query(collection(db, "application_cycles"), orderBy("academicYear", "desc"));
        onSnapshot(cycleQuery, (snapshot) => {
        renderCycleExplorer(snapshot.docs);
