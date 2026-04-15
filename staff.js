@@ -1090,6 +1090,19 @@ window.enterCycle = (id, name) => {
     loadApplications(id); 
 };
 
+window.addCourseRow = (course = '', campus = '', mode = '') => {
+    const tbody = document.getElementById('courseTableBody');
+    const row = document.createElement('tr');
+    row.style.borderBottom = "1px solid #eee";
+    row.innerHTML = `
+        <td style="padding: 2px;"><input type="text" class="c-course" value="${course}" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="e.g. IT"></td>
+        <td style="padding: 2px;"><input type="text" class="c-campus" value="${campus}" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="Pretoria"></td>
+        <td style="padding: 2px;"><input type="text" class="c-mode" value="${mode}" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="Online"></td>
+        <td style="padding: 2px; text-align:center;"><i class="fas fa-times" onclick="this.closest('tr').remove()" style="color:#ff4d4d; cursor:pointer; font-size:0.7rem;"></i></td>
+    `;
+    tbody.appendChild(row);
+};
+
 
 
 
