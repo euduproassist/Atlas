@@ -980,8 +980,7 @@ document.getElementById('btnCreateCycle').onclick = async () => {
             academicYear: year,
             openDate: open,
             closingDate: close,
-            campuses: ["Pretoria", "Soshanguve", "Johannesburg"],
-            modules: ["Computer Science", "Information Technology", "Software Engineering", "Mathematical Sciences", "Actuarial Sciences"],
+            
             createdAt: new Date()
         };
 
