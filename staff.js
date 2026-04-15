@@ -1076,14 +1076,23 @@ function renderCycleExplorer(docs) {
 }
 
 // 2. Fill form on the right when sub-link is clicked
-function fillCycleForm(cycle) {
-    document.getElementById('formTitle').innerText = "Cycle Summary";
+async function fillCycleForm(cycle) {
+    document.getElementById('formTitle').innerText = "Edit Cycle Offerings";
     document.getElementById('cycleName').value = cycle.name;
     document.getElementById('cycleYear').value = cycle.academicYear;
     document.getElementById('cycleOpen').value = cycle.openDate;
     document.getElementById('cycleClose').value = cycle.closingDate;
-}
 
+    // Clear and load existing offerings
+    const tbody = document.getElementById('courseTableBody');
+    tbody.innerHTML = '';
+    const q = query(collection(db, "course_offerings"), where("cycleId", "==", cycle.id));
+    const snap = await getDocs(q);
+    snap.forEach(doc => {
+        const d = doc.data();
+        addCourseRow(d.course, d.campus, d.attendanceMode);
+    });
+}
 // 3. Clear form when "Create New" is clicked
 document.getElementById('btnNewCycle').onclick = () => {
     document.getElementById('formTitle').innerText = "Create Application Cycle";
@@ -1102,24 +1111,6 @@ window.enterCycle = (id, name) => {
     // Re-load apps filtered by this cycle ID
     loadApplications(id); 
 };
-
-async function fillCycleForm(cycle) {
-    document.getElementById('formTitle').innerText = "Edit Cycle Offerings";
-    document.getElementById('cycleName').value = cycle.name;
-    document.getElementById('cycleYear').value = cycle.academicYear;
-    document.getElementById('cycleOpen').value = cycle.openDate;
-    document.getElementById('cycleClose').value = cycle.closingDate;
-
-    // Clear and load existing offerings
-    const tbody = document.getElementById('courseTableBody');
-    tbody.innerHTML = '';
-    const q = query(collection(db, "course_offerings"), where("cycleId", "==", cycle.id));
-    const snap = await getDocs(q);
-    snap.forEach(doc => {
-        const d = doc.data();
-        addCourseRow(d.course, d.campus, d.attendanceMode);
-    });
-}
 
 window.addCourseRow = (course = '', campus = '', mode = '') => {
     const tbody = document.getElementById('courseTableBody');
