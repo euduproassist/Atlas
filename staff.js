@@ -985,7 +985,7 @@ document.getElementById('btnCreateCycle').onclick = async () => {
             createdAt: new Date()
         };
 
-        
+        await addDoc(collection(db, "application_cycles"), cycleData);
         
         document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
         
