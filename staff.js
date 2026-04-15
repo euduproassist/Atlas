@@ -13,6 +13,41 @@ let activeSubFilter = 'all'; // Tracks Pending, Review, or Waiting
 let activeTabFilter = 'new'; 
 
 // 1. Security Check: Ensure user is logged in
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "staff-login.html";
+        return;
+    }
+
+    const staffRef = doc(db, "staff", user.uid);
+    const staffSnap = await getDoc(staffRef);
+
+    if (staffSnap.exists()) {
+        window.currentStaffName = staffSnap.data().fullName || "Staff";
+
+        const cycleQuery = query(collection(db, "application_cycles"), orderBy("academicYear", "desc"));
+        onSnapshot(cycleQuery, (snapshot) => {
+            renderCycleExplorer(snapshot.docs);
+
+            if (snapshot.empty || !window.selectedCycleId) {
+                document.getElementById('mainDashboard').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('cycleOverlay').style.display = 'flex';
+            } else {
+                document.getElementById('mainDashboard').style.display = 'block';
+                document.getElementById('mainContent').style.display = 'flex';
+                document.getElementById('cycleOverlay').style.display = 'none';
+                // Using the global variable name instead of the undefined cycleSnap
+                document.getElementById('portalTitle').innerText = `Staff Management Portal - ${window.selectedCycleName || ''}`;
+                loadApplications();
+            }
+        });
+        setupProfile(user);
+    } else {
+        console.warn("Security: UID", user.uid, "not found in staff collection.");
+        auth.signOut();
+    }
+});
 
 // 2. Real-time Listener for Applications (Connects to 'applications' collection)
 function loadApplications() {
