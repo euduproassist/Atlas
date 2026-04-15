@@ -980,7 +980,7 @@ document.getElementById('btnCreateCycle').onclick = async () => {
             academicYear: year,
             openDate: open,
             closingDate: close,
-            
+            courseCount: window.currentCycleCourseCount || 0, 
             createdAt: new Date()
         };
 
