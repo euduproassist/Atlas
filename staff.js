@@ -25,7 +25,18 @@ onAuthStateChanged(auth, async (user) => {
 
         if (staffSnap.exists()) {
         window.currentStaffName = staffSnap.data().fullName || "Staff";
-     
+            // Check for cycles in the cycles collection instead of a single config doc
+       const cycleQuery = query(collection(db, "application_cycles"), orderBy("academicYear", "desc"));
+       onSnapshot(cycleQuery, (snapshot) => {
+       renderCycleExplorer(snapshot.docs);
+    
+    // If no cycle is currently selected or no cycles exist, stay on the overlay
+    if (snapshot.empty || !window.selectedCycleId) {
+        document.getElementById('mainDashboard').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('cycleOverlay').style.display = 'flex';
+        }
+        });    
         } else {
             // Show the dashboard and load data
             document.getElementById('mainDashboard').style.display = 'block';
