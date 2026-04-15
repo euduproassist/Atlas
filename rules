@@ -178,7 +178,7 @@ service cloud.firestore {
     }
 
     // New rule for the Application Cycle - Does not affect payments
-    match /system_config/active_cycle {
+    
       allow read: if request.auth != null;
       allow write: if isStaffOrAdmin();
     }
