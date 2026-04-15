@@ -25,14 +25,6 @@ onAuthStateChanged(auth, async (user) => {
 
         if (staffSnap.exists()) {
         window.currentStaffName = staffSnap.data().fullName || "Staff";
-
-        const cycleSnap = await getDoc(doc(db, "system_config", "active_cycle"));
-        if (!cycleSnap.exists()) {
-            document.getElementById('cycleOverlay').style.display = 'flex';
-        } else {
-            document.getElementById('portalTitle').innerText = `Staff Management Portal - ${cycleSnap.data().name}`;
-            loadApplications(); // Only load the "Next Page" (Data) if the cycle is found
-        }
         
     setupProfile(user);
 
