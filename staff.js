@@ -632,6 +632,7 @@ document.getElementById('sortDate').addEventListener('change', (e) => {
 
 function setupProfile(user) {
     const trigger = document.getElementById('profileTrigger');
+    const cycleTrigger = document.getElementById('cycleTrigger');
     const overlay = document.getElementById('profileOverlay');
     const emailDisp = document.getElementById('staffEmailDisplay');
 
