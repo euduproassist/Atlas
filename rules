@@ -1,3 +1,113 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is Staff or Admin
+    function isStaffOrAdmin() {
+      return request.auth != null && (
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // 1. STUDENTS / USERS COLLECTION
+    match /users/{userId} {
+      // Allows user to read own profile, and staff/admins to view for dashboard names
+      allow read: if request.auth != null && (request.auth.uid == userId || isStaffOrAdmin());
+      allow write: if false; // Only Cloud Functions or Admin SDK should handle this for security
+    }
+
+    // 2. STAFF COLLECTION
+    match /staff/{staffId} {
+      allow read, write: if request.auth != null && request.auth.uid == staffId;
+      allow read: if request.auth != null;
+    }
+
+    // 3. ADMIN COLLECTION
+    match /admins/{adminId} {
+      allow read, write: if request.auth != null && request.auth.uid == adminId;
+    }
+
+    // 4. DRAFTS
+    match /drafts/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 5. APPLICATIONS 
+    match /applications/{applicationId} {
+      // Duplicate Check
+      allow get: if request.auth != null;
+
+      // Browsing/Listing
+      allow list: if isStaffOrAdmin();
+
+      // Detailed Read
+      allow read: if request.auth != null && (
+        request.auth.uid == applicationId || isStaffOrAdmin()
+      );
+
+      allow create: if request.auth != null && request.auth.uid == applicationId;
+
+       allow update: if request.auth != null && (
+    request.auth.uid == applicationId || isStaffOrAdmin()
+  ) && (
+    isStaffOrAdmin() || 
+    request.resource.data.diff(resource.data).affectedKeys()
+      .hasAny(['step1', 'step2', 'documents', 'documentStatuses', 'draft', 'lastUpdated', 'status1', 'adminNote', 'studentNumber', 'processedBy', 'actionHistory', 'adminDocs', 'applicationID', 'submittedAt'])
+  );
+}
+
+
+    // 6. DOCUMENT VAULT
+    match /documentVault/{docId} {
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && (
+        resource.data.ownerId == request.auth.uid || isStaffOrAdmin()
+      );
+    }
+   match /mail/{mailId} {
+      allow read: if false; 
+      allow write: if isStaffOrAdmin(); // Only staff can trigger the write that results in a mail doc
+   }
+
+  
+    // 7. New rule for the Application Cycle - Does not affect payments
+    match /application_cycles/{cycleId} {
+      allow read: if request.auth != null;
+      allow write: if isStaffOrAdmin();
+    }
+    
+    match /course_offerings/{offeringId} {
+      allow read: if request.auth != null;
+      allow write: if isStaffOrAdmin();
+      // Validation: Ensure required fields are present
+      allow create: if isStaffOrAdmin() && 
+      request.resource.data.keys().hasAll(['cycleId', 'course', 'campus', 'attendanceMode']);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 🥇 Gauteng “broken / manual admissions likely” school targets (50)
 🏫 Johannesburg / Sandton / Midrand area
 Redhill School
@@ -161,99 +271,7 @@ smtps://eduproassist44@gmail.com:odozijwkxmingtig@smtp.gmail.com:465
 
 
 
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    
-    // Helper function to check if user is Staff or Admin
-    function isStaffOrAdmin() {
-      return request.auth != null && (
-        exists(/databases/$(database)/documents/staff/$(request.auth.uid)) ||
-        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-      );
-    }
 
-    // 1. STUDENTS / USERS COLLECTION
-    match /users/{userId} {
-      // Allows user to read own profile, and staff/admins to view for dashboard names
-      allow read: if request.auth != null && (request.auth.uid == userId || isStaffOrAdmin());
-      allow write: if false; // Only Cloud Functions or Admin SDK should handle this for security
-    }
-
-    // 2. STAFF COLLECTION
-    match /staff/{staffId} {
-      allow read, write: if request.auth != null && request.auth.uid == staffId;
-      allow read: if request.auth != null;
-    }
-
-    // 3. ADMIN COLLECTION
-    match /admins/{adminId} {
-      allow read, write: if request.auth != null && request.auth.uid == adminId;
-    }
-
-    // 4. DRAFTS
-    match /drafts/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // 5. APPLICATIONS 
-    match /applications/{applicationId} {
-      // Duplicate Check
-      allow get: if request.auth != null;
-
-      // Browsing/Listing
-      allow list: if isStaffOrAdmin();
-
-      // Detailed Read
-      allow read: if request.auth != null && (
-        request.auth.uid == applicationId || isStaffOrAdmin()
-      );
-
-      allow create: if request.auth != null && request.auth.uid == applicationId;
-
-       allow update: if request.auth != null && (
-    request.auth.uid == applicationId || isStaffOrAdmin()
-  ) && (
-    isStaffOrAdmin() || 
-    request.resource.data.diff(resource.data).affectedKeys()
-      .hasAny(['step1', 'step2', 'documents', 'paymentStatus', 'paystackReference', 'paidAt', 'documentStatuses', 'draft', 'lastUpdated', 'status1', 'adminNote', 'studentNumber', 'processedBy', 'actionHistory', 'adminDocs', 'applicationID', 'submittedAt'])
-  );
-}
-
-
-    // 6. DOCUMENT VAULT
-    match /documentVault/{docId} {
-      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
-      allow read, update, delete: if request.auth != null && (
-        resource.data.ownerId == request.auth.uid || isStaffOrAdmin()
-      );
-    }
-   match /mail/{mailId} {
-      allow read: if false; 
-      allow write: if isStaffOrAdmin(); // Only staff can trigger the write that results in a mail doc
-   }
-
-    // 7. SYSTEM CONFIG (Read-only for authenticated users)
-    match /system_config/payments {
-      allow read: if request.auth != null;
-      allow write: if false; 
-    }
-
-    // New rule for the Application Cycle - Does not affect payments
-    match /application_cycles/{cycleId} {
-      allow read: if request.auth != null;
-      allow write: if isStaffOrAdmin();
-    }
-
-      match /course_offerings/{offeringId} {
-      allow read: if request.auth != null;
-      allow write: if isStaffOrAdmin();
-      // Validation: Ensure required fields are present
-      allow create: if isStaffOrAdmin() && 
-      request.resource.data.keys().hasAll(['cycleId', 'course', 'campus', 'attendanceMode']);
-    }
-  }
-}
 
 
 
