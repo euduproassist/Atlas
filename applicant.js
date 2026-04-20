@@ -40,6 +40,42 @@ onAuthStateChanged(auth, async (user) => {
                 
                 userNameDisplay.textContent = firstName;
                 welcomeText.textContent = `Welcome, ${firstName}!`;
+                                // --- SYNC LOGIC START ---
+                const nowStr = new Date().toISOString().split('T')[0];
+                const cycleQ = query(collection(db, "application_cycles"));
+                const cycleSnap = await getDocs(cycleQ);
+                let activeCycle = null;
+
+                cycleSnap.forEach(doc => {
+                    const d = doc.data();
+                    if (nowStr >= d.openDate && nowStr <= d.closingDate) {
+                        activeCycle = { id: doc.id, ...d };
+                    }
+                });
+
+                const appSnap = await getDoc(doc(db, "applications", user.uid));
+                const appCard = document.querySelector('.card');
+                const appBtn = document.querySelector('.btn-continue');
+                const appText = appCard.querySelector('p');
+                const appTitle = appCard.querySelector('h3');
+
+                if (!activeCycle) {
+                    // Scenario 1: No open cycles
+                    appBtn.innerText = "Applications Closed";
+                    appBtn.disabled = true;
+                    appBtn.style.background = "#ccc";
+                    appBtn.style.cursor = "not-allowed";
+                    appBtn.onclick = null;
+                    appText.innerText = "There are no application cycles currently open. Please check back later.";
+                } else if (appSnap.exists() && appSnap.data().cycleId === activeCycle.id) {
+                    // Scenario 2: Already applied to THIS cycle
+                    appCard.style.border = "2px solid #27ae60"; // Green edges
+                    appTitle.innerText = "Application Completed";
+                    appText.innerText = "Please click the button below to view your application summary.";
+                    appBtn.innerText = "View Application Summary";
+                    // This re-uses your existing trackStatusBtn functionality
+                    appBtn.onclick = () => { document.getElementById('trackStatusBtn').click(); };
+                }
             }
             
             // Hide Loader
