@@ -1,634 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Portal - Management Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-    :root { 
-        --primary: #4a90e2; 
-        --bg: #f4f7f9; 
-        --border: #e1e4e8; 
-        --text: #333; 
-    }
-
-    /* Reset & Base */
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
-    body { 
-        background-color: var(--bg); 
-        color: var(--text); 
-        overflow: hidden;
-        height: 100vh;
-    }
-
-    /* 1. Dashboard Header - Full Width & Clean */
-    .dashboard-header {
-    background: var(--bg); 
-    padding: 10px 0 0 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    }
-
-    .logo-section {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: #2c3e50;
-        white-space: nowrap; /* Prevents logo text from wrapping */
-        margin-bottom: 15px;
-        padding-left: 15px;
-    }
-
-    .logo-section i { color: var(--primary); }
-
-  /* 2. Toolbar (Filters + Search) - Fixed to stay within container */
-.toolbar {
-    background: #ffffff;
-    padding: 6px 15px;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; /* Changed from 100vw to fit the screen properly */
-    gap: 15px;
-}
-
-    .filters {
-        display: flex;
-        gap: 8px;
-    }
-
-    select, .search-bar input {
-        padding: 5px 10px;
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        background: #fff;
-        font-size: 0.75rem;
-        outline: none;
-        transition: border 0.2s;
-    }
-
-    select:focus, .search-bar input:focus { border-color: var(--primary); }
-
-    .search-bar {
-        position: relative;
-        min-width: 240px;
-    }
-
-    .search-bar input { width: 100%; padding-right: 35px; }
-
-    .search-bar i {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 0.8rem;
-        color: #999;
-    }
-
-    /* 3. Main Table Content - Full Screen */
-    .main-content {
-        display: flex;
-        width: 100vw;
-        margin-left: 0;
-        margin-right: 0;
-        min-height: 80vh;
-        background: white;
-    }
-
-    .sidebar-folder {
-    padding: 10px 25px;
-    font-weight: 700;
-    font-size: 0.8rem;
-    color: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid #f0f0f0;
-    background: #fafafa;
-}
-.sidebar-folder:hover { background: #f0f7ff; color: var(--primary); }
-.sidebar-folder i.arrow { margin-left: auto; font-size: 0.7rem; transition: 0.3s; }
-.sidebar-section { background: #fff; }
-
- /* Add this new Sidebar styling */
-.sidebar-menu {
-    width: 200px;
-    border-right: 1px solid var(--border);
-    background: #fff;
-    flex-shrink: 0;
-    transition: all 0.3s ease;
-    height: calc(100vh - 140px);
-    overflow-y: auto;
-    position: sticky;
-    top: 140px;
-}
-
-    .sidebar-menu.collapsed {
-    width: 0;
-    padding: 20px 0;
-    border-right: none;
-    opacity: 0;
-    pointer-events: none;
-    }
-
-.sidebar-section {
-    margin-bottom: 25px;
-}
-
-.sidebar-header {
-    padding: 0 25px 10px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.sub-tab {
-    display: block; /* Makes them stack vertically */
-    padding: 6px 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #666;
-    text-decoration: none;
-    cursor: pointer;
-    transition: 0.2s;
-    border-left: 3px solid transparent;
-}
-
-.sub-tab:hover {
-    background: #f8f9fa;
-    color: var(--primary);
-}
-
-/* This replaces your old horizontal border-bottom active style */
-.sub-tab.active-link {
-    background: #eef5ff;
-    color: #4a90e2;
-    border-left: 3px solid #4a90e2;
-}
-
-/* Update table wrapper to take remaining space */
-.table-container {
-    flex-grow: 1;
-    overflow-x: auto;
-}
-
-    .table-wrapper {
-        flex-grow: 1;
-        width: 100%;
-        background: white;
-        height: calc(100vh - 140px);
-        overflow-y: auto; 
-    }
-
-    thead th {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: #f8f9fa; /* Matches your header color */
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 800px; /* Prevents text squashing on mobile */
-    }
-
-    th {
-        text-align: left;
-        padding: 10px 15px;
-        background: #f8f9fa;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        color: #666;
-        border-bottom: 2px solid var(--border);
-        letter-spacing: 0.5px;
-    }
-
-    td {
-        padding: 10px 15px;
-        border-bottom: 1px solid var(--border);
-        font-size: 0.75rem;
-        font-weight: 400;
-        color: #555;
-    }
-
-    tr:hover { background-color: #fcfdfe; cursor: pointer; }
-
-    /* 4. Status Pills */
-    .status { padding: 2px 8px; border-radius: 3px; font-size: 0.6rem; font-weight: 500; text-transform: uppercase; }
-    .status-pending { background: #e3f2fd; color: #1976d2; }
-    .status-review { background: #f3e5f5; color: #7b1fa2; }
-    .status-missing { background: #fff3e0; color: #ef6c00; }
-    .status-prov_accepted { background: #e8f5e9; color: #2e7d32; }
-    .status-uncon_accepted { background: #dcedc8; color: #33691e; border: 1px solid #aece90; }
-    .status-waiting { background: #eceff1; color: #546e7a; }
-    .status-rejected { background: #ffebee; color: #c62828; }
-    .status-inactive { 
-    background: #f0f0f0; 
-    color: #999; 
-    border: 1px solid #ddd; 
-    padding: 4px 10px; 
-    border-radius: 4px; 
-    font-size: 0.75rem; 
-    font-weight: 600; 
-    text-transform: uppercase;
-    display: inline-block;
-}
-
-    /* 5. Ticket Details Popup */
-    .ticket-details {
-        margin: 25px;
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        overflow: hidden;
-    }
-
-    .details-header { background: #f8f9fa; padding: 15px 20px; font-weight: 700; border-bottom: 1px solid var(--border); }
-    .details-body { 
-        padding: 25px; 
-        display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-        gap: 20px; 
-    }
-    .details-body p { font-size: 0.95rem; line-height: 1.5; }
-    .details-body strong { color: #666; width: 130px; display: inline-block; }
-
-    /* Note Section */
-    .note-footer { border-top: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; gap: 15px; background: #fcfcfc; }
-    .note-footer input { flex-grow: 1; padding: 12px; border: 1px solid var(--border); border-radius: 6px; }
-    .btn-save { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-    .btn-save:hover { background: #357abd; }
-
-    /* Add this to your <style> section */
-    #actionDrop.show {
-    display: block !important;
-    }
-    #actionDrop a:hover {
-    background-color: #f1f1f1;
-    }
-
-    /* 6. UNIVERSAL RESPONSIVENESS */
-    @media (max-width: 1024px) {
-        .dashboard-header { flex-direction: column; align-items: flex-start; padding: 15px; }
-        .toolbar { width: 100%; justify-content: space-between; margin-top: 10px; }
-        .search-bar { flex-grow: 1; }
-    }
-
-    @media (max-width: 768px) {
-        .hide-mobile { display: none; }
-        .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
-        .filters { justify-content: space-between; }
-        .filters select { flex: 1; }
-        .search-bar { width: 100%; }
-        .ticket-details { margin: 10px; }
-    }
-
-    /* Add this inside your <style> tag */
-    .view-btn {
-    padding: 4px 10px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 0.65rem;
-    border: 1px solid transparent;
-    transition: background 0.2s;
-    }
-
-    .view-btn:hover {
-    filter: brightness(0.95);
-    }
-
-    /* style: Remove the pointer cursor from the row since it's no longer a big button */
-    tr:hover { background-color: #fcfdfe; cursor: default; }
-
-    .stats-tab {
-    flex: 1; /* This forces all 4 cards to share the width equally */
-    border-radius: 0 !important; /* Removes rounded corners so they touch the screen edges */
-}
-    /* Centered Profile Card Styling */
-.profile-card {
-    background: white;
-    width: 90%;
-    max-width: 400px;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    position: relative;
-    text-align: center;
-}
-.profile-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 3000;
-    justify-content: center;
-    align-items: center;
-}
-
-    .mod-nav-item {
-    padding: 14px 25px;
-    font-size: 0.85rem;
-    color: #666;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: 0.2s;
-}
-.mod-nav-item i:not(.arrow) { width: 18px; text-align: center; font-size: 0.9rem; }
-.mod-nav-item .arrow { margin-left: auto; font-size: 0.7rem; opacity: 0; transition: 0.2s; }
-.mod-nav-item:hover { background: #fcfdfe; color: var(--primary); }
-.mod-nav-item.active { background: #eef5ff; color: var(--primary); font-weight: 600; border-right: 3px solid var(--primary); }
-.mod-nav-item.active .arrow { opacity: 1; transform: translateX(5px); }
-
-</style>
-
-</head>
-<body>
-
-    <div class="dashboard-header">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-    <div class="logo-section" style="margin-bottom: 0;">
-        <i class="fas fa-graduation-cap"></i>
-        <span>Staff Management Portal</span>
-    </div>
-    <div id="profileTrigger" style="margin-right: 15px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: #fff; border: 1px solid var(--border); border-radius: 50px; transition: 0.2s;">
-        <i class="fas fa-user-circle" style="font-size: 0.9rem; color: var(--primary);"></i>
-        <span style="font-size: 0.75rem; font-weight: 600; color: #555;">Account</span>
-    </div>
-</div>
-
-        <div style="display: flex; gap: 0; margin-bottom: 4px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); border-left: none; border-right: none; border-radius: 0; overflow: hidden;">
-    <div class="stats-tab" style="padding: 8px; background: white; border-right: 1px solid var(--border); text-align: center;">
-        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">New Apps</span>
-        <strong id="newAppsCount" style="font-size: 1rem;">0</strong>
-    </div>
-    <div class="stats-tab" style="padding: 8px; background: white; border-right: 1px solid var(--border); text-align: center;">
-        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">Admissions</span>
-        <strong id="acceptedCount" style="font-size: 1rem;">0</strong>
-    </div>
-    <div class="stats-tab" style="padding: 8px; background: white; border-right: 1px solid var(--border); text-align: center;">
-        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">Declined</span>
-        <strong id="rejectedCount" style="font-size: 1rem;">0</strong>
-    </div>
-    <div class="stats-tab" style="padding: 8px; background: white; text-align: center;">
-        <span style="display: block; font-size: 0.6rem; color: #999; text-transform: uppercase;">Archived</span>
-        <strong id="archivedCount" style="font-size: 1rem;">0</strong>
-    </div>
-</div>
-
-            <div class="table-container">
-               <div class="toolbar">
-        <div class="search-bar" style="width: 450px;">
-        <input type="text" id="searchInput" placeholder="Search Application ID or Course...">
-        <i class="fas fa-search"></i>
-    </div>
-    <div class="filters" style="display: flex; gap: 10px;">
-        <select id="filterDocs" style="width: 240px;">
-            <option value="all">All Documents</option>
-            <option value="CD">Complete Docs (CD)</option>
-            <option value="MD">Missing Docs (MD)</option>
-        </select>
-        <select id="sortDate" style="width: 230px;">
-            <option value="newest">Sort: Newest</option>
-            <option value="oldest">Sort: Oldest</option>
-        </select>
-    </div>
-</div>
-            </div>
-
-<div class="main-content">
-    <div class="sidebar-menu">
-    <div id="tabNew" class="sidebar-folder" onclick="toggleFolder('sideNavNew')">
-        <i class="fas fa-folder"></i> New Applications <i class="fas fa-chevron-down arrow"></i>
-    </div>
-    <div id="sideNavNew" class="sidebar-section">
-        <div onclick="setSubFilter('all', 'new', event)" class="sub-tab active-link" id="subAll">All Applications</div>
-        <div onclick="setSubFilter('pending', 'new', event)" class="sub-tab" id="subPending">Pending</div>
-        <div onclick="setSubFilter('review', 'new', event)" class="sub-tab" id="subReview">Under Review</div>
-        <div onclick="setSubFilter('waiting', 'new', event)" class="sub-tab" id="subWaiting">Waiting List</div>
-    </div>
-
-    <div id="tabAccepted" class="sidebar-folder" onclick="toggleFolder('sideNavAccepted')">
-        <i class="fas fa-folder"></i> Admissions <i class="fas fa-chevron-down arrow"></i>
-    </div>
-    <div id="sideNavAccepted" class="sidebar-section" style="display: none;">
-        <div onclick="setSubFilter('all', 'accepted', event)" class="sub-tab" id="subAccAll">All Admissions</div>
-        <div onclick="setSubFilter('prov_accepted', 'accepted', event)" class="sub-tab" id="subProv">Provisional</div>
-        <div onclick="setSubFilter('uncon_accepted', 'accepted', event)" class="sub-tab" id="subUncon">Unconditional</div>
-        <div onclick="setSubFilter('registered', 'accepted', event)" class="sub-tab" id="subReg">Registered</div>
-    </div>
-
-    <div id="tabRejected" class="sidebar-folder" onclick="toggleFolder('sideNavRejected')">
-        <i class="fas fa-folder"></i> Declined <i class="fas fa-chevron-down arrow"></i>
-    </div>
-    <div id="sideNavRejected" class="sidebar-section" style="display: none;">
-        <div onclick="setSubFilter('all', 'rejected', event)" class="sub-tab" id="subRejAll">All Declined</div>
-        <div onclick="setSubFilter('rejected', 'rejected', event)" class="sub-tab" id="subDouble">Rejected</div>
-        <div onclick="setSubFilter('withdrawn_expired', 'rejected', event)" class="sub-tab" id="subExpired">Withdrawn/Expired</div>
-        <div onclick="setSubFilter('student_declined', 'rejected', event)" class="sub-tab" id="subStudent">Student Declined</div>
-    </div>
-
-    <div id="tabArchived" class="sidebar-folder" onclick="toggleFolder('sideNavArchived', 'archived')">
-        <i class="fas fa-archive"></i> System Archive <i class="fas fa-chevron-down arrow"></i>
-    </div>
-        <div id="sideNavArchived" class="sidebar-section" style="display: none;">
-    <div onclick="setSubFilter('archived', 'archived', event)" class="sub-tab" id="subArchived">All Archived</div>
-</div>
-</div>
-
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>Application ID</th>
-                    <th>Course 1</th>
-                    <th>Status 1</th>
-                    <th>Course 2</th>
-                    <th>Status 2</th>
-                    <th class="hide-mobile">Date Submitted</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="applicationTableBody"></tbody>
-        </table>
-    </div>
-</div>
-    </div>
-
-        <div id="appModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; flex-direction: column; shadow-y: auto; overflow-y: auto;">
-            <div style="display: flex; height: 100vh; background: #f8f9fa;">
-    
-    <div style="width: 280px; background: white; border-right: 1px solid #eee; display: flex; flex-direction: column; padding: 20px 0;">
-        <div style="padding: 0 25px 20px; border-bottom: 1px solid #f5f5f5; margin-bottom: 10px;">
-            <button onclick="document.getElementById('appModal').style.display='none'" style="background:none; border:none; color:#999; cursor:pointer; font-size: 0.8rem; margin-bottom: 15px;">
-                <i class="fas fa-arrow-left"></i> BACK TO LIST
-            </button>
-            <div id="modalIdBadge" style="font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 1px;"></div>
-            <h2 id="modalStudentName" style="font-size: 1.1rem; margin-top: 5px; color: #333;"></h2>
-        </div>
-
-        <nav id="modalNav">
-            <div onclick="switchModalTab('personal')" class="mod-nav-item active" id="nav-personal">
-                <i class="fas fa-user"></i> Personal Details <i class="fas fa-chevron-right arrow"></i>
-            </div>
-            <div onclick="switchModalTab('academic')" class="mod-nav-item" id="nav-academic">
-                <i class="fas fa-graduation-cap"></i> Academic Qualifications <i class="fas fa-chevron-right arrow"></i>
-            </div>
-            <div onclick="switchModalTab('documents')" class="mod-nav-item" id="nav-documents">
-                <i class="fas fa-file-alt"></i> Uploaded Documents <i class="fas fa-chevron-right arrow"></i>
-            </div>
-            <div onclick="switchModalTab('application')" class="mod-nav-item" id="nav-application">
-                <i class="fas fa-clipboard-list"></i> Application Details <i class="fas fa-chevron-right arrow"></i>
-            </div>
-        </nav>
-    </div>
-
-    <div style="flex-grow: 1; padding: 40px; overflow-y: auto; display: flex; justify-content: center;">
-        <div id="modalContentCard" style="background: white; width: 100%; max-width: 800px; padding: 35px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); height: fit-content;">
-            <div id="sec-personal" class="modal-section"></div>
-            <div id="sec-academic" class="modal-section" style="display:none;"></div>
-            <div id="sec-documents" class="modal-section" style="display:none;"></div>
-            <div id="sec-application" class="modal-section" style="display:none;"></div>
-        </div>
-    </div>
-</div>
-
-        <div id="modalBody">
-            </div>
-    </div>
-</div>
-
-    <div id="profileOverlay" class="profile-overlay" onclick="if(event.target === this) this.style.display='none'">
-    <div class="profile-card">
-        <button onclick="document.getElementById('profileOverlay').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #999;">&times;</button>
-        <div style="width: 70px; height: 70px; background: #e3f2fd; color: #4a90e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.8rem;">
-            <i class="fas fa-user-shield"></i>
-        </div>
-        <h3 style="margin-bottom: 5px;">Staff Account</h3>
-        <p id="staffEmailDisplay" style="color: #777; font-size: 0.9rem; margin-bottom: 25px;"></p>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <button id="btnResetPass" style="padding: 12px; border: 1px solid #4a90e2; background: #fff; color: #4a90e2; border-radius: 8px; font-weight: 600; cursor: pointer;"><i class="fas fa-key"></i> Reset Password</button>
-            <button id="btnLogout" style="padding: 12px; border: none; background: #ff4d4d; color: white; border-radius: 8px; font-weight: 600; cursor: pointer;"><i class="fas fa-sign-out-alt"></i> Logout</button>
-        </div>
-    </div>
-</div>
-
-<script type="module" src="staff.js"></script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { auth, db } from './firebase-config.js';
-import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField, addDoc, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 
@@ -648,20 +19,34 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
-    // CRITICAL FIX: Verify staff status in the UI before querying
     const staffRef = doc(db, "staff", user.uid);
     const staffSnap = await getDoc(staffRef);
-    
+
     if (staffSnap.exists()) {
         window.currentStaffName = staffSnap.data().fullName || "Staff";
-    loadApplications();
-    setupProfile(user);
 
-} else {
-    console.warn("Security: UID", user.uid, "not found in staff collection.");
-    auth.signOut();
-}
+        const cycleQuery = query(collection(db, "application_cycles"), orderBy("academicYear", "desc"));
+        onSnapshot(cycleQuery, (snapshot) => {
+            renderCycleExplorer(snapshot.docs);
 
+            if (snapshot.empty || !window.selectedCycleId) {
+                document.getElementById('mainDashboard').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('cycleOverlay').style.display = 'flex';
+            } else {
+                document.getElementById('mainDashboard').style.display = 'block';
+                document.getElementById('mainContent').style.display = 'flex';
+                document.getElementById('cycleOverlay').style.display = 'none';
+                // Using the global variable name instead of the undefined cycleSnap
+                document.getElementById('portalTitle').innerText = `Staff Management Portal - ${window.selectedCycleName || ''}`;
+                loadApplications();
+            }
+        });
+        setupProfile(user);
+    } else {
+        console.warn("Security: UID", user.uid, "not found in staff collection.");
+        auth.signOut();
+    }
 });
 
 // 2. Real-time Listener for Applications (Connects to 'applications' collection)
@@ -1247,8 +632,15 @@ document.getElementById('sortDate').addEventListener('change', (e) => {
 
 function setupProfile(user) {
     const trigger = document.getElementById('profileTrigger');
+    const cycleTrigger = document.getElementById('cycleTrigger');
     const overlay = document.getElementById('profileOverlay');
     const emailDisp = document.getElementById('staffEmailDisplay');
+
+    cycleTrigger.onclick = () => {
+    document.getElementById('cycleOverlay').style.display = 'flex';
+    document.getElementById('mainDashboard').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
+    };
 
     trigger.onclick = () => {
         emailDisp.innerText = user.email;
@@ -1319,6 +711,40 @@ window.saveStatusUpdate = async () => {
 
         const isAdmissionStatus = ['uncon_accepted', 'registered'].includes(s1Value);
         const isDeclinedStatus = ['rejected', 'withdrawn_expired'].includes(s1Value);
+
+        // REJECTION REASON LOGIC
+        let rejectionReasonBody = "";
+        let rejectionTitle = "";
+
+        if (isDeclinedStatus) {
+            const reasons = {
+                1: { title: "Course/Programme Full", text: "Although you meet the minimum academic criteria for this qualification, we are unable to offer you a place because the program has reached its maximum enrollment capacity. Admission is highly competitive and is based on a ranking of top-performing applicants." },
+                2: { title: "Academic Non-Compliance", text: "Your application has been unsuccessful as your academic results do not meet the minimum statutory requirements or the faculty-specific criteria (such as APS score or required marks in Mathematics/English) for this program." },
+                3: { title: "Final Results Below Provisional Offer", text: "Your provisional offer of admission has been withdrawn. Upon verification of your final National Senior Certificate (NSC) results, it was determined that you no longer meet the specific entry requirements." },
+                4: { title: "Administrative Non-Compliance", text: "Your application has been rejected because it remained incomplete after the deadline. Required supporting documents were not provided or were submitted in an unreadable format." },
+                5: { title: "Selection Criteria Not Met", text: "This program requires a secondary selection process. After a thorough review by the faculty committee, your application was not selected for the current intake." },
+                6: { title: "Offer Expired", text: "A provisional offer was extended to you via the portal. Because you did not accept the offer within the required 48-hour timeframe, the system has automatically withdrawn the offer." }
+            };
+
+            const choice = prompt(
+                "SELECT REJECTION REASON:\n" +
+                "1. Course Full\n" +
+                "2. Academic Requirements Not Met\n" +
+                "3. Final Results Drop\n" +
+                "4. Missing/Invalid Documents\n" +
+                "5. Faculty Selection\n" +
+                "6. Offer Expired (Withdrawn)"
+            );
+
+            if (!reasons[choice]) {
+                alert("Update cancelled. You must select a valid reason (1-6) to reject an application.");
+                btn.innerText = "UPDATE STATUS";
+                btn.disabled = false;
+                return;
+            }
+            rejectionTitle = reasons[choice].title;
+            rejectionReasonBody = reasons[choice].text;
+        }
 
         // 2. Logic for Student Number
         let studentNum = currentData.studentNumber || null; 
@@ -1421,6 +847,30 @@ window.saveStatusUpdate = async () => {
             });
         }
 
+          // If Rejected or Withdrawn, Send Rejection Email
+        if (isDeclinedStatus) {
+            await addDoc(collection(db, "mail"), {
+                to: currentData.step1.email,
+                from: "Atlas Admissions <eduproassist44@gmail.com>",
+                message: {
+                    subject: `ADMISSION UPDATE: Application ${currentData.applicationId}`,
+                    html: `
+                        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                            <h3>Dear ${currentData.step1.fullNames},</h3>
+                            <p>Thank you for your application to <b>Atlas Independent School</b> for the 2026 academic year.</p>
+                            <p>We regret to inform you that your application for <b>${currentData.step2.choice1}</b> has been unsuccessful for the following reason:</p>
+                            <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #e74c3c; margin: 20px 0;">
+                                <strong>Reason: ${rejectionTitle}</strong><br>
+                                <p>${rejectionReasonBody}</p>
+                            </div>
+                            <p>We understand this news may be disappointing. We encourage you to consider our rewrite programs or contact our admissions office for guidance on alternative qualifications.</p>
+                            <p>Your application status has been updated accordingly on the Student Portal.</p>
+                            <p>Regards,<br><b>Atlas Admissions Office</b></p>
+                        </div>`
+                }
+            });
+        }
+
         // Apply final update to Firestore
         await updateDoc(appRef, finalUpdate);
 
@@ -1511,6 +961,205 @@ window.updateVaultStatuses = async (data) => {
         alert("Error: " + err.message); 
     }
 };
+
+// Function to save the new cycle
+document.getElementById('btnCreateCycle').onclick = async () => {
+    const name = document.getElementById('cycleName').value;
+    const year = document.getElementById('cycleYear').value;
+    const open = document.getElementById('cycleOpen').value;
+    const close = document.getElementById('cycleClose').value;
+    const now = new Date();
+now.setHours(0,0,0,0);
+const openDate = new Date(open);
+const closeDate = new Date(close);
+
+if (!name || !open || !close) {
+    alert("Please fill in all fields.");
+    return;
+}
+
+if (openDate < now) {
+    alert("Error: You cannot set an opening date in the past.");
+    return;
+}
+
+if (closeDate <= openDate) {
+    alert("Error: Closing date must be after the opening date.");
+    return;
+}
+
+// Check for overlaps in existing cycles
+const cycleQuery = await getDocs(collection(db, "application_cycles"));
+const overlap = cycleQuery.docs.some(doc => {
+    const d = doc.data();
+    const existingStart = new Date(d.openDate);
+    const existingEnd = new Date(d.closingDate);
+    return (openDate <= existingEnd && closeDate >= existingStart);
+});
+
+if (overlap) {
+    alert("Error: This date range overlaps with an existing application cycle. Please choose different dates or close the existing cycle manually.");
+    return;
+}
+
+    try {
+    const cycleRef = await addDoc(collection(db, "application_cycles"), {
+    name: name,
+    academicYear: year,
+    openDate: open,
+    closingDate: close,
+    createdAt: new Date()
+});
+
+const rows = document.querySelectorAll('#courseTableBody tr');
+for (let row of rows) {
+    const course = row.querySelector('.c-course').value;
+    const campus = row.querySelector('.c-campus').value;
+    const mode = row.querySelector('.c-mode').value;
+
+    if(course && campus && mode) {
+        await addDoc(collection(db, "course_offerings"), {
+            cycleId: cycleRef.id,
+            courseName: course,
+            campus: campus,
+            mode: mode,
+            lastUpdated: new Date()
+        });
+    }
+}
+        
+        document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
+        
+        // FIX: Explicitly show the dashboard and main content layout
+        document.getElementById('mainDashboard').style.display = 'block';
+        document.getElementById('mainContent').style.display = 'flex';
+        
+        document.getElementById('cycleOverlay').style.display = 'none';
+        alert("Application Cycle Created Successfully.");
+        loadApplications();
+
+    } catch (error) {
+        alert("Error creating cycle: " + error.message);
+    }
+};
+
+// 1. Render the left-side folder structure
+function renderCycleExplorer(docs) {
+    const list = document.getElementById('cycleExplorerList');
+    list.innerHTML = '';
+    
+    if (docs.length === 0) {
+        list.innerHTML = '<p style="text-align:center; font-size:0.7rem; color:#999; margin-top:20px;">No application cycles found.</p>';
+        return;
+    }
+
+    // Grouping docs by Year
+    const groups = {};
+    docs.forEach(d => {
+        const year = d.data().academicYear;
+        if (!groups[year]) groups[year] = [];
+        groups[year].push({ id: d.id, ...d.data() });
+    });
+
+    Object.keys(groups).sort((a,b) => b-a).forEach(year => {
+        const yearFolder = document.createElement('div');
+        yearFolder.innerHTML = `
+            <div style="font-size:0.75rem; font-weight:700; color:#333; padding:8px 5px; background:#f4f7f9; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Academic Year ${year}
+            </div>
+            <div id="year-${year}" style="padding-left:15px; border-left:1px solid #eee; margin-left:10px;"></div>
+        `;
+        list.appendChild(yearFolder);
+
+        const subContainer = document.getElementById(`year-${year}`);
+        groups[year].forEach(cycle => {
+            const now = new Date();
+            const start = new Date(cycle.openDate);
+            const end = new Date(cycle.closingDate);
+            
+            let status = "SCHEDULED";
+            let color = "#ffa000"; // Orange
+            
+            if (now >= start && now <= end) {
+                status = "OPEN";
+                color = "#2e7d32"; // Green
+            } else if (now > end) {
+                status = "CLOSED";
+                color = "#c62828"; // Red
+            }
+
+            const link = document.createElement('div');
+            link.style = "display:flex; justify-content:space-between; align-items:center; padding:10px 5px; border-bottom:1px solid #f9f9f9; cursor:pointer;";
+            link.onclick = () => fillCycleForm(cycle);
+            link.innerHTML = `
+                <span style="font-size:0.7rem; color:#555; font-weight:600;"><i class="fas fa-link" style="font-size:0.6rem; margin-right:5px; color:#999;"></i> ${cycle.name}</span>
+                <button onclick="event.stopPropagation(); enterCycle('${cycle.id}', '${cycle.name}')" 
+                        style="background:${color}; color:white; border:none; padding:3px 8px; border-radius:3px; font-size:0.6rem; font-weight:700; cursor:pointer;">
+                    ${status}
+                </button>
+            `;
+            subContainer.appendChild(link);
+        });
+    });
+}
+
+// 2. Fill form on the right when sub-link is clicked
+async function fillCycleForm(cycle) {
+    document.getElementById('formTitle').innerText = "Edit Cycle Offerings";
+    document.getElementById('cycleName').value = cycle.name;
+    document.getElementById('cycleYear').value = cycle.academicYear;
+    document.getElementById('cycleOpen').value = cycle.openDate;
+    document.getElementById('cycleClose').value = cycle.closingDate;
+
+    // Clear and load existing offerings
+    const tbody = document.getElementById('courseTableBody');
+    tbody.innerHTML = '';
+    const q = query(collection(db, "course_offerings"), where("cycleId", "==", cycle.id));
+    const snap = await getDocs(q);
+    snap.forEach(doc => {
+        const d = doc.data();
+        addCourseRow(d.course, d.campus, d.attendanceMode);
+    });
+}
+// 3. Clear form when "Create New" is clicked
+document.getElementById('btnNewCycle').onclick = () => {
+    document.getElementById('formTitle').innerText = "Create Application Cycle";
+    document.getElementById('cycleName').value = '';
+    document.getElementById('cycleOpen').value = '';
+    document.getElementById('cycleClose').value = '';
+};
+
+// 4. Enter the cycle to view students
+window.enterCycle = (id, name) => {
+    window.selectedCycleId = id;
+    document.getElementById('cycleOverlay').style.display = 'none';
+    document.getElementById('mainDashboard').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'flex';
+    document.getElementById('portalTitle').innerText = `Staff Management Portal - ${name}`;
+    // Re-load apps filtered by this cycle ID
+    loadApplications(id); 
+};
+
+window.addCourseRow = (course = '', campus = '', mode = '') => {
+    const tbody = document.getElementById('courseTableBody');
+    const row = document.createElement('tr');
+    row.style.borderBottom = "1px solid #eee";
+    row.innerHTML = `
+        <td style="padding: 2px;"><input type="text" class="c-course" value="${course}" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="e.g. IT"></td>
+        <td style="padding: 2px;"><input type="text" class="c-campus" value="${campus}" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="Pretoria"></td>
+        <td style="padding: 2px;"><input type="text" class="c-mode" value="${mode}" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="Online"></td>
+        <td style="padding: 2px; text-align:center;"><i class="fas fa-times" onclick="this.closest('tr').remove()" style="color:#ff4d4d; cursor:pointer; font-size:0.7rem;"></i></td>
+    `;
+    tbody.appendChild(row);
+};
+
+
+
+
+
+
+
+
 
 
 
