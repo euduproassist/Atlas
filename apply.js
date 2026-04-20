@@ -164,6 +164,47 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         document.getElementById('email').value = user.email || '';
 
+// 1. Find the currently active cycle
+const nowStr = new Date().toISOString().split('T')[0];
+const cycleQ = query(collection(db, "application_cycles"), where("openDate", "<=", nowStr));
+const cycleSnap = await getDocs(cycleQ);
+
+let activeCycle = null;
+cycleSnap.forEach(doc => {
+    const d = doc.data();
+    if (nowStr <= d.closingDate) activeCycle = { id: doc.id, ...d };
+});
+
+// 2. If no active cycle, show the decorative "Closed" card
+if (!activeCycle) {
+    document.body.innerHTML = `
+        <div style="height:100vh; display:flex; justify-content:center; align-items:center; background:#f4f7f9; font-family:sans-serif;">
+            <div style="background:white; padding:40px; border-radius:12px; border:1px solid #e0e6ed; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.05); max-width:400px;">
+                <div style="width:60px; height:60px; background:#f0f7ff; border-radius:50%; display:flex; justify-content:center; align-items:center; margin:0 auto 20px;">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <h2 style="color:black; margin:0 0 10px 0; font-size:1.5rem;">Applications Closed</h2>
+                <p style="color:#666; font-size:0.9rem; line-height:1.5;">There are currently no open application cycles. Please check back later or contact the admissions office for more information.</p>
+            </div>
+        </div>`;
+    return;
+}
+
+// 3. Check if student already submitted to THIS specific cycle
+const appCheck = await getDoc(doc(db, "applications", user.uid));
+if (appCheck.exists() && appCheck.data().cycleId === activeCycle.id) {
+    // Force Step 4 only
+    currentStep = 4;
+    document.getElementById('step1Container').style.display = 'none';
+    document.getElementById('step2Container').style.display = 'none';
+    document.getElementById('step3Container').style.display = 'none';
+    document.getElementById('step4Container').style.display = 'block';
+    window.renderReviewSummary();
+    // Disable all navigation dots except 4
+    for(let i=1; i<=3; i++) document.getElementById(`dot${i}`).style.opacity = '0.3';
+    return; 
+}
+
  // --- LOAD SAVED DATA FROM CLOUD ---
 const docSnap = await getDoc(doc(db, "drafts", user.uid));
 if (docSnap.exists()) {
