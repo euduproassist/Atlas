@@ -1007,7 +1007,7 @@ if (overlap) {
     try {
     const cycleRef = await addDoc(collection(db, "application_cycles"), {
     name: name,
-    academicYear: year,
+    academicYear: acadYear,
     openDate: open,
     closingDate: close,
     createdAt: new Date()
@@ -1023,7 +1023,7 @@ for (let row of rows) {
         await addDoc(collection(db, "course_offerings"), {
             cycleId: cycleRef.id,
             cycleName: name,
-            academicYear: year,
+            academicYear: acadYear,
             course: course,
             campus: campus,
             attendanceMode: mode,
