@@ -175,6 +175,57 @@ cycleSnap.forEach(doc => {
     if (nowStr <= d.closingDate) activeCycle = { id: doc.id, ...d };
 });
 
+// --- NEW: DYNAMIC COURSE FILTERING LOGIC ---
+if (activeCycle) {
+    // Set the Academic Year automatically from the cycle
+    document.getElementById('acadYear').value = activeCycle.academicYear || "N/A";
+
+    const attendanceSelect = document.getElementById('attendance');
+    const campusSelect = document.getElementById('campus');
+    const courseSelect = document.getElementById('choice1');
+
+    // Fetch all courses for this cycle
+    const coursesSnap = await getDocs(collection(db, "course_offerings"));
+    let allCourses = [];
+    coursesSnap.forEach(doc => allCourses.push(doc.data()));
+
+    // Populate Attendance Modes (Unique list)
+    const modes = [...new Set(allCourses.map(c => c.mode))];
+    attendanceSelect.innerHTML = '<option value="">Select Mode</option>' + 
+        modes.map(m => `<option value="${m}">${m}</option>`).join('');
+
+    // Filter 1: When Mode changes, show valid Campuses
+    attendanceSelect.addEventListener('change', () => {
+        const selectedMode = attendanceSelect.value;
+        campusSelect.innerHTML = '<option value="">Select Campus</option>';
+        courseSelect.innerHTML = '<option value="">Select Campus First</option>';
+        courseSelect.disabled = true;
+
+        if (selectedMode) {
+            const validCampuses = [...new Set(allCourses.filter(c => c.mode === selectedMode).map(c => c.campus))];
+            campusSelect.innerHTML += validCampuses.map(cap => `<option value="${cap}">${cap}</option>`).join('');
+            campusSelect.disabled = false;
+        } else {
+            campusSelect.disabled = true;
+        }
+    });
+
+    // Filter 2: When Campus changes, show valid Courses
+    campusSelect.addEventListener('change', () => {
+        const selectedMode = attendanceSelect.value;
+        const selectedCampus = campusSelect.value;
+        courseSelect.innerHTML = '<option value="">Select Course</option>';
+
+        if (selectedCampus) {
+            const validCourses = allCourses.filter(c => c.mode === selectedMode && c.campus === selectedCampus);
+            courseSelect.innerHTML += validCourses.map(c => `<option value="${c.courseName}">${c.courseName}</option>`).join('');
+            courseSelect.disabled = false;
+        } else {
+            courseSelect.disabled = true;
+        }
+    });
+}
+
 // 2. If no active cycle, show the decorative "Closed" card
 if (!activeCycle) {
     document.body.innerHTML = `
