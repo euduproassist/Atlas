@@ -357,6 +357,7 @@ ${s2.postSchoolQualifications && s2.postSchoolQualifications.length > 0 ? `
                 ${row("Academic Year", s2.acadYear)}
                 ${row("Campus Selection", s2.campus)}
                 ${row("Course Selection", s2.choice1)}
+                ${row("Attendance Mode", s2.attendance)}
                 ${row("Need Student Accommodation", s2.housing)}
                 ${row("Need Financial Support", s2.nsfas)}
             </div>
