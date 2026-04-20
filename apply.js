@@ -185,7 +185,7 @@ if (activeCycle) {
     const courseSelect = document.getElementById('choice1');
 
     // Fetch all courses for this cycle
-    const coursesSnap = await getDocs(collection(db, "course_offerings"));
+    
     let allCourses = [];
     coursesSnap.forEach(doc => allCourses.push(doc.data()));
 
