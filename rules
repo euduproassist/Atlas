@@ -46,7 +46,7 @@ service cloud.firestore {
         request.auth.uid == applicationId || isStaffOrAdmin()
       );
 
-      allow create: if request.auth != null && request.auth.uid == applicationId;
+      
 
        allow update: if request.auth != null && (
     request.auth.uid == applicationId || isStaffOrAdmin()
