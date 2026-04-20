@@ -22,6 +22,7 @@ const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
 const mainForm = document.getElementById('mainApplyForm');
 let currentStep = 1;
 let syncTimer;
+let activeCycle = null;
 
     const filesToUpload = [
         { id: 'file_id', name: 'ID_Passport' },
