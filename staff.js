@@ -1020,9 +1020,9 @@ for (let row of rows) {
     if(course && campus && mode) {
         await addDoc(collection(db, "course_offerings"), {
             cycleId: cycleRef.id,
-            course: course,
+            courseName: course,
             campus: campus,
-            attendanceMode: mode,
+            mode: mode,
             lastUpdated: new Date()
         });
     }
