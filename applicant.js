@@ -555,6 +555,9 @@ async function renderSummaryModal() {
     const user = auth.currentUser;
     const modal = document.getElementById('statusModal');
     const body = document.getElementById('statusModalBody');
+
+    // Close button (X) styling and logic
+    const closeBtn = `<div onclick="document.getElementById('statusModal').style.display='none'" style="position:absolute; top:10px; right:15px; font-size:24px; cursor:pointer; color:#888;">&times;</div>`;
     
     body.style.position = 'relative';
     body.innerHTML = closeBtn + "<p style='text-align:center;'>Loading Summary...</p>";
