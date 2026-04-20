@@ -217,7 +217,8 @@ if (activeCycle) {
         courseSelect.innerHTML = '<option value="">Select Course</option>';
 
         if (selectedCampus) {
-
+            const validCourses = allCourses.filter(c => c.attendanceMode === selectedMode && c.campus === selectedCampus);
+            courseSelect.innerHTML += validCourses.map(c => `<option value="${c.course}">${c.course}</option>`).join('');
             courseSelect.disabled = false;
         } else {
             courseSelect.disabled = true;
