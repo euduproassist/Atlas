@@ -575,7 +575,14 @@
                 <th style="padding: 5px; font-size: 0.55rem; width: 10%;"></th>
             </tr>
         </thead>
-
+        <tbody id="courseTableBody">
+    <tr style="border-bottom: 1px solid #eee">
+        <td style="padding: 2px;"><input type="text" class="c-course" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="e.g. IT"></td>
+        <td style="padding: 2px;"><input type="text" class="c-campus" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="Pretoria"></td>
+        <td style="padding: 2px;"><input type="text" class="c-mode" style="width:100%; border:none; padding:4px; font-size:0.7rem;" placeholder="Online"></td>
+        <td style="padding: 2px; text-align:center;"><i class="fas fa-times" onclick="this.closest('tr').remove()" style="color:#ff4d4d; cursor:pointer; font-size:0.7rem;"></i></td>
+    </tr>
+</tbody>
     </table>
     <button type="button" onclick="addCourseRow()" style="width: 100%; padding: 6px; background: #fdfdfd; border: none; border-top: 1px solid var(--border); font-size: 0.6rem; color: var(--primary); font-weight: 700; cursor: pointer;">
         + ADD ROW
