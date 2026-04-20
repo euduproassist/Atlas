@@ -190,7 +190,7 @@ if (activeCycle) {
     coursesSnap.forEach(doc => allCourses.push(doc.data()));
 
     // Populate Attendance Modes (Unique list)
-    const modes = [...new Set(allCourses.map(c => c.mode))];
+    const modes = [...new Set(allCourses.map(c => c.attendanceMode))];
     attendanceSelect.innerHTML = '<option value="">Select Mode</option>' + 
         modes.map(m => `<option value="${m}">${m}</option>`).join('');
 
@@ -202,7 +202,7 @@ if (activeCycle) {
         courseSelect.disabled = true;
 
         if (selectedMode) {
-            const validCampuses = [...new Set(allCourses.filter(c => c.mode === selectedMode).map(c => c.campus))];
+            const validCampuses = [...new Set(allCourses.filter(c => c.attendanceMode === selectedMode).map(c => c.campus))];
             campusSelect.innerHTML += validCampuses.map(cap => `<option value="${cap}">${cap}</option>`).join('');
             campusSelect.disabled = false;
         } else {
