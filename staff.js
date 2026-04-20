@@ -50,7 +50,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // 2. Real-time Listener for Applications (Connects to 'applications' collection)
-function loadApplications() {
+function loadApplications(filterId = null) {
     // We order by lastUpdated to show newest first, matching your 'Sort: Newest' UI
     const q = window.selectedCycleId 
     ? query(collection(db, "applications"), where("cycleId", "==", window.selectedCycleId), orderBy("lastUpdated", "desc"))
