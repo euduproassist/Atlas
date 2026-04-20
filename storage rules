@@ -10,11 +10,6 @@ service firebase.storage {
         firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
       );
 
-    allow write, delete: if request.auth != null && (
-    request.auth.uid == userId || 
-    firestore.exists(/databases/(default)/documents/staff/$(request.auth.uid))
-    );
-
     }
   }
 }
