@@ -1118,7 +1118,7 @@ async function fillCycleForm(cycle) {
     const snap = await getDocs(q);
     snap.forEach(doc => {
         const d = doc.data();
-        
+        addCourseRow(d.course || d.courseName, d.campus, d.attendanceMode || d.mode);
     });
 }
 // 3. Clear form when "Create New" is clicked
