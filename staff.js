@@ -1015,9 +1015,9 @@ if (overlap) {
 
 const rows = document.querySelectorAll('#courseTableBody tr');
 for (let row of rows) {
-    const course = row.querySelector('.c-course').value;
-    const campus = row.querySelector('.c-campus').value;
-    const mode = row.querySelector('.c-mode').value;
+    const course = row.querySelector('.c-course').value.trim();
+    const campus = row.querySelector('.c-campus').value.trim();
+    const mode = row.querySelector('.c-mode').value.trim();
 
     if(course && campus && mode) {
         await addDoc(collection(db, "course_offerings"), {
