@@ -53,7 +53,7 @@ service cloud.firestore {
   ) && (
     isStaffOrAdmin() || 
     request.resource.data.diff(resource.data).affectedKeys()
-      .hasAny(['step1', 'step2', 'documents', 'documentStatuses', 'draft', 'lastUpdated', 'status1', 'adminNote', 'studentNumber', 'processedBy', 'actionHistory', 'adminDocs', 'applicationID', 'submittedAt'])
+      .hasAny(['step1', 'step2', 'documents', 'paymentStatus', 'paystackReference', 'paidAt', 'documentStatuses', 'draft', 'lastUpdated', 'status1', 'adminNote', 'studentNumber', 'processedBy', 'actionHistory', 'adminDocs', 'applicationID', 'submittedAt'])
   );
 }
 
@@ -69,20 +69,24 @@ service cloud.firestore {
       allow read: if false; 
       allow write: if isStaffOrAdmin(); // Only staff can trigger the write that results in a mail doc
    }
-
+   
+    // 7. SYSTEM CONFIG (Read-only for authenticated users)
+    match /system_config/payments {
+      allow read: if request.auth != null;
+      allow write: if false; 
+    }
   
-    // 7. New rule for the Application Cycle - Does not affect payments
+    // New rule for the Application Cycle - Does not affect payments
     match /application_cycles/{cycleId} {
       allow read: if request.auth != null;
       allow write: if isStaffOrAdmin();
     }
     
-    match /course_offerings/{offeringId} {
-      allow read: if request.auth != null;
-      allow write: if isStaffOrAdmin();
-      // Validation: Ensure required fields are present
-      allow create: if isStaffOrAdmin() && 
-      request.resource.data.keys().hasAll(['cycleId', 'course', 'campus', 'attendanceMode']);
+     match /course_offerings/{courseId} {
+     // Students can only see the courses, they cannot add or change them
+     allow read: if request.auth != null;
+     // Only Staff and Admins can add, update, or delete courses
+     allow write: if isStaffOrAdmin();
     }
   }
 }
