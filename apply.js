@@ -786,6 +786,12 @@ window.goToStep = async function(stepNumber) {
     
     // Show new step
     document.getElementById(`step${stepNumber}Container`).style.display = 'block';
+
+    if (stepNumber === 2) {
+    document.getElementById('attendance').required = true;
+    document.getElementById('campus').required = true;
+    document.getElementById('choice1').required = true;
+    }
     
     // Update the step counter
     currentStep = stepNumber;
