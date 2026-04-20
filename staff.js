@@ -968,6 +968,39 @@ document.getElementById('btnCreateCycle').onclick = async () => {
     const year = document.getElementById('cycleYear').value;
     const open = document.getElementById('cycleOpen').value;
     const close = document.getElementById('cycleClose').value;
+    const now = new Date();
+now.setHours(0,0,0,0);
+const openDate = new Date(open);
+const closeDate = new Date(close);
+
+if (!name || !open || !close) {
+    alert("Please fill in all fields.");
+    return;
+}
+
+if (openDate < now) {
+    alert("Error: You cannot set an opening date in the past.");
+    return;
+}
+
+if (closeDate <= openDate) {
+    alert("Error: Closing date must be after the opening date.");
+    return;
+}
+
+// Check for overlaps in existing cycles
+const cycleQuery = await getDocs(collection(db, "application_cycles"));
+const overlap = cycleQuery.docs.some(doc => {
+    const d = doc.data();
+    const existingStart = new Date(d.openDate);
+    const existingEnd = new Date(d.closingDate);
+    return (openDate <= existingEnd && closeDate >= existingStart);
+});
+
+if (overlap) {
+    alert("Error: This date range overlaps with an existing application cycle. Please choose different dates or close the existing cycle manually.");
+    return;
+}
 
     try {
     const cycleRef = await addDoc(collection(db, "application_cycles"), {
