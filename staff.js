@@ -969,11 +969,6 @@ document.getElementById('btnCreateCycle').onclick = async () => {
     const open = document.getElementById('cycleOpen').value;
     const close = document.getElementById('cycleClose').value;
 
-    if (!name || !open || !close) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
     try {
     const cycleRef = await addDoc(collection(db, "application_cycles"), {
     name: name,
