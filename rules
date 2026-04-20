@@ -46,7 +46,10 @@ service cloud.firestore {
         request.auth.uid == applicationId || isStaffOrAdmin()
       );
 
-      
+      // This ensures the student can only create an application if they don't already have one for the current cycle
+      allow create: if request.auth != null && 
+               request.auth.uid == applicationId && 
+               !exists(/databases/$(database)/documents/applications/$(applicationId));
 
        allow update: if request.auth != null && (
     request.auth.uid == applicationId || isStaffOrAdmin()
