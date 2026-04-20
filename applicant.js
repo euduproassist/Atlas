@@ -74,7 +74,7 @@ onAuthStateChanged(auth, async (user) => {
                     appText.innerText = "Please click the button below to view your application summary.";
                     appBtn.innerText = "View Application Summary";
                     // This re-uses your existing trackStatusBtn functionality
-                    
+                    appBtn.onclick = () => { renderSummaryModal(); };
                 }
             }
             
