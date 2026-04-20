@@ -1,3 +1,8 @@
+    // Close button (X) styling and logic
+    const closeBtn = `<div onclick="document.getElementById('statusModal').style.display='none'" style="position:absolute; top:10px; right:15px; font-size:24px; cursor:pointer; color:#888;">&times;</div>`;
+    
+
+
 Whitestone FET College (Pretoria)
 ​Berea Technical College (Pretoria Information Center/Satellite)
 ​St. Augustine College (Pretoria Satellite/Distance manual entries)
