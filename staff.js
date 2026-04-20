@@ -52,7 +52,10 @@ onAuthStateChanged(auth, async (user) => {
 // 2. Real-time Listener for Applications (Connects to 'applications' collection)
 function loadApplications(filterId = null) {
     // We order by lastUpdated to show newest first, matching your 'Sort: Newest' UI
-
+    const targetCycleId = filterId || window.selectedCycleId;
+    const q = targetCycleId 
+    ? query(collection(db, "applications"), where("cycleId", "==", targetCycleId), orderBy("lastUpdated", "desc"))
+    : query(collection(db, "applications"), orderBy("lastUpdated", "desc"));
 onSnapshot(q, (snapshot) => {
 const newAppsCount = snapshot.docs.filter(d => ['pending', 'review', 'waiting'].includes(d.data().status1)).length;
 const acceptedCount = snapshot.docs.filter(d => ['uncon_accepted', 'registered', 'deregistered'].includes(d.data().status1)).length;
