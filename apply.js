@@ -170,7 +170,7 @@ const nowStr = new Date().toISOString().split('T')[0];
 const cycleQ = query(collection(db, "application_cycles"), where("openDate", "<=", nowStr));
 const cycleSnap = await getDocs(cycleQ);
 
-let activeCycle = null;
+activeCycle = null;
 cycleSnap.forEach(doc => {
     const d = doc.data();
     if (nowStr <= d.closingDate) activeCycle = { id: doc.id, ...d };
