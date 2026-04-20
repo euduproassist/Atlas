@@ -413,6 +413,7 @@ mainForm.addEventListener('submit', async (e) => {
         try {
             await setDoc(doc(db, "drafts", user.uid), {
                 step1: step1Data,
+                cycleId: activeCycle.id, // Ensure we tag the application with the cycle ID
                 currentStep: 2
             }, { merge: true });
 
