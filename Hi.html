@@ -1,4 +1,1859 @@
-logger.ts:117 [2026-04-20T15:02:58.157Z]  @firebase/firestore: Firestore (11.0.0): Uncaught Error in snapshot listener: FirebaseError: [code=failed-precondition]: The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/atlas-c58f8/firestore/inde…2luZGV4ZXMvXxABGgsKB2N5Y2xlSWQQARoPCgtsYXN0VXBkYXRlZBACGgwKCF9fbmFtZV9fEAI
+Okay i hear you now listen to this very very carefully and make sure u understand me if you dont understand then dont answer me cz if u dont understand but u still choose to force urself to give codes u will make errors so give me codes only and only if u understand what i want if u dont understand dont give codes just tell me u dont understand then i will try to explain in a more clear way
+Im.not going to repeat my self u need to check these codes carefully bro check them three times before answer camz u tell me to go to codes that  i already fixed ur job to check which ones i forgot to fix evaluate the code carefully three times then answer 
+Check this codes carefully if i fixed everything already just say so bro dont tell me to fix something that i already fixed bro check these codes carefully before u give me an answer
+
+Listen to very carefully cz it a bit complicated so make sure u understand it before u give the codes if you're not 100% sure that we will get 100% functionality with 0% errors amd 0% bugs then dont guve me any codes at all just tell me straight that u can provide with such codes but with u do give me you must be  100% sure that we will get 100% functionality with 0% errors amd 0% bugs 
+
+Apply.js
+import { auth, db } from './firebase-config.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { doc, setDoc, getDoc, query, where, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
+const storage = getStorage();
+
+// Function to show/hide the global processing loader
+const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
+    let loader = document.getElementById('global-file-loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'global-file-loader';
+        loader.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:10000;color:white;font-family:sans-serif;";
+        loader.innerHTML = `<div class="spinner" style="border:4px solid #f3f3f3;border-top:4px solid #3498db;border-radius:50%;width:40px;height:40px;animation:spin 2s linear infinite;"></div><p id="loader-text" style="margin-top:15px;"></p><style>@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>`;
+        document.body.appendChild(loader);
+    }
+    document.getElementById('loader-text').innerText = text;
+    loader.style.display = show ? 'flex' : 'none';
+};
+
+
+const mainForm = document.getElementById('mainApplyForm');
+let currentStep = 1;
+let syncTimer;
+let activeCycle = null;
+
+    const filesToUpload = [
+        { id: 'file_id', name: 'ID_Passport' },
+        { id: 'file_birth', name: 'Birth_Certificate' },
+        { id: 'file_matric', name: 'Matric_Certificate' },
+        { id: 'file_grade11', name: 'Grade_11_Results' },
+        { id: 'file_transcripts', name: 'Transcripts' },
+        { id: 'file_address', name: 'Proof_of_Address' },
+        { id: 'file_sponsor', name: 'Sponsor_ID' }
+    ];
+
+// Attach listeners to every file input for immediate background processing
+filesToUpload.forEach(f => {
+    const input = document.getElementById(f.id);
+    if (input) {
+        input.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            toggleGlobalLoader(true, `System is compressing ${f.name}...`);
+            
+            let finalFile = file;
+            let compressionAttempted = false;
+
+            try {
+                // TRY COMPRESSION FIRST (Always for images)
+                if (file.type.startsWith('image/')) {
+                    compressionAttempted = true;
+                    finalFile = await processFile(file);
+                }
+            } catch (err) {
+                console.warn("Compression failed, moving to secondary logic.");
+                // We don't block yet; we let the 500KB logic decide.
+            } finally {
+                // --- THE 500KB FALLBACK LOGIC ---
+                // This ONLY acts if the result is still too big after the system tried its best
+                if (finalFile.size > 512000) { 
+                    alert("Compression failed, Please upload a file less than 500KB");
+                    input.value = ""; 
+                    toggleGlobalLoader(false);
+                } else {
+                    // Success: File is either compressed to ~200KB or naturally under 500KB
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(finalFile);
+                    input.files = dataTransfer.files;
+                    
+                    console.log(`${f.name} processed successfully: ${Math.round(finalFile.size/1024)}KB`);
+                    toggleGlobalLoader(false);
+                }
+            }
+        });
+    }
+});
+
+window.toggleOtherNationality = function(value) {
+    const otherGroup = document.getElementById('otherNationalityGroup');
+    const otherInput = document.getElementById('otherNationality');
+    
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true; // This forces the browser to wait for input
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false; 
+        otherInput.value = ''; // Clear it if they switch back to SA
+    }
+};
+
+// This saves data to the cloud only after 2 seconds of 'silence' (no typing)
+async function syncFieldToCloud(fieldId, value) {
+    const user = auth.currentUser;
+    if (!user || !fieldId) return;
+
+    try {
+        // We create a reference to the 'draft' object to ensure arrays overwrite correctly
+        const dataToSave = {
+            currentStep: currentStep,
+            lastUpdated: new Date(),
+            draft: {} 
+        };
+        dataToSave.draft[fieldId] = value;
+
+        await setDoc(doc(db, "drafts", user.uid), dataToSave, { merge: true });
+    } catch (e) {
+        console.error("Sync error:", e);
+    }
+}
+
+window.toggleDisability = function(value) {
+    const container = document.getElementById('disabilityDetailsContainer');
+    if (value === 'Yes') {
+        container.style.display = 'block';
+    } else {
+        container.style.display = 'none';
+        // Reset and hide extra boxes
+        document.getElementById('disability1').value = '';
+        document.getElementById('disability2').value = '';
+        document.getElementById('disability3').value = '';
+        document.getElementById('box2').style.display = 'none';
+        document.getElementById('box3').style.display = 'none';
+    }
+};
+
+window.checkAddButton = function() {
+    const d1 = document.getElementById('disability1').value;
+    const d2 = document.getElementById('disability2').value;
+    
+    document.getElementById('addBtn1').style.display = (d1.length > 0 && document.getElementById('box2').style.display === 'none') ? 'block' : 'none';
+};
+
+window.addDisabilityBox = function() {
+    if (document.getElementById('box2').style.display === 'none') {
+        document.getElementById('box2').style.display = 'block';
+        document.getElementById('addBtn1').style.display = 'none';
+    } else if (document.getElementById('box3').style.display === 'none') {
+        document.getElementById('box3').style.display = 'block';
+    }
+};
+
+window.toggleOtherQual = function(value) {
+    const otherGroup = document.getElementById('otherQualGroup');
+    const otherInput = document.getElementById('otherQual');
+    
+    if (value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherInput.required = true;
+    } else {
+        otherGroup.style.display = 'none';
+        otherInput.required = false;
+        otherInput.value = ''; 
+    }
+    // Automatically save the selection to cloud
+    syncFieldToCloud('examBody', value);
+};
+
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+    } else {
+        document.getElementById('email').value = user.email || '';
+
+// 1. Find the currently active cycle
+const nowStr = new Date().toISOString().split('T')[0];
+const cycleQ = query(collection(db, "application_cycles"), where("openDate", "<=", nowStr));
+const cycleSnap = await getDocs(cycleQ);
+
+activeCycle = null;
+cycleSnap.forEach(doc => {
+    const d = doc.data();
+    if (nowStr <= d.closingDate) activeCycle = { id: doc.id, ...d };
+});
+
+// --- NEW: DYNAMIC COURSE FILTERING LOGIC ---
+if (activeCycle) {
+    // Set the Academic Year automatically from the cycle
+    document.getElementById('acadYear').value = activeCycle.academicYear || "N/A";
+
+    const attendanceSelect = document.getElementById('attendance');
+    const campusSelect = document.getElementById('campus');
+    const courseSelect = document.getElementById('choice1');
+
+    // Fetch all courses for this cycle
+    const coursesSnap = await getDocs(query(collection(db, "course_offerings"), where("cycleId", "==", activeCycle.id)));
+    let allCourses = [];
+    coursesSnap.forEach(doc => allCourses.push(doc.data()));
+
+    // Populate Attendance Modes (Unique list)
+    const modes = [...new Set(allCourses.map(c => c.attendanceMode))];
+    attendanceSelect.innerHTML = '<option value="">Select Mode</option>' + 
+        modes.map(m => `<option value="${m}">${m}</option>`).join('');
+
+    // Filter 1: When Mode changes, show valid Campuses
+    attendanceSelect.addEventListener('change', () => {
+        const selectedMode = attendanceSelect.value;
+        campusSelect.innerHTML = '<option value="">Select Campus</option>';
+        courseSelect.innerHTML = '<option value="">Select Campus First</option>';
+        courseSelect.disabled = true;
+
+        if (selectedMode) {
+            const validCampuses = [...new Set(allCourses.filter(c => c.attendanceMode === selectedMode).map(c => c.campus))];
+            campusSelect.innerHTML += validCampuses.map(cap => `<option value="${cap}">${cap}</option>`).join('');
+            campusSelect.disabled = false;
+        } else {
+            campusSelect.disabled = true;
+        }
+    });
+
+    // Filter 2: When Campus changes, show valid Courses
+    campusSelect.addEventListener('change', () => {
+        const selectedMode = attendanceSelect.value;
+        const selectedCampus = campusSelect.value;
+        courseSelect.innerHTML = '<option value="">Select Course</option>';
+
+        if (selectedCampus) {
+            const validCourses = allCourses.filter(c => c.attendanceMode === selectedMode && c.campus === selectedCampus);
+            courseSelect.innerHTML += validCourses.map(c => `<option value="${c.course}">${c.course}</option>`).join('');
+            courseSelect.disabled = false;
+        } else {
+            courseSelect.disabled = true;
+        }
+    });
+}
+
+// 2. If no active cycle, show the decorative "Closed" card
+if (!activeCycle) {
+    document.body.innerHTML = `
+        <div style="height:100vh; display:flex; justify-content:center; align-items:center; background:#f4f7f9; font-family:sans-serif;">
+            <div style="background:white; padding:40px; border-radius:12px; border:1px solid #e0e6ed; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.05); max-width:400px;">
+                <div style="width:60px; height:60px; background:#f0f7ff; border-radius:50%; display:flex; justify-content:center; align-items:center; margin:0 auto 20px;">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <h2 style="color:black; margin:0 0 10px 0; font-size:1.5rem;">Applications Closed</h2>
+                <p style="color:#666; font-size:0.9rem; line-height:1.5;">There are currently no open application cycles. Please check back later or contact the admissions office for more information.</p>
+            </div>
+        </div>`;
+    return;
+}
+
+// 3. Check if student already submitted to THIS specific cycle
+const appCheck = await getDoc(doc(db, "applications", user.uid));
+if (appCheck.exists() && appCheck.data().cycleId === activeCycle.id) {
+    // Force Step 4 only
+    currentStep = 4;
+    document.getElementById('step1Container').style.display = 'none';
+    document.getElementById('step2Container').style.display = 'none';
+    document.getElementById('step3Container').style.display = 'none';
+    document.getElementById('step4Container').style.display = 'block';
+    window.renderReviewSummary();
+    // Disable all navigation dots except 4
+    for(let i=1; i<=3; i++) document.getElementById(`dot${i}`).style.opacity = '0.3';
+    return; 
+}
+
+ // --- LOAD SAVED DATA FROM CLOUD ---
+const docSnap = await getDoc(doc(db, "drafts", user.uid));
+if (docSnap.exists()) {
+    const data = docSnap.data();
+    const draft = data.draft || {};
+
+    // Fill standard inputs
+    Object.keys(draft).forEach(key => {
+        const input = document.getElementById(key);
+        if (input && input.type !== 'file') { 
+            input.value = draft[key];
+        }
+    });
+
+    // --- FIX: REBUILD SUBJECT ROWS ---
+    if (draft.subjects && draft.subjects.length > 0) {
+        const container = document.getElementById('subjectsContainer');
+        container.innerHTML = ''; // Clear the default empty row
+        subjectCount = 0; // Reset counter for clean rebuild
+
+        draft.subjects.forEach((sub, index) => {
+            window.addSubjectRow(); // This creates row1, row2, etc.
+            const row = document.getElementById(`row${index + 1}`);
+            if (row) {
+                row.querySelector('.sub-name').value = sub.name || '';
+                row.querySelector('.sub-perc').value = sub.percentage || '';
+                row.querySelector('.sub-level').value = sub.level || '';
+            }
+        });
+        // Ensure the "Add" button shows up if the last row is complete
+        window.validateRows(); 
+    }
+
+    // --- FIX: REBUILD POST-SCHOOL QUALIFICATIONS ---
+    if (draft.postSchoolQualifications && draft.postSchoolQualifications.length > 0) {
+        const psContainer = document.getElementById('postSchoolContainer');
+        psContainer.innerHTML = ''; // Clear default
+
+        draft.postSchoolQualifications.forEach((qual) => {
+            window.addPostSchoolRow();
+            const rows = document.querySelectorAll('.post-school-row');
+            const lastRow = rows[rows.length - 1];
+            const inputs = lastRow.querySelectorAll('.ps-input');
+            
+            inputs[0].value = qual.institutionalName || '';
+            inputs[1].value = qual.qualificationName || '';
+            
+            const statusSelect = lastRow.querySelector('.ps-status');
+            statusSelect.value = qual.status || '';
+            
+            inputs[2].value = qual.studentNumber || '';
+            inputs[3].value = qual.modulePercentageAverage || '';
+            
+            const yearInput = lastRow.querySelector('.ps-year');
+            yearInput.value = qual.yearCompleted || '';
+            
+            // Trigger the disabled logic for 'Discontinued' status
+            window.handleDiscontinued(statusSelect);
+        });
+        window.validatePostSchool();
+    }
+
+             // 1. Restore the correct Step/Page
+           if (data.currentStep) {
+            currentStep = data.currentStep;
+            // Hide all steps first
+            document.getElementById('step1Container').style.display = 'none';
+            document.getElementById('step2Container').style.display = 'none';
+            document.getElementById('step3Container').style.display = 'none';
+            if(document.getElementById('step4Container')) document.getElementById('step4Container').style.display = 'none';
+
+            
+            // Show the saved step
+            document.getElementById(`step${currentStep}Container`).style.display = 'block';
+
+   // --- NEW: Restore Uploaded Document Status ---
+const savedDocs = data.documents || {};
+Object.keys(savedDocs).forEach(docName => {
+    // We find the input based on the 'name' used in the filesToUpload array
+    const fileId = filesToUpload.find(f => f.name === docName)?.id;
+    if (fileId) {
+        const input = document.getElementById(fileId);
+        const label = input.previousElementSibling;
+        if (label) {
+            label.innerHTML += ` <span style="color: #27ae60; font-size: 0.8rem;">(Already Uploaded ✅)</span>`;
+            input.required = false; // Remove requirement since it's already in the cloud
+        }
+    }
+});
+
+                           if(currentStep === 4 && typeof window.renderReviewSummary === "function") {
+                window.renderReviewSummary();
+            }
+            
+            // Update progress bar UI (dots)
+            for(let i=1; i<=currentStep; i++) {
+                document.getElementById(`dot${i}`).classList.add('active');
+                if(i < currentStep) document.getElementById(`line${i}`).classList.add('active');
+                  }
+               }
+
+                if (data.draft['examBody'] === 'Other') {
+                   document.getElementById('examBody').value = 'Other';
+                   document.getElementById('otherQualGroup').style.display = 'block';
+                   document.getElementById('otherQual').value = data.draft['otherQual'] || '';
+               }
+
+              // NEW: Ensure the box shows up if 'Other' was previously saved
+              const savedNationality = data.draft['nationality'];
+                if (savedNationality === 'Other') {
+                   document.getElementById('otherNationalityGroup').style.display = 'block';
+                   document.getElementById('otherNationality').required = true;
+               }
+        // 2. NEW: Restore Disability boxes
+        const savedDisability = data.draft['disability'];
+        if (savedDisability === 'Yes') {
+            document.getElementById('disabilityDetailsContainer').style.display = 'block';
+            
+            // Show box 2 if it has data
+            if (data.draft['disability2']) {
+                document.getElementById('box2').style.display = 'block';
+            }
+            // Show box 3 if it has data
+            if (data.draft['disability3']) {
+                document.getElementById('box3').style.display = 'block';
+            }
+        }
+            }
+        }
+});
+
+// Save when they stop typing for 2 seconds
+mainForm.addEventListener('input', (e) => {
+    // ADDED: List of IDs to IGNORE for auto-saving
+    const ignoreList = ['nationality', 'otherNationality']; 
+    
+    if (e.target.id && e.target.type !== 'file' && !ignoreList.includes(e.target.id)) {
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => {
+            syncFieldToCloud(e.target.id, e.target.value);
+        }, 2000); 
+    }
+});
+
+// Save IMMEDIATELY when they click or tab out of a field
+mainForm.addEventListener('focusout', (e) => {
+    if (e.target.id && e.target.type !== 'file') {
+        syncFieldToCloud(e.target.id, e.target.value);
+    }
+});
+
+mainForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    if (!user) return;
+
+    if (currentStep === 1) {
+        // Collect Step 1 Data (Identity, Contact, Address, Demographic, NOK, Socio)
+        const step1Data = {
+            fullNames: document.getElementById('fullNames').value,
+            surname: document.getElementById('surname').value,
+            idNumber: document.getElementById('idNumber').value,
+            dob: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            title: document.getElementById('title').value,
+            nationality: document.getElementById('nationality').value === 'Other'
+                         ? document.getElementById('otherNationality').value
+                         : document.getElementById('nationality').value,
+            homeLanguage: document.getElementById('homeLanguage').value,
+            email: document.getElementById('email').value,
+            mobile: document.getElementById('mobile').value,
+            altPhone: document.getElementById('altPhone').value,
+            address: {
+                street: document.getElementById('physStreet').value,
+                suburb: document.getElementById('physSuburb').value,
+                province: document.getElementById('physProvince').value,
+                postalCode: document.getElementById('physPostalCode').value,
+                country: document.getElementById('physCountry').value
+            },
+            postalAddress: {
+                street: document.getElementById('postStreet').value,
+                suburb: document.getElementById('postSuburb').value,
+                province: document.getElementById('postProvince').value,
+                postalCode: document.getElementById('postPostalCode').value,
+                country: document.getElementById('postCountry').value
+            },
+            race: document.getElementById('race').value,
+            disability: document.getElementById('disability').value,
+            disabilityDetails: document.getElementById('disability').value === 'Yes' 
+            ? [
+            document.getElementById('disability1').value,
+            document.getElementById('disability2').value,
+            document.getElementById('disability3').value
+            ].filter(val => val !== "") 
+            : [],
+            citizenship: document.getElementById('citizenship').value,
+            nokName: document.getElementById('nokName').value,
+            nokRelation: document.getElementById('nokRelation').value,
+            nokPhone: document.getElementById('nokPhone').value,
+            marital: document.getElementById('marital').value,
+            employment: document.getElementById('employment').value,
+            socialGrant: document.getElementById('socialGrant').value,
+            lastUpdated: new Date()
+        };
+
+        try {
+            await setDoc(doc(db, "drafts", user.uid), {
+                step1: step1Data,
+                cycleId: activeCycle.id, // Ensure we tag the application with the cycle ID
+                academicYear: activeCycle.academicYear,
+                currentStep: 2
+            }, { merge: true });
+
+            // SWITCH UI TO STEP 2
+            goToStep(2);
+
+
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+
+            } else if (currentStep === 2) {
+        // Collect ALL Step 2 Data from your list
+        // Collect dynamic subject rows
+            const subjectsList = [];
+            document.querySelectorAll('#subjectsContainer .form-grid').forEach(row => {
+                  subjectsList.push({
+            name: row.querySelector('.sub-name').value,
+            percentage: row.querySelector('.sub-perc').value,
+            level: row.querySelector('.sub-level').value
+               });
+            });
+
+      // --- THE NEW POST-SCHOOL LOGIC HERE ---
+        const postSchoolRows = document.querySelectorAll('.post-school-row');
+        const val = validatePostSchool();
+
+        // If any part of the section has data, ensure the last row is fully valid
+        if (val.anyFilled && !val.allFilled) {
+            alert("Please ensure all 6 fields are filled in your last qualification entry, or clear them to proceed.");
+            return;
+        }
+
+        const qualData = [];
+        if (val.allFilled) {
+            postSchoolRows.forEach(row => {
+                const inputs = row.querySelectorAll('.ps-input');
+                const status = row.querySelector('.ps-status').value;
+                const year = row.querySelector('.ps-year').value;
+                qualData.push({
+                    institutionalName: inputs[0].value,
+                    qualificationName: inputs[1].value,
+                    status: status,
+                    studentNumber: inputs[2].value,
+                    modulePercentageAverage: inputs[3].value,
+                    yearCompleted: year
+                });
+            });
+        }
+        const step2Data = {
+            // 1. Matric Details
+            schoolName: document.getElementById('schoolName').value,
+            schoolCountry: document.getElementById('schoolCountry').value,
+            schoolProvince: document.getElementById('schoolProvince').value,
+            matricYear: document.getElementById('matricYear').value,
+            examBody: document.getElementById('examBody').value === 'Other'
+                ? document.getElementById('otherQual').value
+                : document.getElementById('examBody').value,
+                           
+            currentStatus: document.getElementById('currentStatus').value,
+            
+            // 2. Marks & APS
+            subjects: subjectsList,
+            APS: document.getElementById('APS').value,
+
+           // 3. NEW DYNAMIC POST-SCHOOL FIELD
+            postSchoolQualifications: qualData,
+            
+            // 4. Choices
+            choice1: document.getElementById('choice1').value,
+            acadYear: document.getElementById('acadYear').value,
+            campus: document.getElementById('campus').value,
+            attendance: document.getElementById('attendance').value,
+            
+            // 5. Additional
+            nbtNum: document.getElementById('nbtNum').value,
+            housing: document.getElementById('housing').value,
+            nsfas: document.getElementById('nsfas').value,
+            
+            lastUpdated: new Date()
+        };
+
+        try {
+            await setDoc(doc(db, "drafts", user.uid), {
+                step2: step2Data,
+                progress: 50, // Updated progress
+                currentStep: 3
+            }, { merge: true });
+            
+            // Logic to move to Step 3 would go here
+            goToStep(3);
+
+
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+
+        } else if (currentStep === 3) {
+        const uploadBtn = document.getElementById('uploadBtn');
+        uploadBtn.innerText = "Please wait...";
+        uploadBtn.disabled = true;
+
+        // 1. Validation Check: Ensure they uploaded at least one academic doc
+        const academicFiles = document.querySelectorAll('.academic-req');
+        const hasAcademic = Array.from(academicFiles).some(input => input.files.length > 0);
+        
+        if (!hasAcademic) {
+            alert("Please upload either your Matric Certificate or Grade 11 Results.");
+            uploadBtn.disabled = false; 
+            uploadBtn.innerText = "Upload & Continue";
+            return;
+        }
+
+        try {
+            const documentData = {};
+            
+            // Loop through each file one by one
+            for (const f of filesToUpload) {
+                const inputEl = document.getElementById(f.id);
+                
+                if (inputEl && inputEl.files[0]) {
+                    const file = inputEl.files[0];
+                    const storageRef = ref(storage, `applications/${user.uid}/${f.name}`);
+                    
+                    // Upload the file (which was already compressed by the listener)
+                    await uploadBytes(storageRef, file);
+                    const url = await getDownloadURL(storageRef);
+                    
+                    // Prepare data for Firestore
+                    documentData[f.name] = url;
+                    documentData[`${f.name}_filename`] = file.name;
+                    // SAVE FILE SIZE TO DATABASE
+                    documentData[`${f.name}_size`] = Math.round(file.size / 1024) + " KB";
+                }
+            }
+
+            // Save document metadata to drafts collection
+            await setDoc(doc(db, "drafts", user.uid), {
+                documents: documentData,
+                lastUpdated: new Date()
+            }, { merge: true });
+
+            // 3. Final Application Submission Logic
+            const [draftSnap, appSnap] = await Promise.all([
+                getDoc(doc(db, "drafts", user.uid)),
+                getDoc(doc(db, "applications", user.uid))
+            ]);
+
+            if (draftSnap.exists()) {
+                const existingData = appSnap.exists() ? appSnap.data() : {};
+                
+                // Set Status
+                let finalStatus = existingData.status1 === "missing info" ? "pending" : (existingData.status1 || "pending");
+
+                // Generate or keep Application ID
+                const yearSuffix = new Date().getFullYear().toString().slice(-2);
+                let finalAppId = existingData.applicationId;
+
+                if (!finalAppId) {
+                    const randomDigits = Math.floor(100000 + Math.random() * 900000);
+                    finalAppId = `APP-${yearSuffix}${randomDigits}`;
+                }
+
+                // Push to final applications collection
+                await setDoc(doc(db, "applications", user.uid), {
+                    ...draftSnap.data(),
+                    applicationId: finalAppId,
+                    status1: finalStatus,
+                    submittedAt: existingData.submittedAt || new Date(),
+                    lastUpdated: new Date()
+                }, { merge: true });
+
+                alert("Application Submitted Successfully!");
+                goToStep(4);
+                if (typeof renderReviewSummary === "function") renderReviewSummary();
+            }
+
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Upload failed: " + error.message);
+            uploadBtn.innerText = "Upload & Continue";
+            uploadBtn.disabled = false;
+        }
+    }
+});
+
+function populateMatricYears() {
+    const select = document.getElementById('matricYear');
+    const currentYear = new Date().getFullYear();
+    
+    // Start 50 years ago, end 10 years into the future
+    for (let year = currentYear - 50; year <= currentYear + 10; year++) {
+        let option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        select.appendChild(option);
+    }
+}
+
+// Call this function when the script loads
+populateMatricYears();
+
+let subjectCount = 0;
+
+window.addSubjectRow = function() {
+    subjectCount++;
+    const container = document.getElementById('subjectsContainer');
+    const row = document.createElement('div');
+    row.className = 'form-grid';
+    row.style.marginBottom = '10px';
+    row.id = `row${subjectCount}`;
+    row.innerHTML = `
+        <div class="input-group"><input type="text" placeholder="Subject Name" class="sub-name" oninput="validateRows()"></div>
+        <div class="input-group"><input type="number" placeholder="Percentage" class="sub-perc" oninput="validateRows()"></div>
+        <div class="input-group"><input type="number" placeholder="Level" class="sub-level" oninput="validateRows()"></div>
+    `;
+    container.appendChild(row);
+    document.getElementById('addSubjectRowBtn').style.display = 'none';
+}
+
+window.validateRows = function() {
+    const rows = document.querySelectorAll('#subjectsContainer .form-grid');
+    const lastRow = rows[rows.length - 1];
+    const inputs = lastRow.querySelectorAll('input');
+    
+    // Check if the "Add" button should show
+    const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+    document.getElementById('addSubjectRowBtn').style.display = allFilled ? 'block' : 'none';
+
+    // --- CRITICAL: MOVE THIS INSIDE THE BRACKETS ---
+    const subjectsList = [];
+    rows.forEach(row => {
+        subjectsList.push({
+            name: row.querySelector('.sub-name').value,
+            percentage: row.querySelector('.sub-perc').value,
+            level: row.querySelector('.sub-level').value
+        });
+    });
+     // Explicitly pass the full array to ensure the cloud matches the UI exactly
+    if (subjectsList.length > 0) {
+        syncFieldToCloud('subjects', subjectsList); 
+    }
+
+};
+
+
+// Add this new logic to handle Discontinued status
+window.handleDiscontinued = function(selectElement) {
+    const row = selectElement.closest('.post-school-row');
+    const yearInput = row.querySelector('.ps-year');
+    if (selectElement.value === 'Discontinued') {
+        yearInput.disabled = true;
+        yearInput.value = '';
+    } else {
+        yearInput.disabled = false;
+    }
+};
+
+window.addPostSchoolRow = function() {
+    const container = document.getElementById('postSchoolContainer');
+    const row = document.createElement('div');
+    row.className = 'form-grid post-school-row';
+    row.style.cssText = "margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;";
+    row.innerHTML = `
+        <div class="input-group"><label>Institutional name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Qualification name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Status</label><select class="ps-status" onchange="validatePostSchool(); handleDiscontinued(this)"><option value="">Select</option><option value="Completed">Completed</option><option value="Registered">Currently Registered</option><option value="Discontinued">Discontinued</option></select></div>
+        <div class="input-group"><label>Student Number</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Module percentage average</label><input type="number" class="ps-input" oninput="validatePostSchool()"></div>
+        <div class="input-group"><label>Year Completed/to be completed</label><input type="number" class="ps-year" oninput="validatePostSchool()"></div>
+    `;
+    container.appendChild(row);
+    document.getElementById('addPostSchoolBtn').style.display = 'none';
+};
+
+window.validatePostSchool = function() {
+    const rows = document.querySelectorAll('.post-school-row');
+    const lastRow = rows[rows.length - 1];
+    const inputs = lastRow.querySelectorAll('.ps-input');
+    const status = lastRow.querySelector('.ps-status');
+    const year = lastRow.querySelector('.ps-year');
+    
+    let allFilled = true;
+    let anyFilled = false;
+    
+    inputs.forEach(i => { if(i.value.trim() !== "") anyFilled = true; else allFilled = false; });
+    if(status.value === "") allFilled = false; else anyFilled = true;
+    if(status.value !== 'Discontinued' && year.value.trim() === "") allFilled = false;
+    
+    document.getElementById('addPostSchoolBtn').style.display = (allFilled) ? 'block' : 'none';
+
+    // --- CRITICAL: MOVE THIS INSIDE THE BRACKETS ---
+    const qualData = [];
+    rows.forEach(row => {
+        const rowInputs = row.querySelectorAll('.ps-input');
+        qualData.push({
+            institutionalName: rowInputs[0].value,
+            qualificationName: rowInputs[1].value,
+            status: row.querySelector('.ps-status').value,
+            studentNumber: rowInputs[2].value,
+            modulePercentageAverage: rowInputs[3].value,
+            yearCompleted: row.querySelector('.ps-year').value
+        });
+    });
+   // Explicitly pass the full array
+    if (qualData.length > 0) {
+        syncFieldToCloud('postSchoolQualifications', qualData);
+    }
+
+    return { allFilled, anyFilled };
+};
+
+// Add this at the very end of apply.js
+window.goToStep = async function(stepNumber) {
+    const user = auth.currentUser;
+    
+    // Hide current step
+    document.getElementById(`step${currentStep}Container`).style.display = 'none';
+    
+    // Show new step
+    document.getElementById(`step${stepNumber}Container`).style.display = 'block';
+
+    if (stepNumber === 2) {
+    document.getElementById('attendance').required = true;
+    document.getElementById('campus').required = true;
+    document.getElementById('choice1').required = true;
+    }
+    
+    // Update the step counter
+    currentStep = stepNumber;
+
+    // Save the step progress to Firebase immediately (R0 cost - tiny string)
+    if (user) {
+        await setDoc(doc(db, "drafts", user.uid), { currentStep: currentStep }, { merge: true });
+    }
+    window.scrollTo(0, 0);
+};
+
+window.renderReviewSummary = async function() {
+    const user = auth.currentUser;
+    const docSnap = await getDoc(doc(db, "drafts", user.uid));
+    const summaryDiv = document.getElementById('reviewSummary');
+    
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        const s1 = data.step1 || {};
+        const s2 = data.step2 || {};
+
+        summaryDiv.innerHTML = `
+            <h3 style="color:var(--primary); border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:15px;">Application Summary</h3>
+            <p><strong>Full Name:</strong> ${s1.fullNames} ${s1.surname}</p>
+            <p><strong>Identity Number:</strong> ${s1.idNumber}</p>
+            <p><strong>Email:</strong> ${s1.email}</p>
+            <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+            <p><strong>Selected Course:</strong> ${s2.choice1 || 'None'}</p>
+            <p><strong>Academic Year:</strong> ${data.academicYear || (activeCycle ? activeCycle.academicYear : 'N/A')}</p>
+            <p><strong>Total APS:</strong> ${s2.APS || 'N/A'}</p>
+            <p style="margin-top:15px; color:#27ae60; font-weight:600;"><i class="fas fa-check-circle"></i> Documents have been uploaded to the vault.</p>
+        `;
+    }
+};
+
+// --- THE STARTUP CHECK ---
+setTimeout(() => {
+    const container = document.getElementById('subjectsContainer');
+    if (container && container.children.length === 0) {
+        window.addSubjectRow();
+    }
+}, 1000);
+
+async function processFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        
+        img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let width = img.width;
+            let height = img.height;
+
+            // STAGE 1: Aggressive Resizing
+            // If the file is massive, we keep halving dimensions until it's manageable
+            // This is the "No Matter What" logic for 1000MB+ files
+            const MAX_PIXELS = 1200; 
+            if (width > MAX_PIXELS || height > MAX_PIXELS) {
+                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
+                width *= ratio;
+                height *= ratio;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // STAGE 2: The 200KB Quality Loop
+            let quality = 0.8;
+            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            
+            // Keep dropping quality until we hit 200KB (204800 bytes)
+            while (blob.size > 204800 && quality > 0.1) {
+                quality -= 0.1; 
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            }
+
+            // STAGE 3: Emergency Dimension Shrink 
+            // If quality 0.1 is STILL over 200KB, we shrink the pixels further
+            let scaleFactor = 0.8;
+            while (blob.size > 204800 && scaleFactor > 0.2) {
+                canvas.width *= scaleFactor;
+                canvas.height *= scaleFactor;
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.1));
+                scaleFactor -= 0.1;
+            }
+
+            URL.revokeObjectURL(img.src);
+            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
+        };
+
+        img.onerror = () => {
+            URL.revokeObjectURL(img.src);
+            reject("Compression Failed: Format not supported or file corrupted.");
+        };
+    });
+}
+
+
+
+
+Apply.html 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply - Student Application Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <style>
+        :root { --primary: #4a90e2; --bg: #f8f9fa; --border: #e0e0e0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg); padding-bottom: 50px; }
+        .app-header { background: white; padding: 20px; border-bottom: 1px solid var(--border); text-align: center; }
+        .logo-text { display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: 700; color: #556080; text-transform: uppercase; margin-bottom: 20px; }
+        .logo-text i { color: var(--primary); font-size: 1.5rem; }
+        .progress-container { display: flex; justify-content: center; align-items: center; max-width: 400px; margin: 0 auto; gap: 10px; }
+        .step-dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; }
+        .step-dot.active { background: var(--primary); box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2); }
+        .step-line { flex-grow: 1; height: 2px; background: #ddd; }
+        .step-line.active { background: var(--primary); }
+        .container { max-width: 700px; margin: 30px auto; padding: 0 15px; }
+        .form-card { background: white; border-radius: 8px; border: 1px solid var(--border); padding: 30px; }
+        .form-card h2 { font-size: 1.4rem; margin-bottom: 10px; }
+        .form-card p { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #333; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.95rem; }
+        .section-title { margin: 25px 0 15px; padding-bottom: 5px; border-bottom: 1px solid #eee; font-size: 1rem; color: var(--primary); }
+        .btn-group { display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px; }
+        .btn { padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: 600; border: none; }
+        .btn-cancel { background: #f5f5f5; color: #666; }
+        .btn-next { background: var(--primary); color: white; }
+        #step2Container { display: none; } /* CRITICAL: Hides Step 2 initially */
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <div class="logo-text"><i class="fas fa-graduation-cap"></i> Student Application Portal</div>
+        <div class="progress-container">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-line" id="line1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-line" id="line2"></div>
+            <div class="step-dot" id="dot3"></div>
+            <div class="step-line" id="line3"></div>
+            <div class="step-dot" id="dot4"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <form id="mainApplyForm" class="form-card">
+            
+            <div id="step1Container">
+                <h2 id="stepTitle">Step 1 of 4: Personal Details</h2>
+                <p>Please enter your identity and biographical details.</p>
+
+                <div class="section-title">1. Identity & Biographical Details</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Full Names *</label><input type="text" id="fullNames" required></div>
+                    <div class="input-group full-width"><label>Surname *</label><input type="text" id="surname" required></div>
+                    <div class="input-group">
+                    <label>ID Type *</label>
+                    <select id="idType" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="SA ID">South African ID</option>
+                    <option value="Passport">Passport Number</option>
+                    </select>
+                    </div>
+                    <div class="input-group">
+                    <label>ID / Passport Number *</label>
+                    <input type="text" id="idNumber" required>
+                    </div>                   
+                    <div class="input-group"><label>Date of Birth *</label><input type="date" id="dob" required></div>
+                    <div class="input-group"><label>Gender *</label><select id="gender" required><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+                    <div class="input-group">
+                    <label>Title *</label>
+                    <select id="title" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="Mr">Mr</option>
+                    <option value="Ms">Ms</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Dr">Dr</option>
+                    <option value="Mx">Mx</option>
+                    </select>
+                    </div>
+                    <div class="input-group">
+                   <label>Nationality *</label>
+                   <select id="nationality" required onchange="toggleOtherNationality(this.value)">
+                   <option value="" selected disabled>Select</option>
+                   <option value="South African">South African</option>
+                   <option value="Other">Other</option>
+                </select>
+                </div>
+                    <div class="input-group" id="otherNationalityGroup" style="display: none;">
+                    <label>Please Specify Nationality *</label>
+                    <input type="text" id="otherNationality">
+                </div>
+                    <div class="input-group full-width"><label>Home Language *</label><input type="text" id="homeLanguage" required></div>
+                </div>
+
+                <div class="section-title">2. Contact Information</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Personal Email Address *</label><input type="email" id="email" required></div>
+                    <div class="input-group"><label>Mobile Phone Number *</label><input type="tel" id="mobile" required></div>
+                    <div class="input-group"><label>Alternative Phone Number</label><input type="tel" id="altPhone"></div>
+                </div>
+
+               <div class="section-title">3. Physical Home Address (Required)</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Street Name *</label><input type="text" id="physStreet" required></div>
+                    <div class="input-group"><label>Suburb/Town/City *</label><input type="text" id="physSuburb" required></div>
+                    <div class="input-group"><label>Province/Region *</label><input type="text" id="physProvince" required></div>
+                    <div class="input-group"><label>Postal Code *</label><input type="text" id="physPostalCode" required></div>
+                    <div class="input-group"><label>Country *</label><input type="text" id="physCountry" required></div>
+                </div>
+
+                <div class="section-title">4. Postal Address (If different)</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Street Name / PO Box</label><input type="text" id="postStreet"></div>
+                    <div class="input-group"><label>Suburb/Town/City</label><input type="text" id="postSuburb"></div>
+                    <div class="input-group"><label>Province/Region</label><input type="text" id="postProvince"></div>
+                    <div class="input-group"><label>Postal Code</label><input type="text" id="postPostalCode"></div>
+                    <div class="input-group"><label>Country</label><input type="text" id="postCountry"></div>
+                </div>
+
+
+                <div class="section-title">5. Demographic & Equity Information</div>
+                <div class="form-grid">
+                    <div class="input-group"><label>Population Group / Race *</label><select id="race" required><option value="">Select</option><option value="Black">Black</option><option value="White">White</option><option value="Coloured">Coloured</option><option value="Indian">Indian</option></select></div>
+                    <div class="input-group">
+                    <label>Disability Status *</label>
+                    <select id="disability" onchange="toggleDisability(this.value)">
+                    <option value="No">No Disability</option>
+                    <option value="Yes">Yes</option>
+                    </select>
+                     </div>
+
+                     <div id="disabilityDetailsContainer" style="display: none; margin-bottom: 15px;">
+                     <div id="box1" class="input-group">
+                     <label>Specify Disability 1 *</label>
+                     <input type="text" id="disability1" class="disability-input" oninput="checkAddButton()">
+                      <button type="button" id="addBtn1" style="display:none; margin-top:5px;" onclick="addDisabilityBox()">+ Add another</button>
+                      </div>
+                     <div id="box2" class="input-group" style="display:none;">
+                     <label>Specify Disability 2 *</label>
+                       <input type="text" id="disability2" class="disability-input" oninput="checkAddButton()">
+                      </div>
+                       <div id="box3" class="input-group" style="display:none;">
+                      <label>Specify Disability 3 *</label>
+                        <input type="text" id="disability3" class="disability-input">
+                       </div>
+                       </div>
+                    <div class="input-group full-width"><label>Citizenship Status *</label><select id="citizenship" required>
+               <option value="" selected disabled>Select</option>
+               <option value="South African citizen">South African citizen</option>
+               <option value="Permanent Resident">Permanent Resident</option>
+               <option value="Refugee/Asylum Seeker">Refugee/Asylum Seeker</option>
+               <option value="Non-citizen/Temporary Resident">Non-citizen/Temporary Resident</option>
+               </select>
+              </div>
+                </div>
+
+                <div class="section-title">6. Socio-Economic Data</div>
+                <div class="form-grid">
+                    <div class="input-group"><label>Marital Status</label><select id="marital"><option value="Single">Single</option><option value="Married">Married</option></select></div>
+                    <div class="input-group"><label>Employment Status</label><select id="employment"><option value="Unemployed">Unemployed</option><option value="Employed">Employed</option><option value="Student">Student</option></select></div>
+                    <div class="input-group full-width"><label>Social Grant Status</label><select id="socialGrant"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                </div>
+
+                <div class="section-title">7. Next of Kin / Emergency Contact</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Full Name *</label><input type="text" id="nokName" required></div>
+                    <div class="input-group"><label>Relationship *</label><input type="text" id="nokRelation" required></div>
+                    <div class="input-group"><label>Contact Number *</label><input type="tel" id="nokPhone" required></div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-cancel" onclick="history.back()">Cancel</button>
+                    <button type="submit" class="btn btn-next">Next</button>
+                </div>
+            </div>
+
+                        <div id="step2Container" style="display: none;">
+                <h2>Step 2 of 4: Course & Education Qualifications</h2>
+                <p>Please enter your secondary school and post-school qualifications.</p>
+                
+                <div class="section-title">1. Secondary / High School Details</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>School Name *</label><input type="text" id="schoolName" placeholder="Enter School"></div>
+                    <div class="input-group">
+                <label>School Country *</label>
+                <input type="text" id="schoolCountry" placeholder="e.g. South Africa">
+                </div>
+                <div class="input-group">
+                <label>School Province *</label>
+                <input type="text" id="schoolProvince" placeholder="e.g. Gauteng">
+                </div>
+                    <div class="input-group">
+                <label>Year Completed / To Be Completed *</label>
+                <select id="matricYear">
+                <option value="" selected disabled>Select</option>
+                </select>
+                </div>
+
+                    <div class="input-group">
+                <label>Qualification Type *</label>
+                <select id="examBody" onchange="toggleOtherQual(this.value)">
+                <option value="" selected disabled>Select</option>
+                <option value="NSC">NSC</option>
+                <option value="IEB">IEB</option>
+                <option value="SACAI">SACAI</option>
+                <option value="NCV">NCV</option>
+                <option value="Other">Other</option>
+                </select>
+                </div>
+                <div class="input-group" id="otherQualGroup" style="display: none;">
+                <label>Please Specify Qualification *</label>
+                <input type="text" id="otherQual" placeholder="Type your qualification here">
+                </div>
+                    <div class="input-group">
+                <label>Current Status *</label>
+                <select id="currentStatus">
+                <option value="" selected disabled>Select</option>
+                <option value="Still at school">Still at school</option>
+                <option value="Completed schooling">Completed schooling</option>
+                </select>
+                </div>
+
+                </div>
+
+                <div class="section-title">2. Subject-Specific Marks & APS</div>
+                <div id="subjectsContainer">
+                </div>
+                 <button type="button" id="addSubjectRowBtn" style="margin-top:15px; padding: 10px 20px; display:none; background:#4a90e2; color:white; border:none; border-radius:4px; cursor:pointer;" onclick="addSubjectRow()">+ Add another subject</button>
+
+                <div style="margin-top: 25px; padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid var(--border);">
+                <label style="font-weight: 600;">Total APS:</label>
+                <input type="number" id="APS" placeholder="Enter Total APS" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px;">
+                <p style="font-size: 0.8rem; color: #d9534f; margin-top: 8px;">* Note: Do not include Life Orientation in the total APS.</p>
+                </div>
+                            <div class="section-title">3. Post-School / Previous Qualifications</div>
+               <div id="postSchoolContainer">
+               <div class="form-grid post-school-row" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+               <div class="input-group"><label>Institutional name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+               <div class="input-group"><label>Qualification name</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+               <div class="input-group">
+               <label>Status</label>
+            <select class="ps-status" onchange="validatePostSchool(); handleDiscontinued(this)">
+                <option value="">Select</option>
+                <option value="Completed">Completed</option>
+                <option value="Registered">Currently Registered</option>
+                <option value="Discontinued">Discontinued</option>
+            </select>
+                </div>
+                <div class="input-group"><label>Student Number</label><input type="text" class="ps-input" oninput="validatePostSchool()"></div>
+                <div class="input-group"><label>Module percentage average</label><input type="number" class="ps-input" oninput="validatePostSchool()"></div>
+                <div class="input-group"><label>Year Completed/to be completed</label><input type="number" class="ps-year" oninput="validatePostSchool()"></div>
+                 </div>
+                   </div>
+                <button type="button" id="addPostSchoolBtn" style="display:none; margin-bottom:20px; padding: 10px 20px; background:#4a90e2; color:white; border:none; border-radius:4px; cursor:pointer;" onclick="addPostSchoolRow()">+ Add another qualification</button>
+
+                <div class="section-title">4. Programme Choices</div>
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>Course *</label><select id="choice1" disabled><option value="">Select Campus First</option></select></div>
+                    <div class="input-group"><label>Academic Year *</label><input type="text" id="acadYear" readonly></div>
+                    <div class="input-group"><label>Campus Selection *</label><select id="campus" disabled><option value="">Select Mode First</option></select></div>
+                    <div class="input-group full-width"><label>Attendance Mode *</label><select id="attendance"><option value="">Loading Modes...</option></select></div>
+                </div>
+
+                <div class="section-title">5. Additional Requirements & Checklist</div>
+                <div class="form-grid">
+                    <div class="input-group"><label>NBT Registration Number</label><input type="text" id="nbtNum"></div>
+                    <div class="input-group"><label>Need student Accommodation ? *</label><select id="housing"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                    <div class="input-group full-width"><label>Need Financial Support ? *</label><select id="nsfas"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                </div>
+                            
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-cancel" onclick="goToStep(1)">Back</button>
+                    <button type="submit" class="btn btn-next">Next</button>
+                </div>
+            </div>
+
+          <div id="step3Container" style="display: none;">
+                <h2>Step 3 of 4: Upload Documents</h2>
+                <p>Please upload the required documents to support your application.<br>
+                <small>Accepted file types: PDF, JPG, PNG. Max file size: 5MB</small></p>
+
+                <div class="section-title">1. Identity Documents</div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Certified Copy of ID / Passport *</label>
+                    <input type="file" id="file_id" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Birth Certificate (optional)</label>
+                    <input type="file" id="file_birth" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="section-title">2. Academic Records</div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Matric / Grade 12 Certificate *</label>
+                    <input type="file" id="file_matric" class="academic-req" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Grade 11 Final Results (optional)</label>
+                    <input type="file" id="file_grade11" class="academic-req" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Official Academic Transcripts</label>
+                    <input type="file" id="file_transcripts" accept=".pdf,.jpg,.png">
+                </div>
+
+                <div class="section-title">3. Financial & Residency Documents</div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Proof of Residence *</label>
+                    <input type="file" id="file_address" accept=".pdf,.jpg,.png">
+                </div>
+                <div class="upload-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;">
+                    <label style="font-size: 0.9rem;">Sponsor / Parent ID (optional)</label>
+                    <input type="file" id="file_sponsor" accept=".pdf,.jpg,.png">
+                </div>
+
+                 <div class="btn-group">
+                    <button type="button" class="btn btn-cancel" onclick="goToStep(2)">Back</button>
+                    <button type="submit" class="btn btn-next" id="uploadBtn">Upload & Continue</button>
+                </div>
+            </div>
+
+            <div id="step4Container" style="display: none;">
+                <h2>Step 4 of 4: Review & Confirm</h2>
+                <p>Please review your details below. Your application has been saved as a draft.</p>
+                
+                <div id="reviewSummary" style="background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; line-height: 1.6;">
+                    </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-next" onclick="window.finalSubmitApplication()">Finalize & Submit</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script type="module" src="apply.js"></script>
+</body>
+</html>
+Applicant.js 
+import { auth, db } from './firebase-config.js';
+import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { doc, getDoc, onSnapshot, updateDoc, query, collection, getDocs, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
+
+const loader = document.getElementById('loader');
+const userNameDisplay = document.getElementById('userNameDisplay');
+const welcomeText = document.getElementById('welcomeText');
+const logoutBtn = document.getElementById('logoutBtn');
+const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
+    let loader = document.getElementById('global-file-loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'global-file-loader';
+        loader.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:10000;color:white;font-family:sans-serif;";
+        loader.innerHTML = `<div class="spinner" style="border:4px solid #f3f3f3;border-top:4px solid #3498db;border-radius:50%;width:40px;height:40px;animation:spin 2s linear infinite;"></div><p id="loader-text" style="margin-top:15px;"></p><style>@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>`;
+        document.body.appendChild(loader);
+    }
+    document.getElementById('loader-text').innerText = text;
+    loader.style.display = show ? 'flex' : 'none';
+};
+
+// Monitor Authentication State
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        // User is logged in, check if verified
+        if (!user.emailVerified) {
+            alert("Email not verified. Redirecting to login.");
+            window.location.href = "index.html";
+            return;
+        }
+
+        try {
+            // Fetch User Data from Firestore (R0 usage: 1 Read)
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            
+            if (userDoc.exists()) {
+                const data = userDoc.data();
+                const firstName = data.fullName.split(' ')[0]; // Pick first name for header
+                
+                userNameDisplay.textContent = firstName;
+                welcomeText.textContent = `Welcome, ${firstName}!`;
+                                // --- SYNC LOGIC START ---
+                const nowStr = new Date().toISOString().split('T')[0];
+                const cycleQ = query(collection(db, "application_cycles"));
+                const cycleSnap = await getDocs(cycleQ);
+                let activeCycle = null;
+
+                cycleSnap.forEach(doc => {
+                    const d = doc.data();
+                    if (nowStr >= d.openDate && nowStr <= d.closingDate) {
+                        activeCycle = { id: doc.id, ...d };
+                    }
+                });
+
+                const appSnap = await getDoc(doc(db, "applications", user.uid));
+                const appCard = document.querySelector('.card');
+                const appBtn = document.querySelector('.btn-continue');
+                const appText = appCard.querySelector('p');
+                const appTitle = appCard.querySelector('h3');
+
+                if (!activeCycle) {
+                    // Scenario 1: No open cycles
+                    appBtn.innerText = "Applications Closed";
+                    appBtn.disabled = true;
+                    appBtn.style.background = "#ccc";
+                    appBtn.style.cursor = "not-allowed";
+                    appBtn.onclick = null;
+                    appText.innerText = "There are no application cycles currently open. Please check back later.";
+                } else if (appSnap.exists() && appSnap.data().cycleId === activeCycle.id) {
+                    // Scenario 2: Already applied to THIS cycle
+                    appCard.style.border = "2px solid #27ae60"; // Green edges
+                    appTitle.innerText = "Application Completed";
+                    appText.innerText = "Please click the button below to view your application summary.";
+                    appBtn.innerText = "View Application Summary";
+                    // This re-uses your existing trackStatusBtn functionality
+                    appBtn.onclick = () => { document.getElementById('trackStatusBtn').click(); };
+                }
+            }
+            
+            // Hide Loader
+            loader.style.display = 'none';
+
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            loader.style.display = 'none';
+        }
+    } else {
+        // No user logged in, kick them out
+        window.location.href = "index.html";
+    }
+});
+
+// New Modern Profile Card UI
+const triggerProfileActions = async () => {
+    const user = auth.currentUser;
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+    
+    // Fetch latest user data for the card
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const userData = userDoc.data();
+
+    body.innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+            <div style="width: 80px; height: 80px; background: #e3f2fd; color: #4a90e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 2rem;">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 style="margin-bottom: 5px;">${userData.fullName}</h2>
+            <p style="color: #666; margin-bottom: 25px;">${user.email}</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 0 auto;">
+                <button id="modalChangePass" style="padding: 12px; background: white; border: 1px solid #4a90e2; color: #4a90e2; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    <i class="fas fa-key"></i> Change Password
+                </button>
+                <button id="modalLogout" style="padding: 12px; background: #ff4d4d; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+
+    // Button Logic inside the Card
+    document.getElementById('modalChangePass').onclick = () => {
+        sendPasswordResetEmail(auth, user.email).then(() => alert("Reset link sent to " + user.email));
+    };
+    document.getElementById('modalLogout').onclick = () => {
+        if(confirm("Log out now?")) signOut(auth).then(() => window.location.href = "index.html");
+    };
+};
+
+// Re-bind the listeners to the new function
+logoutBtn.onclick = (e) => { e.stopPropagation(); triggerProfileActions(); };
+document.getElementById('updateProfileBtn').onclick = (e) => { e.preventDefault(); triggerProfileActions(); };
+
+// Function to show the Tracking Modal
+document.getElementById('trackStatusBtn').addEventListener('click', async () => {
+    const user = auth.currentUser;
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+
+    // Show loading state
+    body.innerHTML = "<p style='text-align:center;'>Fetching status...</p>";
+    modal.style.display = 'flex';
+
+    try {
+        // Fetch the application data (Synced with Staff Portal updates)
+        const appSnap = await getDoc(doc(db, "applications", user.uid));
+        
+        if (!appSnap.exists()) {
+            body.innerHTML = "<p style='text-align:center; color: #666;'>No application found. Please complete Step 1 to 4 first.</p>";
+            return;
+        }
+
+        const data = appSnap.data();
+        const s1 = data.step1 || {};
+        const s2 = data.step2 || {};
+
+         // --- FIXED LOGIC: Syncing with Staff Portal 'status1' and 'status2' ---
+        const currentStatus = data.status1 || "pending";
+        
+        // --- UI Construction ---
+        body.innerHTML = `
+            <div style="display: flex; gap: 40px; margin-bottom: 30px;">
+                <div>
+                    <span style="color: #888; font-size: 0.85rem;">Application ID:</span>
+                    <strong style="display: block;">${data.applicationId || 'Generating...'}</strong>
+                    ${data.studentNumber ? `<span style="color: #2e7d32; font-size: 0.8rem;">Student No: ${data.studentNumber}</span>` : ''}
+                </div>
+                <div>
+                    <span style="color: #888; font-size: 0.85rem;">Name:</span>
+                    <strong style="display: block;">${s1.fullNames} ${s1.surname}</strong>
+                </div>
+            </div>
+
+            <div style="width: 100%; overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+            <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
+           <th style="padding: 10px;">Year</th>
+               <th style="padding: 10px;">Qualification</th>
+               <th style="padding: 10px;">Campus</th>
+               <th style="padding: 10px;">Status</th> <!-- New Column -->
+               <th style="padding: 10px;">Documents</th>
+               </tr>
+               </thead>
+               <tbody style="font-size: 0.9rem;">
+    <!-- 1st Choice Row -->
+    <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 15px 10px;">${s2.acadYear || '2027'}</td>
+        <td style="padding: 15px 10px;">${s2.choice1}</td>
+        <td style="padding: 15px 10px;">${s2.campus}</td>
+        <td style="padding: 15px 10px; font-weight: 700; color: #1976d2;">
+            ${currentStatus === 'review' ? 'UNDER REVIEW' : 
+      currentStatus === 'waiting' ? 'WAITING LIST' : 
+      currentStatus === 'uncon_accepted' ? 'ACCEPTED' :
+      data.documentStatuses && Object.values(data.documentStatuses).includes('rejected') ? '<span style="color:#d32f2f">ACTION REQUIRED</span>' :
+      currentStatus === 'withdrawn_expired' ? 'WITHDRAWN' :
+      currentStatus.replace('_', ' ').toUpperCase()}
+     </td>
+        <td style="padding: 15px 10px;">
+            ${data.adminDocs && data.adminDocs.acceptanceLetter ? `<a href="${data.adminDocs.acceptanceLetter}" target="_blank" style="color:#4a90e2; text-decoration: none;"><i class="fas fa-file-download"></i> View Letter</a>` : '<span style="color:#ccc;">None</span>'}
+        </td>
+    </tr>
+</tbody>
+            </table>
+        `;
+
+    } catch (error) {
+        console.error("Tracking Error:", error);
+        body.innerHTML = "<p style='text-align:center; color: red;'>Error loading data. Please try again.</p>";
+    }
+});
+
+let currentZoom = 1.0;
+
+window.changeZoom = function(amount) {
+    const body = document.getElementById('statusModalBody');
+    currentZoom += amount;
+    
+    // Limits: Don't let it get too small or too huge
+    if (currentZoom < 0.5) currentZoom = 0.5;
+    if (currentZoom > 1.5) currentZoom = 1.5;
+    
+    body.style.transform = `scale(${currentZoom})`;
+};
+
+// Contact Support Modal for TUT Arcadia
+document.querySelector('a.q-link[href="#"]:nth-child(2)').addEventListener('click', (e) => {
+    e.preventDefault();
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+
+    body.innerHTML = `
+        <div style="text-align: center; padding: 10px;">
+            <div style="margin-bottom: 20px;">
+                <i class="fas fa-graduation-cap" style="font-size: 2rem; color: #4a90e2;"></i>
+                <i class="fas fa-headset" style="font-size: 1.5rem; color: #556080; margin-left: -10px;"></i>
+                <h2 style="margin-top: 10px; color: #333;">Student Support</h2>
+                <p style="color: #666;">TUT Arcadia Campus Admissions & Technical Help</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
+                <!-- Admissions Support -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-university"></i> Admissions</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Course info, status updates, and academic requirements.</p>
+                    <a href="mailto:arcadiaadmissions@tut.ac.za" style="color: #333; font-weight: 600; text-decoration: none; font-size: 0.9rem;">arcadiaadmissions@tut.ac.za</a>
+                </div>
+
+                <!-- Document Vault Help -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-file-invoice"></i> Vault Support</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Issues with uploading IDs, certificates, or file sizes.</p>
+                    <a href="mailto:arcadiasupport@tut.ac.za" style="color: #333; font-weight: 600; text-decoration: none; font-size: 0.9rem;">arcadiasupport@tut.ac.za</a>
+                </div>
+
+                <!-- Technical Assistance -->
+                <div style="padding: 15px; border: 1px solid #eef0f5; border-radius: 8px; background: #fff;">
+                    <h4 style="color: #4a90e2; margin-bottom: 8px;"><i class="fas fa-tools"></i> System Help</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Login issues, password resets, or portal bugs.</p>
+                    <button onclick="window.location.href='mailto:techsupport@tut.ac.za'" style="background: none; border: none; color: #4a90e2; font-weight: 600; cursor: pointer; padding: 0;">Report a Bug →</button>
+                </div>
+
+                <!-- Instant Help -->
+                <div style="padding: 15px; border: 1px solid #25D366; border-radius: 8px; background: #f0fdf4;">
+                    <h4 style="color: #25D366; margin-bottom: 8px;"><i class="fab fa-whatsapp"></i> Instant Chat</h4>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Quick chat with an advisor during office hours.</p>
+                    <a href="https://wa.me/27123825911" target="_blank" style="color: #128C7E; font-weight: 700; text-decoration: none;">Chat via WhatsApp</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.8rem; color: #999;">
+                <p><i class="fas fa-clock"></i> Office Hours: Mon - Fri (08:00 - 15:30)</p>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+});
+
+// --- STUDENT PORTAL MASTER GUIDELINE DATA ---
+const guideSections = [
+    {
+        title: "1. Official Welcome and Portal Overview",
+        content: "Welcome to the Student Application Portal, your primary gateway to managing your academic journey and administrative requirements. This comprehensive guideline serves as an exhaustive manual to ensure that every applicant can navigate the system with absolute clarity and precision. The portal is designed to act as a bridge between the applicant and the institution, facilitating the submission of personal data, academic records, and supporting documentation through a streamlined, multi-step process. You are encouraged to read through this entire document carefully, as it contains critical instructions on how to accurately provide your information, how to interpret the various stages of your application status, and where to seek professional assistance should you encounter technical or administrative hurdles during your journey."
+    },
+    {
+        title: "2. Initial Access: Registration and Security",
+        content: "To begin your journey, you must first secure your account through our mandatory authentication layer. Every applicant is required to use a valid, functional email address that they check regularly. Upon registration, the system will trigger a mandatory verification email; you must click the link within that email to prove your identity and activate your portal access. If you attempt to enter the portal without completing this verification step, the system will automatically redirect you back to the login page as a security measure to protect your data. Within the dashboard, you will find a Profile Card that allows you to manage your credentials; if at any point you forget your password or feel your account is compromised, you can trigger a 'Password Reset' which will send a secure link directly to your registered inbox, ensuring that only you have control over your application progress."
+    },
+    {
+        title: "3. Step 1: Mastering the Personal Information Section",
+        content: "Section One is dedicated to your legal identity and contact profile. It is imperative that the names entered match exactly what is written on your Government-issued ID or Passport. In the 'Full Names' field, you should list all names as they appear on your birth certificate, while the 'Surname' field is reserved for your family name. When entering your ID or Passport number, double-check every digit for accuracy, as this is used for primary identification. For 'Nationality', if you are not a South African citizen, you must select 'Other', which will then prompt you to manually type in your country of origin. This section also requires a detailed physical and postal address; please include your street name, house number, suburb, and postal code correctly to ensure that any physical correspondence from the university reaches you without delay. You must also provide a primary mobile number and an alternative contact number—this alternative number is vital in case of emergencies or if your primary phone is unreachable during the admissions window."
+    },
+    {
+        title: "4. Detailed Guidance on Demographic and Social Declarations",
+        content: "As part of our commitment to social support and inclusivity, the portal asks for specific demographic details. This includes your home language, which helps us understand your communication preferences, and your marital and employment status. We also inquire about 'Social Grants'; if you are a recipient of financial aid from the government, please indicate this accurately as it may influence your eligibility for certain institutional support structures. Furthermore, the 'Next of Kin' section is mandatory; you must provide the full name, relationship (e.g., Parent, Sibling, Guardian), and a valid telephone number for someone the university can contact regarding your application or safety. Providing incomplete info in these sections can lead to delays, so ensure every field is addressed with the most current information available to you."
+    },
+    {
+        title: "5. Comprehensive Disability Support and Accessibility",
+        content: "If you have any physical or learning disability that requires the institution to provide special accommodations, you must declare it in the dedicated 'Disability' section. Upon selecting 'Yes', the system will present you with detailed input boxes where you can specify the nature of your disability. You are not limited to a single entry; the 'Add' buttons allow you to list up to three specific conditions. It is crucial to be as descriptive as possible—for example, instead of just saying 'Vision', you might specify 'Requires large-print materials' or 'Uses a screen reader'. This information is handled with the highest level of confidentiality and is strictly used to ensure that the campus environment is prepared to support your academic success from the moment you are admitted."
+    },
+    {
+        title: "6. Step 2: Accurate Reporting of Academic History",
+        content: "The Academic History section is perhaps the most critical part of your application. You must first identify your high school and the province where you completed your Matric. Use the dropdown menu to select the exact year you finished your schooling. For the 'Examination Body' (such as DBE, IEB, or SACAI), ensure you select the correct one; if you studied under a different curriculum, select 'Other' and specify the qualification type. For students who are currently in Grade 12, select the 'Currently Registered' status. This section is dynamic: you must enter each subject, followed by the percentage achieved and the corresponding level. Note that the 'Add Subject' button will only appear once you have completely filled in the previous row. This is to ensure that no subjects are left partially blank. The system then uses this data to calculate your APS (Admission Point Score), which is the primary metric used to determine if you meet the minimum entry requirements for your chosen qualification."
+    },
+    {
+        title: "7. Post-Schooling and Previous Institutional Qualifications",
+        content: "If you have previously studied at another college or university, you must disclose this in the 'Post-School Qualifications' section. This includes any certificates, diplomas, or degrees you have attempted or completed. You will need to provide the institutional name, the name of the qualification, your student number from that institution, and your average percentage across your modules. The 'Status' field is vital: 'Completed' means you have graduated, 'Registered' means you are still currently enrolled there, and 'Discontinued' means you stopped your studies before finishing. If you select 'Discontinued', the system will naturally disable the 'Year Completed' field since no completion occurred. Providing a full history of your previous studies is essential to avoid being rejected for 'Incomplete Info' or 'Non-Disclosure' during the auditing phase of your application."
+    },
+    {
+        title: "8. Qualification Choices and Campus Selection Strategy",
+        content: "The portal allows you to select two choices for your study programme. Your '1st Choice' should be the qualification you most desire to study. Your '2nd Choice' acts as a safety net; the admissions office will typically only evaluate your 2nd choice if you do not meet the requirements for your 1st choice or if that programme is already full. You must also select your preferred 'Campus' (such as Arcadia) and your 'Attendance' mode—usually Full-time or Part-time. Double-check that you meet the specific APS requirements for both choices before submitting, as choosing a programme for which you do not qualify will result in an automatic rejection. Also, ensure you select the correct 'Academic Year' for which you are applying (e.g., 2027) to ensure your application is placed in the correct intake cycle."
+    },
+    {
+        title: "9. Step 3: The Document Vault and Upload Procedures",
+        content: "Once you have completed the data entry, you must move to the 'Document Vault'. Here, you are required to upload digital copies of your supporting documents. This includes a certified copy of your ID or Passport, your Matric results, and any transcripts from previous institutions. If you are a minor or have a sponsor, you may need to upload a 'Sponsor ID' and 'Proof of Payment' for your application fee. To upload, click the 'Upload Documents' button or navigate to the specific file input fields. Ensure your files are clear, legible, and in a standard format (PDF or JPEG). Once a document is successfully saved to our system, you will see a green 'Already Uploaded ✅' confirmation. If you receive a status of 'Missing Info' later, you must return to this section to provide the specific documents that were flagged as missing or illegible by the administrative staff."
+    },
+    {
+        title: "10. Step 4: Final Review and Submission Commitment",
+        content: "Before your application is finalized, the system presents a 'Review Summary'. This page displays a condensed version of all the data you have entered, from your full name and ID number to your primary course choices. You must scroll through this summary meticulously. If you notice an error in your APS, your email, or your spelling, you must navigate back to the previous steps to correct it. Once you click the 'Submit' button, your application is locked and sent to the admissions queue. At this point, your status will change to 'Pending', and you will no longer be able to edit your primary details without contacting support. Submission is a legal commitment that all information provided is true and accurate to the best of your knowledge."
+    },
+    {
+        title: "11. Understanding Application Status Meanings",
+        content: "Once submitted, your application will go through several stages. It is vital that you understand what each status means so you can react accordingly: \n\n" +
+                  "• PENDING: Your application has been received and is waiting in the queue for an administrator to open it.\n" +
+                  "• UNDER REVIEW: An admissions officer is currently looking at your marks and documents to see if you qualify.\n" +
+                  "• MISSING INFO: This is a critical status. It means the admin team found an error, such as a blurry ID photo or a missing certificate. You must check your dashboard for notes on what is missing and upload it immediately to keep your application active.\n" +
+                  "• PROVISIONALLY ACCEPTED: You have been accepted based on your current marks (e.g., Grade 11 or Mid-year Grade 12), but this is dependent on you maintaining those marks in your final exams.\n" +
+                  "• UNCONDITIONALLY ACCEPTED: You have met all requirements and have been fully admitted into the programme. Congratulations!\n" +
+                  "• WAITING LIST: You qualify for the course, but the programme is currently full. You will be contacted if a space opens up.\n" +
+                  "• REJECTED: Your application was not successful. Common reasons include 'False Info' (providing fake marks), 'Incomplete Info' (failing to upload documents after a request), or 'Below Requirements' (your APS was too low for the chosen course)."
+    },
+    {
+        title: "12. How to Avoid Rejection and Technical Troubleshooting",
+        content: "To ensure your application has the highest chance of success, always be honest and thorough. Avoid 'False Info' at all costs, as our system verifies marks against national databases; any discrepancy will result in a permanent ban from the institution. If you experience technical issues—such as the portal not loading or buttons not responding—first check your internet connection and ensure you are using a modern browser like Chrome or Edge. If the 'Loader' (the spinning circle) stays on your screen for more than a minute, try refreshing the page or logging out and back in. For lost passwords, use the 'Help Center' link to reset your credentials. Always keep a record of your Application ID (e.g., APP-XXXXX), as you will need this whenever you speak to a support agent."
+    },
+    {
+        title: "13. Contacting Support and Accessing the Help Desk",
+        content: "The portal provides multiple layers of support to ensure you are never stranded. If you have questions about your application status or course requirements, use the 'Contact Support' link to reach the Arcadia Campus Admissions office via email at arcadiaadmissions@tut.ac.za. For technical bugs or issues with the Document Vault (such as files failing to upload), you should contact the Tech Support team at techsupport@tut.ac.za. For the fastest response during office hours (Monday to Friday, 08:00 to 15:30), we have provided an Instant WhatsApp Chat link. This allows you to speak directly with an advisor who can guide you through the process in real-time. Please be patient during peak application periods, as response times may be longer than usual."
+    },
+    {
+        title: "14. Final Legal Declaration and Terms of Use",
+        content: "By proceeding with your application on this portal, you hereby declare that you understand and agree to the following conditions: You certify that all information provided is, to the best of your knowledge, complete and accurate. You acknowledge that the institution reserves the right to cancel your application or registration if any information is found to be false or misleading. You consent to the institution processing your personal data for the purposes of admissions and academic administration. You also agree to check the portal regularly for status updates and to respond promptly to any requests for 'Missing Info'. This portal is a professional tool designed for your benefit; misuse of the system or attempting to bypass security measures will result in immediate termination of your access and potential legal consequences. We wish you the very best of luck with your application and your future academic career."
+    }
+];
+
+// --- LOGIC TO OPEN THE GUIDE ---
+document.querySelector('a.q-link:last-child').addEventListener('click', (e) => {
+    e.preventDefault();
+    const overlay = document.getElementById('guideOverlay');
+    const content = document.getElementById('guideScrollContent');
+
+    // Generate the massive list of instructions
+    content.innerHTML = guideSections.map(section => `
+        <div style="margin-bottom: 50px;">
+            <h2 style="color: #4a90e2; font-size: 1.4rem; margin-bottom: 15px; border-left: 4px solid #4a90e2; padding-left: 15px;">
+                ${section.title}
+            </h2>
+            <p style="font-size: 1.05rem; line-height: 1.8; color: #444; text-align: justify;">
+                ${section.content}
+            </p>
+        </div>
+    `).join('');
+
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Stop background scroll
+});
+
+// --- CLOSE LOGIC ---
+document.getElementById('closeGuide').onclick = () => {
+    document.getElementById('guideOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Re-enable scroll
+};
+
+// --- DOCUMENT VAULT LOGIC ---
+document.getElementById('openVaultBtn').addEventListener('click', async () => {
+    const user = auth.currentUser;
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+
+    body.innerHTML = `
+    <div id="vaultHeaderInfo" style="display: flex; gap: 40px; margin-bottom: 30px; text-align: left;">
+        <p style='text-align:center; width: 100%;'>Loading Vault Data...</p>
+    </div>
+    <div id="vaultTableContainer" style="width: 100%; overflow-x: auto;"></div>
+    `;
+    modal.style.display = 'flex';
+
+    // Real-time listener to check application status and documents
+    onSnapshot(doc(db, "applications", user.uid), (docSnap) => {
+        if (!docSnap.exists()) {
+            body.innerHTML = "<p style='text-align:center;'>Please submit your application first to activate the vault.</p>";
+            return;
+        }
+
+        const data = docSnap.data();
+        const currentStatus = data.status1 || "pending";
+        const savedDocs = data.documents || {};
+        const isLocked = currentStatus !== "pending"; // Lock if NOT pending
+
+        let vaultHTML = `
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="border-bottom: 2px solid #eee; color: #1976d2; font-size: 0.75rem; text-transform: uppercase;">
+                <th style="padding: 10px;">Document Name</th>
+                <th style="padding: 10px;">Size</th>
+                <th style="padding: 10px;">File Name</th>
+                <th style="padding: 10px; text-align: center;">Action</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 0.9rem;">
+`;
+
+         const filesToCheck = [
+        { name: 'ID_Passport', label: 'ID / Passport' },
+        { name: 'Birth_Certificate', label: 'Birth Certificate' },
+        { name: 'Matric_Certificate', label: 'Matric Certificate' },
+        { name: 'Grade_11_Results', label: 'Grade 11 Results' },
+        { name: 'Transcripts', label: 'Academic Transcripts' },
+        { name: 'Proof_of_Address', label: 'Proof of Residence' },
+        { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' }
+    ];
+
+
+            const docStatuses = data.documentStatuses || {}; // Get statuses
+           filesToCheck.forEach(f => {
+            const fileUrl = savedDocs[f.name];
+            const fileSize = savedDocs[`${f.name}_size`] || "N/A";
+            const hasFile = !!fileUrl;
+
+            vaultHTML += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px 10px; font-weight: 600;">${f.label}</td>
+                    <td style="padding: 12px 10px; color: #666;">${fileSize}</td>
+                    <td style="padding: 12px 10px; font-size: 0.85rem;">
+    ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
+</td>
+                 <td style="padding: 12px 10px; text-align: center;">
+    ${docStatuses[f.name] === 'processed' ? 
+        `<span style="color: #27ae60; font-weight: 800; font-size: 0.75rem;"><i class="fas fa-check-circle"></i> PROCESSED</span>` : 
+        `<span onclick="handleVaultUpload('${f.name}')" style="color: ${hasFile ? '#27ae60' : '#d32f2f'}; cursor: pointer; font-weight: 600; text-decoration: underline; font-size: 0.8rem;">
+            ${hasFile ? 'RE-UPLOAD' : (docStatuses[f.name] === 'missing' ? 'UPLOAD MISSING' : 'UPLOAD')}
+        </span>`
+    }
+</td>
+                </tr>
+            `; 
+        });
+
+        vaultHTML += `</tbody></table></div>`;
+        const s1 = data.step1 || {};
+        document.getElementById('vaultHeaderInfo').innerHTML = `
+    <div>
+        <span style="color: #888; font-size: 0.85rem;">Application ID:</span>
+        <strong style="display: block;">${data.applicationId || 'N/A'}</strong>
+        ${data.studentNumber ? `<span style="color: #2e7d32; font-size: 0.8rem; font-weight:bold;">Student No: ${data.studentNumber}</span>` : ''}
+    </div>
+    <div>
+        <span style="color: #888; font-size: 0.85rem;">Name:</span>
+        <strong style="display: block;">${s1.fullNames || ''} ${s1.surname || ''}</strong>
+    </div>
+`;
+document.getElementById('vaultTableContainer').innerHTML = vaultHTML + `</tbody></table>`;
+    });
+});
+
+window.handleVaultUpload = function(docName) {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*,application/pdf';
+    
+    fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        toggleGlobalLoader(true, `Processing ${docName.replace('_', ' ')}...`);
+        
+        let finalFile = file;
+
+        try {
+            if (file.type.startsWith('image/')) {
+                finalFile = await processFile(file);
+            }
+
+            if (finalFile.size > 512000) { 
+                alert("File is still too large. Please upload a file less than 500KB.");
+                toggleGlobalLoader(false);
+                return;
+            }
+
+            const user = auth.currentUser;
+            const storage = getStorage();
+            const fileRef = ref(storage, `applications/${user.uid}/${docName}`);
+
+            // This automatically overwrites and replaces the old file in Storage
+            const snapshot = await uploadBytes(fileRef, finalFile);
+            const url = await getDownloadURL(snapshot.ref);
+            
+            const appRef = doc(db, "applications", user.uid);
+            await updateDoc(appRef, {
+                [`documents.${docName}`]: url,
+                [`documents.${docName}_filename`]: file.name,
+                [`documents.${docName}_size`]: (finalFile.size / 1024).toFixed(1) + " KB",
+                [`documentStatuses.${docName}`]: 'pending' 
+            });
+
+            alert("Document updated successfully!");
+        } catch (err) {
+            console.error(err);
+            alert("Upload failed. Please try a different file.");
+        } finally {
+            toggleGlobalLoader(false);
+        }
+    };
+    fileInput.click();
+};
+
+async function processFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            let width = img.width;
+            let height = img.height;
+            const MAX_PIXELS = 1200; 
+            if (width > MAX_PIXELS || height > MAX_PIXELS) {
+                const ratio = Math.min(MAX_PIXELS / width, MAX_PIXELS / height);
+                width *= ratio;
+                height *= ratio;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            let quality = 0.8;
+            let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            while (blob.size > 204800 && quality > 0.1) {
+                quality -= 0.1; 
+                blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+            }
+            URL.revokeObjectURL(img.src);
+            resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: 'image/jpeg' }));
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(img.src);
+            reject("Compression Failed.");
+        };
+    });
+}
+
+
+
+The card in step 4 of 4 is good no need to.change it, what u need to change is the button that button shouldnt be a submit button it should be a button that lead to applicant.html bro and inside applicant.js the button that show up when an application is completed when i press it currently it show the track application status card thats not right that view application summary button should show the card from step 4 of 4 in doesn't necessarily go to apply.html no its just pick up that summary and show that summary card in the middle of the screen amd show be clear all devices whether is a small phone or big phoen i should be able to see that card without having to scroll down or up or side way..that card that show up should have an x-sign that sign is for removing it from the screen mind you im not talking about makimg changes on the car in step 4 of 4 and im.saying it should also show up also when i press the view application summary button inside applicant.js that only for students who completed the application 
+
+
+
+
+And i dont want to u to change the logic my codes uses please that might mess up my codes
+
+Be very demonstrative on ur instructions please show me every step one by one step by step dont rush th process 
+Make sure that the student portal amd staff portal match and sync with one another on the features ur about to implement and also make sure that the codes u will implement match and sync woth both the database rules and storage rules 
+I want 100% functionality with 0%errors amd 0% bugs so make sure everything is perfect 
+
+Mimd you i told u only about these so be sure to focus only on thag one dont change my codes please 
+
+
+
+Make.no mistakes i wamt 100% functionality with 0% errors amd 0% bugs
+
+
+ 
+
+Everything else stays the same so dont u dare touch them
+ 
+ 
+Lets do it make.no.mistakes please
+     
+Remember u show me.my current line and them am updated line, do this one by one dont rush the process
+Show me only the line that i need to fix and the lines i need to update dont guve me the whole updated cz that will ruin my codes so intead please just show me the line that i need to delete or update
+
+That mean u show me my current line that i have on.my code then u tell me what to do with that code do i delete or to i update it
+
+Show me the code line current code that need to be fix first then after show what to do with it either delete it or update what what
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      logger.ts:117 [2026-04-20T15:02:58.157Z]  @firebase/firestore: Firestore (11.0.0): Uncaught Error in snapshot listener: FirebaseError: [code=failed-precondition]: The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/atlas-c58f8/firestore/inde…2luZGV4ZXMvXxABGgsKB2N5Y2xlSWQQARoPCgtsYXN0VXBkYXRlZBACGgwKCF9fbmFtZV9fEAI
 (anonymous)	@	logger.ts:117
 (anonymous)	@	log.ts:25
 map	@	log.ts:66
