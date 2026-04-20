@@ -551,6 +551,46 @@ async function processFile(file) {
     });
 }
 
+async function renderSummaryModal() {
+    const user = auth.currentUser;
+    const modal = document.getElementById('statusModal');
+    const body = document.getElementById('statusModalBody');
+    
+    // Close button (X) styling and logic
+    const closeBtn = `<div onclick="document.getElementById('statusModal').style.display='none'" style="position:absolute; top:10px; right:15px; font-size:24px; cursor:pointer; color:#888;">&times;</div>`;
+    
+    body.style.position = 'relative';
+    body.innerHTML = closeBtn + "<p style='text-align:center;'>Loading Summary...</p>";
+    modal.style.display = 'flex';
+
+    const docSnap = await getDoc(doc(db, "drafts", user.uid));
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        const s1 = data.step1 || {};
+        const s2 = data.step2 || {};
+
+        // This template matches your Step 4 card exactly but is optimized for the modal
+        body.innerHTML = closeBtn + `
+            <div style="max-width: 100%; padding: 10px; font-family: 'Segoe UI', sans-serif;">
+                <h3 style="color:#4a90e2; border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:15px; font-size: 1.2rem;">Application Summary</h3>
+                <div style="font-size: 0.95rem; line-height: 1.6; color: #333;">
+                    <p><strong>Full Name:</strong> ${s1.fullNames || ''} ${s1.surname || ''}</p>
+                    <p><strong>Identity Number:</strong> ${s1.idNumber || ''}</p>
+                    <p><strong>Email:</strong> ${s1.email || ''}</p>
+                    <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+                    <p><strong>Selected Course:</strong> ${s2.choice1 || 'None'}</p>
+                    <p><strong>Academic Year:</strong> ${data.academicYear || 'N/A'}</p>
+                    <p><strong>Total APS:</strong> ${s2.APS || 'N/A'}</p>
+                    <p style="margin-top:15px; color:#27ae60; font-weight:600; display:flex; align-items:center; gap:5px;">
+                        <i class="fas fa-check-circle"></i> Documents successfully vaulted.
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+}
+
+
 
 
 
