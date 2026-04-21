@@ -83,6 +83,26 @@ window.pendingUser = {
     }
 });
 
+document.getElementById('verifyPinBtn').addEventListener('click', async () => {
+    const enteredPin = document.getElementById('inputPin').value;
+    const { uid, correctPin } = window.pendingUser;
+
+    if (enteredPin === correctPin) {
+        try {
+            const userRef = doc(db, "users", uid);
+            await setDoc(userRef, { isVerified: true }, { merge: true });
+
+            alert("Email Verified Successfully!");
+            window.location.href = "login.html";
+        } catch (error) {
+            alert("Error updating verification: " + error.message);
+        }
+    } else {
+        alert("Incorrect PIN. Please check your email and try again.");
+    }
+});
+
+
 
 
 
