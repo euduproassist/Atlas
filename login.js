@@ -1,6 +1,6 @@
 import { auth, db } from './firebase-config.js'; // FIXED: Added db import
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js"; // FIXED: Added direct imports
+import { doc, getDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js"; // FIXED: Added direct imports
 
 const loginForm = document.getElementById('loginForm');
 const togglePassword = document.querySelector('.password-toggle');
