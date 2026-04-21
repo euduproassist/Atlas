@@ -56,7 +56,10 @@ registerForm.addEventListener('submit', async (e) => {
                             <h2 style="margin-top: 10px; color: #333;">Welcome to the Portal</h2>
                         </div>
                         <p style="color: #333;">Hi <strong>${fullName}</strong>,</p>
-
+                        <p style="color: #555; line-height: 1.6;">Thank you for registering. Use the code below to verify your account:</p>
+                        <div style="text-align: center; margin: 35px 0;">
+                        <h1 style="font-size: 48px; letter-spacing: 10px; color: #4a90e2;">${verificationPin}</h1>
+                        </div>
                         <p style="font-size: 0.85rem; color: #888;">If the button above does not work, copy and paste this secure link into your browser:</p>
                         <p style="font-size: 0.75rem; color: #4a90e2; word-break: break-all; background: #f4f7f9; padding: 10px; border-radius: 4px;">${verificationLink}</p>
                         <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
