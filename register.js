@@ -68,8 +68,6 @@ registerForm.addEventListener('submit', async (e) => {
             }
         });
 
-        alert("Account created! One verification email has been sent to your inbox.");
-        window.location.href = "login.html";
         
     } catch (error) {
         alert("Error: " + error.message);
