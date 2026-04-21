@@ -20,6 +20,75 @@ const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
     loader.style.display = show ? 'flex' : 'none';
 };
 
+// Monitor Authentication State
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        try {
+            // 1. Fetch User Data from Firestore first to check our CUSTOM PIN verification
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            
+            if (!userDoc.exists() || userDoc.data().isVerified !== true) {
+                alert("Email not verified in our system. Redirecting to login.");
+                await signOut(auth);
+                window.location.href = "index.html";
+                return;
+            }
+
+            // 2. If they ARE verified, continue with the rest of your logic
+            const data = userDoc.data();
+            const firstName = data.fullName.split(' ')[0]; 
+            
+            userNameDisplay.textContent = firstName;
+            welcomeText.textContent = `Welcome, ${firstName}!`;
+
+            // --- SYNC LOGIC START ---
+            const nowStr = new Date().toISOString().split('T')[0];
+            const cycleQ = query(collection(db, "application_cycles"));
+            const cycleSnap = await getDocs(cycleQ);
+            let activeCycle = null;
+
+            cycleSnap.forEach(doc => {
+                const d = doc.data();
+                if (nowStr >= d.openDate && nowStr <= d.closingDate) {
+                    activeCycle = { id: doc.id, ...d };
+                }
+            });
+
+            const appSnap = await getDoc(doc(db, "applications", user.uid));
+            const appCard = document.querySelector('.card');
+            const appBtn = document.querySelector('.btn-continue');
+            const appText = appCard.querySelector('p');
+            const appTitle = appCard.querySelector('h3');
+
+            if (!activeCycle) {
+                appBtn.innerText = "Applications Closed";
+                appBtn.disabled = true;
+                appBtn.style.background = "#ccc";
+                appBtn.style.cursor = "not-allowed";
+                appBtn.onclick = null;
+                appText.innerText = "There are no application cycles currently open. Please check back later.";
+            } else if (appSnap.exists() && appSnap.data().cycleId === activeCycle.id) {
+                appCard.style.border = "2px solid #27ae60"; 
+                appTitle.innerText = "Application Completed";
+                appText.innerText = "Please click the button below to view your application summary.";
+                appBtn.innerText = "View Application Summary";
+                appBtn.onclick = () => { renderSummaryModal(); };
+            }
+
+            // Hide Loader after everything is done
+            loader.style.display = 'none';
+
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            if (loader) loader.style.display = 'none';
+            window.location.href = "index.html";
+        }
+    } else {
+        // No user logged in, kick them out
+        window.location.href = "index.html";
+    }
+});
+
 // New Modern Profile Card UI
 const triggerProfileActions = async () => {
     const user = auth.currentUser;
