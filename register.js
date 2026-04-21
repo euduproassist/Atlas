@@ -38,9 +38,7 @@ registerForm.addEventListener('submit', async (e) => {
         const apiKey = auth.app.options.apiKey;
         const projectID = "atlas-c58f8"; // Your Project ID
         
-        // This constructs the official link that Firebase Auth recognizes
-        // We use firebaseapp.com because it has the highest "Inbox" reputation
-        const verificationLink = `https://${projectID}.firebaseapp.com/__/auth/action?mode=verifyEmail&continueUrl=https://euduproassist.github.io/login.html&apiKey=${apiKey}`;
+        // This constructs the official code that Firebase Auth recognizes
 
         // 4. SEND THE ONE SINGLE BRANDED EMAIL
         await addDoc(collection(db, "mail"), {
