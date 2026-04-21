@@ -68,6 +68,13 @@ service cloud.firestore {
         resource.data.ownerId == request.auth.uid || isStaffOrAdmin()
       );
     }
+
+    match /mail/{mailId} {
+      allow read: if false; 
+      allow write: if 
+        isStaffOrAdmin() || 
+        (request.auth != null && request.resource.data.to == request.auth.token.email);
+   }
    
     // 7. SYSTEM CONFIG (Read-only for authenticated users)
     match /system_config/payments {
