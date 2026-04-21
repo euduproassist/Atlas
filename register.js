@@ -66,6 +66,42 @@ registerForm.addEventListener('submit', async (e) => {
         document.getElementById('pinModal').style.display = 'flex';
 
         // 6. STORE DATA FOR THE VERIFY BUTTON
+                window.pendingUser = {
+            uid: user.uid,
+            correctPin: verificationPin
+        };
+
+    } catch (error) {
+        if (error.code === 'auth/email-already-in-use') {
+            const email = document.getElementById('regEmail').value;
+            const q = query(collection(db, "users"), where("email", "==", email));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+                const userData = userDoc.data();
+
+                if (userData.isVerified === false) {
+                    alert("Account exists but is not verified. Sending a new PIN...");
+                    const newPin = Math.floor(100000 + Math.random() * 900000).toString();
+                    await updateDoc(doc(db, "users", userDoc.id), { verificationPin: newPin });
+                    await addDoc(collection(db, "mail"), {
+                        to: email,
+                        from: "Atlas Admissions <eduproassist44@gmail.com>",
+                        message: {
+                            subject: "Your New Verification PIN",
+                            html: `<div style="text-align: center;"><h1>${newPin}</h1></div>`
+                        }
+                    });
+                    window.pendingUser = { uid: userDoc.id, correctPin: newPin };
+                    document.getElementById('pinModal').style.display = 'flex';
+                    return;
+                }
+            }
+        }
+        alert("Error: " + error.message);
+    }
+});
 
 // VERIFICATION BUTTON LOGIC
 document.getElementById('verifyPinBtn').addEventListener('click', async () => {
