@@ -22,6 +22,25 @@ const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
 
 // Monitor Authentication State
 onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        try {
+            // 1. Fetch User Data from Firestore first to check our CUSTOM PIN verification
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            
+            if (!userDoc.exists() || userDoc.data().isVerified !== true) {
+                alert("Email not verified in our system. Redirecting to login.");
+                // Sign out so they can't stay on the page
+                await signOut(auth);
+                window.location.href = "index.html";
+                return;
+            }
+
+            // 2. If they ARE verified, continue with the rest of your logic
+            const data = userDoc.data();
+            const firstName = data.fullName.split(' ')[0]; 
+            
+            userNameDisplay.textContent = firstName;
+            welcomeText.textContent = `Welcome, ${firstName}!`;
 
                                 // --- SYNC LOGIC START ---
                 const nowStr = new Date().toISOString().split('T')[0];
