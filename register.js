@@ -37,13 +37,6 @@ registerForm.addEventListener('submit', async (e) => {
 
         await sendEmailVerification(user, { url: 'https://feuduproassist.github.io/login.html' });
 
-        // 3. Generate Secure Firebase Link & Trigger Decorative Email
-        const authDomain = auth.config.authDomain; 
-        const apiKey = auth.config.apiKey;
-        
-        // This constructs the official Firebase verification URL dynamically using your project settings
-        const verificationLink = `https://atlas-c58f8.firebaseapp.com/__/auth/handler?mode=verifyEmail&continueUrl=https://euduproassist.github.io/login.html&apiKey=${apiKey}`;
-
         await addDoc(collection(db, "mail"), {
             to: email,
             from: "Atlas Admissions <eduproassist44@gmail.com>",
