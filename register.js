@@ -39,6 +39,7 @@ registerForm.addEventListener('submit', async (e) => {
         const projectID = "atlas-c58f8"; // Your Project ID
         
         // This constructs the official code that Firebase Auth recognizes
+        const verificationPin = Math.floor(100000 + Math.random() * 900000).toString();
 
         // 4. SEND THE ONE SINGLE BRANDED EMAIL
         await addDoc(collection(db, "mail"), {
