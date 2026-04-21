@@ -40,7 +40,6 @@ registerForm.addEventListener('submit', async (e) => {
         const apiKey = auth.config.apiKey;
         
         // This constructs the official Firebase verification URL dynamically using your project settings
-        const verificationLink = `https://${authDomain}/__/auth/handler?mode=verifyEmail&continueUrl=${encodeURIComponent(window.location.origin + "/login.html")}&apiKey=${apiKey}`;
 
         await addDoc(collection(db, "mail"), {
             to: email,
