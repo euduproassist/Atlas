@@ -68,6 +68,15 @@ registerForm.addEventListener('submit', async (e) => {
             }
         });
 
+// Show the PIN Modal instead of redirecting
+document.getElementById('pinModal').style.display = 'flex';
+
+// Store the UID and PIN temporarily in a variable to check against later
+window.pendingUser = {
+    uid: user.uid,
+    correctPin: verificationPin
+};
+
         
     } catch (error) {
         alert("Error: " + error.message);
