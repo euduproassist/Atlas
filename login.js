@@ -28,23 +28,15 @@ loginForm.addEventListener('submit', (e) => {
         .then((userCredential) => {
             const user = userCredential.user;
 
-            // CRITICAL: Check if email is verified
-            if (!user.emailVerified) {
-                alert("Please verify your email address before logging in. Check your inbox for the verification link.");
-                // Optional: Sign them out immediately so they aren't "logged in" in an unverified state
-                auth.signOut(); 
-                return;
-            }
-
             // Fetch the user document from Firestore to check custom verification
-const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js");
-const userDoc = await getDoc(doc(db, "users", user.uid));
+            const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js");
+            const userDoc = await getDoc(doc(db, "users", user.uid));
 
-if (!userDoc.exists() || userDoc.data().isVerified !== true) {
-    alert("Please verify your account using the PIN sent to your email first.");
-    await auth.signOut();
-    return;
-}
+         if (!userDoc.exists() || userDoc.data().isVerified !== true) {
+            alert("Please verify your account using the PIN sent to your email first.");
+         await auth.signOut();
+         return;
+         }
 
             console.log("Logged in as:", user.email);
             alert("Login Successful!");
