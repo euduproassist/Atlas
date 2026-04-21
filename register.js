@@ -1,6 +1,6 @@
 import { auth, db } from './firebase-config.js';
 import { createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const registerForm = document.getElementById('registerForm');
 const togglePassword = document.querySelector('.password-toggle');
