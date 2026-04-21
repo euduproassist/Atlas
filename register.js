@@ -66,15 +66,6 @@ registerForm.addEventListener('submit', async (e) => {
         document.getElementById('pinModal').style.display = 'flex';
 
         // 6. STORE DATA FOR THE VERIFY BUTTON
-        window.pendingUser = {
-            uid: user.uid,
-            correctPin: verificationPin
-        };
-
-    } catch (error) {
-        alert("Error: " + error.message);
-    }
-});
 
 // VERIFICATION BUTTON LOGIC
 document.getElementById('verifyPinBtn').addEventListener('click', async () => {
