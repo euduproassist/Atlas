@@ -35,8 +35,6 @@ registerForm.addEventListener('submit', async (e) => {
             createdAt: new Date()
         });
 
-        // 3. Send Verification Email (Costs R0 on Spark Plan)
-        await sendEmailVerification(user);
 
         alert("Account created! Please check your email inbox and click the verification link before logging in.");
         window.location.href = "login.html";
