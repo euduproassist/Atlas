@@ -30,6 +30,23 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
         // Fetch the user document from Firestore to check custom verification
         const userDoc = await getDoc(doc(db, "users", user.uid));
 
+                // Check if document exists and if isVerified is true
+        if (!userDoc.exists() || userDoc.data().isVerified !== true) {
+            if (confirm("Your account is not verified. Would you like us to send a new PIN?")) {
+                const newPin = Math.floor(100000 + Math.random() * 900000).toString();
+                await updateDoc(doc(db, "users", user.uid), { verificationPin: newPin });
+                await addDoc(collection(db, "mail"), {
+                    to: user.email,
+                    from: "Atlas Admissions <eduproassist44@gmail.com>",
+                    message: { subject: "Your Verification PIN", html: `<h1>${newPin}</h1>` }
+                });
+                alert("PIN sent! Please enter it on the registration page.");
+                window.location.href = "register.html";
+            }
+            await signOut(auth);
+            return;
+        }
+
         console.log("Logged in as:", user.email);
         alert("Login Successful!");
         window.location.href = "applicant.html"; 
