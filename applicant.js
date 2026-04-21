@@ -22,24 +22,7 @@ const toggleGlobalLoader = (show, text = "Checking & Compressing...") => {
 
 // Monitor Authentication State
 onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        // User is logged in, check if verified
-        if (!user.emailVerified) {
-            alert("Email not verified. Redirecting to login.");
-            window.location.href = "index.html";
-            return;
-        }
 
-        try {
-            // Fetch User Data from Firestore (R0 usage: 1 Read)
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            
-            if (userDoc.exists()) {
-                const data = userDoc.data();
-                const firstName = data.fullName.split(' ')[0]; // Pick first name for header
-                
-                userNameDisplay.textContent = firstName;
-                welcomeText.textContent = `Welcome, ${firstName}!`;
                                 // --- SYNC LOGIC START ---
                 const nowStr = new Date().toISOString().split('T')[0];
                 const cycleQ = query(collection(db, "application_cycles"));
