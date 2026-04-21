@@ -56,10 +56,7 @@ registerForm.addEventListener('submit', async (e) => {
                             <h2 style="margin-top: 10px; color: #333;">Welcome to the Portal</h2>
                         </div>
                         <p style="color: #333;">Hi <strong>${fullName}</strong>,</p>
-                        <p style="color: #555; line-height: 1.6;">Thank you for registering. To ensure the security of your account, please verify your email address by clicking the button below:</p>
-                        <div style="text-align: center; margin: 35px 0;">
-                            <a href="${verificationLink}" target="_blank" rel="noopener noreferrer" style="background-color: #4a90e2; color: white; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">VERIFY MY ACCOUNT</a>
-                        </div>
+
                         <p style="font-size: 0.85rem; color: #888;">If the button above does not work, copy and paste this secure link into your browser:</p>
                         <p style="font-size: 0.75rem; color: #4a90e2; word-break: break-all; background: #f4f7f9; padding: 10px; border-radius: 4px;">${verificationLink}</p>
                         <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
