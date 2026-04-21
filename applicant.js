@@ -77,16 +77,17 @@ onAuthStateChanged(auth, async (user) => {
                     appBtn.onclick = () => { renderSummaryModal(); };
                 }
             }
-            
-            // Hide Loader
-            loader.style.display = 'none';
+
+// Hide Loader
+loader.style.display = 'none';
 
         } catch (error) {
             console.error("Error fetching user data:", error);
             loader.style.display = 'none';
+            // If there's a permission error, they probably aren't verified
+            window.location.href = "index.html";
         }
     } else {
-        // No user logged in, kick them out
         window.location.href = "index.html";
     }
 });
