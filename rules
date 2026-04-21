@@ -10,12 +10,6 @@ service cloud.firestore {
       );
     }
 
-    // 1. STUDENTS / USERS COLLECTION
-    match /users/{userId} {
-      // Allows user to read own profile, and staff/admins to view for dashboard names
-      allow read: if request.auth != null && (request.auth.uid == userId || isStaffOrAdmin());
-      allow write: if false; // Only Cloud Functions or Admin SDK should handle this for security
-    }
 
     // 2. STAFF COLLECTION
     match /staff/{staffId} {
