@@ -35,6 +35,8 @@ registerForm.addEventListener('submit', async (e) => {
             createdAt: new Date()
         });
 
+        await sendEmailVerification(user, { url: 'https://feuduproassist.github.io/login.html' });
+
         // 3. Generate Secure Firebase Link & Trigger Decorative Email
         const authDomain = auth.config.authDomain; 
         const apiKey = auth.config.apiKey;
