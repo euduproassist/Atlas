@@ -31,6 +31,8 @@ registerForm.addEventListener('submit', async (e) => {
             email: email,
             role: "student",
             createdAt: new Date()
+            verificationPin: verificationPin,
+            isVerified: false
         });
 
         // 3. GENERATE THE OFFICIAL SECURE LINK
