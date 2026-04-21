@@ -30,13 +30,6 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
         // Fetch the user document from Firestore to check custom verification
         const userDoc = await getDoc(doc(db, "users", user.uid));
 
-        // Check if document exists and if isVerified is true
-        if (!userDoc.exists() || userDoc.data().isVerified !== true) {
-            alert("Please verify your account using the PIN sent to your email first.");
-            await signOut(auth); // Properly sign out unverified user
-            return;
-        }
-
         console.log("Logged in as:", user.email);
         alert("Login Successful!");
         window.location.href = "applicant.html"; 
