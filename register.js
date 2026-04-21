@@ -38,7 +38,7 @@ registerForm.addEventListener('submit', async (e) => {
         // 3. Trigger Official Firebase Verification
         // This MUST be called to generate the secure token that prevents the "Invalid Page Mode" error.
         await sendEmailVerification(user, { 
-            url: 'https://feuduproassist.github.io/login.html' 
+            url: 'https://euduproassist.github.io/login.html' 
         });
 
         // 4. Send your branded "Welcome" email via Firestore
