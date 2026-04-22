@@ -132,7 +132,7 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
         try {
             const userRef = doc(db, "users", uid);
             // Update the document to set isVerified to true
-            await setDoc(userRef, { isVerified: true }, { merge: true });
+            
 
             alert("Email Verified Successfully!");
             window.location.href = "login.html";
