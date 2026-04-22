@@ -62,8 +62,6 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
                 document.getElementById('pinModal').style.display = 'flex';
 
             }
-            await signOut(auth);
-            return;
         }
 
         console.log("Logged in as:", user.email);
