@@ -104,6 +104,29 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
     }
 });
 
+document.getElementById('resendPinBtn').addEventListener('click', async () => {
+    if (!window.pendingUser) return;
+    const { uid } = window.pendingUser;
+    const newPin = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    try {
+        await updateDoc(doc(db, "users", uid), { verificationPin: newPin });
+        await addDoc(collection(db, "mail"), {
+            to: document.getElementById('regEmail')?.value || document.getElementById('email').value,
+            from: "Atlas Admissions <eduproassist44@gmail.com>",
+            message: {
+                subject: "New Verification Code",
+                html: `<p>Your new verification code is: <strong>${newPin}</strong></p>`
+            }
+        });
+        window.pendingUser.correctPin = newPin; // Sync new pin for verification
+        alert("A new PIN has been sent to your email.");
+    } catch (e) {
+        console.error(e);
+    }
+});
+
+
 
 
 
