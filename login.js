@@ -38,7 +38,7 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
                 await addDoc(collection(db, "mail"), {
                     to: user.email,
                     from: "Atlas Admissions <eduproassist44@gmail.com>",
-                    message: { subject: "Your Verification PIN", html: `<h1>${newPin}</h1>` }
+                    
                 });
 
                 // Updated Logic: Stay on login page and show modal
