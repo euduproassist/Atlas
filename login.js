@@ -41,6 +41,10 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
                     message: { subject: "Your Verification PIN", html: `<h1>${newPin}</h1>` }
                 });
 
+                // Updated Logic: Stay on login page and show modal
+                window.pendingUser = { uid: user.uid, correctPin: newPin };
+                document.getElementById('pinModal').style.display = 'flex';
+
             }
             await signOut(auth);
             return;
