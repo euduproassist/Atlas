@@ -82,8 +82,6 @@ registerForm.addEventListener('submit', async (e) => {
                 const userData = userDoc.data();
 
                 if (userData.isVerified === false) {
-                    const newPin = Math.floor(100000 + Math.random() * 900000).toString();
-                    await updateDoc(doc(db, "users", userDoc.id), { verificationPin: newPin });
                     await addDoc(collection(db, "mail"), {
                         to: email,
                         from: "Atlas Admissions <eduproassist44@gmail.com>",
