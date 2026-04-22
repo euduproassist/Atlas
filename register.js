@@ -88,6 +88,24 @@ registerForm.addEventListener('submit', async (e) => {
                     await addDoc(collection(db, "mail"), {
                         to: email,
                         from: "Atlas Admissions <eduproassist44@gmail.com>",
+                message: {
+                subject: "Verify Your Account - Student Application Portal",
+                html: `
+                    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px; padding: 20px; border-top: 5px solid #4a90e2;">
+                        <div style="text-align: center; color: #4a90e2; margin-bottom: 25px;">
+                            <i class="fas fa-graduation-cap" style="font-size: 40px;"></i>
+                            <h2 style="margin-top: 10px; color: #333;">Welcome Back</h2>
+                        </div>
+                        <p style="color: #333;">Hi <strong>${userData.fullName}</strong>,</p>
+                        <p style="color: #555; line-height: 1.6;">It looks like you haven't finished your verification. Use the code below to complete your setup:</p>
+                        <div style="text-align: center; margin: 35px 0;">
+                            <h1 style="font-size: 48px; letter-spacing: 10px; color: #4a90e2; background: #f4f7f9; padding: 20px; border-radius: 8px; display: inline-block;">${newPin}</h1>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #888; text-align: center;">Enter this code in the registration window to complete your setup.</p>
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+                        <p style="color: #555;">Regards,<br><strong style="color: #333;">Atlas Admissions Team</strong></p>
+                    </div>`
+            }
                     });
                     window.pendingUser = { uid: userDoc.id, correctPin: newPin };
                     document.getElementById('pinModal').style.display = 'flex';
