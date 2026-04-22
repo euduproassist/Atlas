@@ -88,10 +88,6 @@ registerForm.addEventListener('submit', async (e) => {
                     await addDoc(collection(db, "mail"), {
                         to: email,
                         from: "Atlas Admissions <eduproassist44@gmail.com>",
-                        message: {
-                            subject: "Your New Verification PIN",
-                            html: `<div style="text-align: center;"><h1>${newPin}</h1></div>`
-                        }
                     });
                     window.pendingUser = { uid: userDoc.id, correctPin: newPin };
                     document.getElementById('pinModal').style.display = 'flex';
