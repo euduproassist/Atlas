@@ -94,6 +94,8 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
     if (enteredPin === correctPin) {
         try {
             await updateDoc(doc(db, "users", uid), { isVerified: true });
+            alert("Verification Successful! Please log in now.");
+            location.reload(); 
 
         } catch (error) {
             alert("Error: " + error.message);
