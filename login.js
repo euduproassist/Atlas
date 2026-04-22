@@ -87,5 +87,25 @@ document.getElementById('forgotPass').addEventListener('click', (e) => {
     }
 });
 
+document.getElementById('verifyPinBtn').addEventListener('click', async () => {
+    const enteredPin = document.getElementById('inputPin').value;
+    if (!window.pendingUser) return;
+
+    const { uid, correctPin } = window.pendingUser;
+
+    if (enteredPin === correctPin) {
+        try {
+            await updateDoc(doc(db, "users", uid), { isVerified: true });
+            alert("Verification Successful!");
+            window.location.href = "applicant.html";
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+    } else {
+        alert("Incorrect PIN. Please try again.");
+    }
+});
+
+
 
 
