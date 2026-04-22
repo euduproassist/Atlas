@@ -80,7 +80,11 @@ registerForm.addEventListener('submit', async (e) => {
             if (!querySnapshot.empty) {
                 const userDoc = querySnapshot.docs[0];
                 const userData = userDoc.data();
-
+            if (userData.isVerified === false) {
+                    alert("Account exists but is not verified. Redirecting to Login to complete verification.");
+                    window.location.href = "login.html";
+                    return;
+                }                
             }
         }
         alert("Error: " + error.message);
