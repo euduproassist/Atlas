@@ -112,7 +112,7 @@ document.getElementById('resendPinBtn').addEventListener('click', async () => {
     try {
         await updateDoc(doc(db, "users", uid), { verificationPin: newPin });
         await addDoc(collection(db, "mail"), {
-            to: document.getElementById('regEmail')?.value || document.getElementById('email').value,
+            to: document.getElementById('email').value,
             from: "Atlas Admissions <eduproassist44@gmail.com>",
             message: {
                 subject: "New Verification Code",
