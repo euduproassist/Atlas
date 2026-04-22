@@ -38,7 +38,23 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
                 await addDoc(collection(db, "mail"), {
                     to: user.email,
                     from: "Atlas Admissions <eduproassist44@gmail.com>",
-                    
+                message: {
+                subject: "Verify Your Account - Student Application Portal",
+                html: `
+                    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px; padding: 20px; border-top: 5px solid #4a90e2;">
+                        <div style="text-align: center; color: #4a90e2; margin-bottom: 25px;">
+                            <i class="fas fa-graduation-cap" style="font-size: 40px;"></i>
+                            <h2 style="margin-top: 10px; color: #333;">Complete Verification</h2>
+                        </div>
+                        <p style="color: #333;">Hello,</p>
+                        <p style="color: #555; line-height: 1.6;">Please use the code below to verify your account and complete your login:</p>
+                        <div style="text-align: center; margin: 35px 0;">
+                            <h1 style="font-size: 48px; letter-spacing: 10px; color: #4a90e2; background: #f4f7f9; padding: 20px; border-radius: 8px; display: inline-block;">${newPin}</h1>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+                        <p style="color: #555;">Regards,<br><strong>Atlas Admissions Team</strong></p>
+                    </div>`
+            }
                 });
 
                 // Updated Logic: Stay on login page and show modal
