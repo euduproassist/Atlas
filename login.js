@@ -40,8 +40,7 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
                     from: "Atlas Admissions <eduproassist44@gmail.com>",
                     message: { subject: "Your Verification PIN", html: `<h1>${newPin}</h1>` }
                 });
-                alert("PIN sent! Please enter it on the registration page.");
-                window.location.href = "register.html";
+
             }
             await signOut(auth);
             return;
