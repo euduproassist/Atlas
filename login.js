@@ -32,7 +32,6 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
 
                 // Check if document exists and if isVerified is true
         if (!userDoc.exists() || userDoc.data().isVerified !== true) {
-            if (confirm("Your account is not verified. Would you like us to send a new PIN?")) {
                 const newPin = Math.floor(100000 + Math.random() * 900000).toString();
                 await updateDoc(doc(db, "users", user.uid), { verificationPin: newPin });
                 await addDoc(collection(db, "mail"), {
@@ -60,8 +59,7 @@ loginForm.addEventListener('submit', async (e) => { // FIXED: Added async here
                 // Updated Logic: Stay on login page and show modal
                 window.pendingUser = { uid: user.uid, correctPin: newPin };
                 document.getElementById('pinModal').style.display = 'flex';
-
-            }
+            
             await signOut(auth);
             return;
         }
