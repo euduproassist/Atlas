@@ -94,8 +94,7 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
     if (enteredPin === correctPin) {
         try {
             await updateDoc(doc(db, "users", uid), { isVerified: true });
-            alert("Verification Successful!");
-            window.location.href = "applicant.html";
+
         } catch (error) {
             alert("Error: " + error.message);
         }
