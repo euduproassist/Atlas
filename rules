@@ -87,6 +87,16 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow write: if isStaffOrAdmin();
     }
+
+    // License and Price Tier Rules
+    match /system_license/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only Cloud Functions or Admin SDK should change this
+    }
+    match /price_tiers/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
     
      match /course_offerings/{courseId} {
      // Students can only see the courses, they cannot add or change them
