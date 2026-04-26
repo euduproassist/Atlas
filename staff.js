@@ -1185,6 +1185,51 @@ async function checkLicenseStatus() {
     }
 }
 
+window.showTiersPage = async (isLocked) => {
+    const overlay = document.getElementById('tierOverlay');
+    const tbody = document.getElementById('tierTableBody');
+    const counter = document.getElementById('tierCounterDisplay');
+    const warning = document.getElementById('tierLockWarning');
+    const exitBtn = document.getElementById('btnExitTiers');
+
+    overlay.style.display = 'flex';
+    if (isLocked) {
+        warning.style.display = 'block';
+        exitBtn.style.display = 'none'; // Cannot exit if locked
+    }
+
+    // Update Counter
+    counter.innerText = `${window.licenseInfo.current} / ${window.licenseInfo.max}`;
+
+    // Load Tiers from Firebase
+    const tierSnap = await getDocs(query(collection(db, "price_tiers"), orderBy("price", "asc")));
+    tbody.innerHTML = '';
+
+    tierSnap.forEach(doc => {
+        const tier = doc.data();
+        const isCurrent = window.licenseInfo.max === tier.max;
+        const canBuy = tier.max > window.licenseInfo.current;
+
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = "1px solid #eee";
+        tr.style.background = isCurrent ? "#fffbeb" : "white";
+        
+        tr.innerHTML = `
+            <td style="padding:15px; font-weight:bold;">${doc.id.replace('tier','')}</td>
+            <td style="padding:15px;">${tier.name}</td>
+            <td style="padding:15px;">0 – ${tier.max}</td>
+            <td style="padding:15px; font-weight:700;">R${tier.price.toLocaleString()}</td>
+            <td style="padding:15px;">
+                ${isCurrent ? '<span class="status status-review">CURRENT</span>' : 
+                  canBuy ? `<a href="${tier.paystackLink}" target="_blank" style="background:var(--primary); color:white; padding:8px 15px; text-decoration:none; border-radius:4px; font-size:0.7rem; font-weight:bold;">UPGRADE</a>` : 
+                  '<span style="color:#ccc;">N/A</span>'}
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+};
+
+
 
 
 
