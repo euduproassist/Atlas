@@ -1158,5 +1158,29 @@ window.addCourseRow = (course = '', campus = '', mode = '') => {
     tbody.appendChild(row);
 };
 
+async function checkLicenseStatus() {
+    const licenseRef = doc(db, "system_license", "current_status");
+    const appCountSnap = await getCountFromServer(collection(db, "applications"));
+    const totalApps = appCountSnap.data().count;
+    
+    const licenseSnap = await getDoc(licenseRef);
+    const licenseData = licenseSnap.data();
+
+    // Update global counter for the UI
+    window.licenseInfo = {
+        current: totalApps,
+        max: licenseData.maxRecords,
+        isLocked: licenseData.isLocked || totalApps > licenseData.maxRecords
+    };
+
+    if (window.licenseInfo.isLocked) {
+        // Force show the Tiers page and hide everything else
+        document.getElementById('mainDashboard').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'none';
+        showTiersPage(true); // true means 'locked mode'
+    }
+}
+
+
 
 
