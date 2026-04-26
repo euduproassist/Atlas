@@ -11,6 +11,9 @@ let selectedAppId = null;
 let currentAppId = null; // To track which student we are looking at
 let activeSubFilter = 'all'; // Tracks Pending, Review, or Waiting
 let activeTabFilter = 'new'; 
+let currentStudentCount = 0;
+let currentTierLimit = 0;
+let isLocked = false;
 
 // 1. Security Check: Ensure user is logged in
 onAuthStateChanged(auth, async (user) => {
