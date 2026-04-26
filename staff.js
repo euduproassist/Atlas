@@ -1235,6 +1235,18 @@ function updateTierDisplay() {
     }
 }
 
+async function updateGlobalStats() {
+  const statsRef = doc(db, "Application_stats", "global");
+
+  try {
+    await updateDoc(statsRef, {
+      count: increment(1) // This handles the math safely on the server
+    });
+    console.log("Stats updated successfully!");
+  } catch (error) {
+    console.error("Error updating stats:", error);
+  }
+}
 
 
 
