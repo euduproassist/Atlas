@@ -1,5 +1,5 @@
 import { auth, db } from './firebase-config.js';
-import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField, addDoc, setDoc, getDocs, where, increment } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { collection, query, onSnapshot, doc, updateDoc, orderBy, getDoc, arrayUnion, deleteField, addDoc, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 
@@ -1234,22 +1234,4 @@ function updateTierDisplay() {
         document.getElementById('lockoutCount').innerText = currentTierLimit;
     }
 }
-
-async function updateGlobalStats() {
-  const statsRef = doc(db, "Application_stats", "global");
-
-  try {
-    await updateDoc(statsRef, {
-      count: increment(1) // This handles the math safely on the server
-    });
-    console.log("Stats updated successfully!");
-  } catch (error) {
-    console.error("Error updating stats:", error);
-  }
-}
-
-
-
-
-
 
