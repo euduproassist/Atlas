@@ -1196,6 +1196,34 @@ function checkLockout() {
     }
 }
 
+window.payForTier = (amount, newLimit, tierName) => {
+    const handler = PaystackPop.setup({
+        key: 'pk_test_YOUR_PUBLIC_KEY', // Replace with your DB key
+        email: auth.currentUser.email,
+        amount: amount * 100, // Paystack takes cents
+        currency: 'ZAR',
+        callback: async (response) => {
+            // Update Database
+            await updateDoc(doc(db, "system_config", "licensing"), {
+                current_limit: newLimit,
+                lastPaymentRef: response.reference
+            });
+            
+            // Trigger Confirmation Email
+            await addDoc(collection(db, "mail"), {
+                to: auth.currentUser.email,
+                from: "Atlas System <eduproassist44@gmail.com>",
+                message: {
+                    subject: `Tier Upgrade Successful: ${tierName}`,
+                    html: `<h3>Payment Confirmed</h3><p>Your system has been upgraded to ${newLimit} records.</p>`
+                }
+            });
+            alert("Upgrade Successful!");
+            location.reload();
+        }
+    });
+    handler.openIframe();
+};
 
 
 
