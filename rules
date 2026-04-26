@@ -41,7 +41,7 @@ service cloud.firestore {
       allow get: if request.auth != null;
 
       // Browsing/Listing
-      allow list: if isStaffOrAdmin();
+
 
       // Detailed Read
       allow read: if request.auth != null && (
