@@ -1225,6 +1225,16 @@ window.payForTier = (amount, newLimit, tierName) => {
     handler.openIframe();
 };
 
+function updateTierDisplay() {
+    const counter = `${currentStudentCount} / ${currentTierLimit}`;
+    if(document.getElementById('tierCounterDisplay')) {
+        document.getElementById('tierCounterDisplay').innerText = counter;
+    }
+    if(document.getElementById('lockoutCount')) {
+        document.getElementById('lockoutCount').innerText = currentTierLimit;
+    }
+}
+
 
 
 
