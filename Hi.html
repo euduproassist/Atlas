@@ -1,3 +1,81 @@
+logger.ts:117 [2026-04-26T11:38:35.527Z]  @firebase/firestore: Firestore (11.0.0): Uncaught Error in snapshot listener: FirebaseError: [code=permission-denied]: Missing or insufficient permissions.
+(anonymous)	@	logger.ts:117
+(anonymous)	@	log.ts:25
+map	@	log.ts:66
+error	@	async_observer.ts:54
+onlineState	@	event_manager.ts:485
+__PRIVATE_eventManagerOnWatchError	@	event_manager.ts:367
+__PRIVATE_removeAndCleanupTarget	@	sync_engine_impl.ts:941
+catch	@	sync_engine_impl.ts:732
+Promise.then		
+__PRIVATE_syncEngineRejectListen	@	sync_engine_impl.ts:731
+__PRIVATE_handleTargetError	@	remote_store.ts:655
+__PRIVATE_onWatchStreamChange	@	remote_store.ts:59
+(anonymous)	@	persistent_stream.ts:684
+(anonymous)	@	persistent_stream.ts:554
+(anonymous)	@	persistent_stream.ts:599
+then	@	async_queue_impl.ts:138
+__PRIVATE_operationInProgress	@	async_queue_impl.ts:330
+Promise.then		
+op	@	async_queue_impl.ts:189
+enqueue	@	async_queue_impl.ts:136
+enqueueAndForget	@	async_queue_impl.ts:97
+(anonymous)	@	persistent_stream.ts:597
+(anonymous)	@	persistent_stream.ts:541
+bo	@	webchannel_connection.ts:56
+(anonymous)	@	webchannel_connection.ts:398
+(anonymous)	@	webchannel_connection.ts:298
+Promise.then		
+(anonymous)	@	webchannel_connection.ts:265
+__PRIVATE_wrappedOnOpen	@	stream_bridge.ts:94
+a_	@	persistent_stream.ts:330
+A_	@	persistent_stream.ts:701
+__PRIVATE_sendWatchRequest	@	remote_store.ts:357
+(anonymous)	@	remote_store.ts:421
+__PRIVATE_onWatchStreamOpen	@	remote_store.ts:417
+(anonymous)	@	persistent_stream.ts:533
+(anonymous)	@	persistent_stream.ts:599
+then	@	async_queue_impl.ts:138
+__PRIVATE_operationInProgress	@	async_queue_impl.ts:330
+Promise.then		
+op	@	async_queue_impl.ts:189
+enqueue	@	async_queue_impl.ts:136
+enqueueAndForget	@	async_queue_impl.ts:97
+(anonymous)	@	persistent_stream.ts:597
+(anonymous)	@	persistent_stream.ts:518
+(anonymous)	@	webchannel_connection.ts:50
+(anonymous)	@	dom.ts:22
+setTimeout		
+(anonymous)	@	dom.ts:19
+T_	@	persistent_stream.ts:664
+P_	@	persistent_stream.ts:505
+(anonymous)	@	persistent_stream.ts:482
+Promise.then		
+auth	@	persistent_stream.ts:477
+start	@	persistent_stream.ts:274
+__PRIVATE_startWatchStream	@	remote_store.ts:389
+__PRIVATE_remoteStoreListen	@	remote_store.ts:288
+__PRIVATE_allocateTargetAndMaybeListen	@	sync_engine_impl.ts:374
+await in __PRIVATE_allocateTargetAndMaybeListen		
+__PRIVATE_syncEngineListen	@	sync_engine_impl.ts:316
+__PRIVATE_eventManagerListen	@	event_manager.ts:176
+(anonymous)	@	firestore_client.ts:454
+await in (anonymous)		
+then	@	async_queue_impl.ts:138
+__PRIVATE_operationInProgress	@	async_queue_impl.ts:330
+Promise.then		
+op	@	async_queue_impl.ts:189
+enqueue	@	async_queue_impl.ts:136
+enqueueAndForget	@	async_queue_impl.ts:97
+(anonymous)	@	firestore_client.ts:455
+(anonymous)	@	reference_impl.ts:810
+loadApplications	@	staff.js:77
+(anonymous)	@	staff.js:607
+
+
+
+
+
 i will ask u one last time, if u disrepect my system and my system worth, the time i spent building this, i even provided free 1 month pilot so they can see the value and ease it provides so  no set up fee cz we start with free pilot amd this i built an online course application system that handle students to apply, upload documets, submit application, wait foe status...admin receive application, verify documents if the documents is valid it update in students portal with a green tick on document they uploaded if the document is invalid admin select reason for rejeting the document and that reason automatical send an email to student and tell student to reupload that rejected document, admin can accept student application(automatically a acceptance email is sent to that student and tell thesrudent to go tot the portal to downoad the application letter if they need the letter) admin can reject student and automatical a rejection email is sent to that student with the reason the admin selected on their portal..student can check status on the portal like, pending, under review, waiting list, approved, rejected, registered, deregistered this status is changed by admin...the info student entered during applying and the documents(id, results, proof of payment, proof of resisdence, etc) student uploaded during applying is stored in firestore storage and firebase database, admin can create application cycle folders and each folder open according to set dates, it only allow admin to open one application cycle to receive application and they can name them each application store separately students who applies during that application cycle is worth what ur talking about right now  im not looking foward to fall in debts so i will charge a fixed amount per 1k students if they get less than 1k they still pay that fixed amount if they get 1.5k student they pay for per 1k students time 2 tier...so the college that charge studenst an application fee of R150 they get 150k because of my step plus they other fees like registration and institutions fee they make that money, imagine a college that charges them 300 for application fee thats 1000 times 300 which is 300k again if they charge 500 that 500k because my easy to use platform brought more clients to that college i will ask you one last time dude how much is my system worth per 1k students, tell me a fixed price dont tell me about x amount- x amount dont tell me the range tell one fixed price u think my system is worth i wanna see if u repect me and my system or u disrespect us
 
 
@@ -5,31 +83,4 @@ i will ask u one last time, if u disrepect my system and my system worth, the ti
 
 
 
-### 1. Enrollment Capacity Bundles (Annual)
-*This covers the annual processing of brand-new student applications.*
-| Tier | Bundle Name | Annual Intake | Annual Flat Fee | Price per Head |
-|---|---|---|---|---|
-| **1** | **Micro-Start** | 0 – 300 | **R22,000** | R73 |
-| **2** | **Micro-Plus** | 301 – 750 | **R40,000** | R53 |
-| **3** | **Growth 1k** | 751 – 1,250 | **R58,000** | R46 |
-| **4** | **Growth 2k** | 1,251 – 2,000 | **R75,000** | R37 |
-| **5** | **Scale-Up** | 2,001 – 3,500 | **R120,000** | R34 |
-| **6** | **Institutional** | 3,501 – 5,500 | **R175,000** | R31 |
-| **7** | **Corporate** | 5,501 – 8,000 | **R240,000** | R30 |
-| **8** | **Enterprise** | 8,001 – 12,000 | **R350,000** | R29 |
-| **9** | **Elite-1** | 12,001 – 20,000 | **R550,000** | R27 |
-| **10** | **Elite-2** | 20,001 – 35,000 | **R900,000** | R25 |
-### 2. Information Governance & Compliance Vault (Monthly)
-*This is the recurring "Maintenance & Safety" fee for all records sitting in your database.*
-| Tier | Records Stored | Monthly Fee | Annual Total |
-|---|---|---|---|
-| **1** | 1 – 500 | **R1,500** | R18,000 |
-| **2** | 501 – 1,500 | **R2,800** | R33,600 |
-| **3** | 1,501 – 3,000 | **R4,500** | R54,000 |
-| **4** | 3,001 – 5,500 | **R7,000** | R84,000 |
-| **5** | 5,501 – 9,000 | **R10,500** | R126,000 |
-| **6** | 9,001 – 13,500 | **R15,000** | R180,000 |
-| **7** | 13,501 – 20,000 | **R22,000** | R264,000 |
-| **8** | 20,001 – 35,000 | **R35,000** | R420,000 |
-| **9** | 35,001 – 60,000 | **R55,000** | R660,000 |
-| **10** | 60,001 – 100,000 | **R85,000** | R1,020,000 |
+
