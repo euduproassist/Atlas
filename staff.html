@@ -601,6 +601,42 @@
     </div>
 </div>
 
+    <div id="tierOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:9999; flex-direction:column; padding:40px; overflow-y:auto;">
+    <div style="max-width: 1000px; margin: 0 auto;">
+        <div id="tierLockWarning" style="display:none; background:#fee2e2; color:#b91c1c; padding:15px; border-radius:8px; margin-bottom:20px; font-weight:bold; text-align:center;">
+            <i class="fas fa-exclamation-triangle"></i> LICENSE EXCEEDED: Access to applications is locked. Please upgrade your tier to resume operations.
+        </div>
+        
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px;">
+            <div>
+                <h2 style="font-size:1.5rem; color:#333;">Atlas Core Infrastructure & Lifecycle License</h2>
+                <p style="color:#666; font-size:0.9rem; max-width:700px;">This all-inclusive annual fee covers the entire student lifecycle: from initial digital application and processing to long-term record governance and security.</p>
+            </div>
+            <div style="text-align:right;">
+                <span style="font-size:0.8rem; color:#999; text-transform:uppercase;">Current Active Records</span>
+                <div id="tierCounterDisplay" style="font-size:1.8rem; font-weight:800; color:var(--primary);">0/0</div>
+            </div>
+        </div>
+
+        <table style="width:100%; border-collapse:collapse; margin-top:20px; border:1px solid #eee;">
+            <thead style="background:#f8f9fa;">
+                <tr>
+                    <th style="padding:15px;">Tier</th>
+                    <th style="padding:15px;">License Name</th>
+                    <th style="padding:15px;">Active Records</th>
+                    <th style="padding:15px;">Annual Fee</th>
+                    <th style="padding:15px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tierTableBody">
+                </tbody>
+        </table>
+        <p style="margin-top:20px; font-size:0.8rem; color:#888;">*Active Records = New applicants processed this year + existing student records maintained in the system for compliance/audits.</p>
+        
+        <button id="btnExitTiers" onclick="location.reload()" style="margin-top:30px; padding:10px 20px; background:#eee; border:none; border-radius:5px; cursor:pointer;">Back to Dashboard</button>
+    </div>
+</div>
+
 <script type="module" src="staff.js"></script>
 
 </body>
