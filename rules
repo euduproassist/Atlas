@@ -41,6 +41,9 @@ service cloud.firestore {
       allow get: if request.auth != null;
 
       // Browsing/Listing
+      allow list: if isStaffOrAdmin() && 
+        (get(/databases/$(database)/documents/applications_stats/global).data.totalCount <= 
+         get(/databases/$(database)/documents/system_config/licensing).data.current_limit);
 
 
       // Detailed Read
