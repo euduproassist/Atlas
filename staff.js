@@ -1162,7 +1162,80 @@ window.addCourseRow = (course = '', campus = '', mode = '') => {
     tbody.appendChild(row);
 };
 
+async function checkLicenseStatus() {
+    const licenseRef = doc(db, "system_license", "current_status");
+    const appCountSnap = await getCountFromServer(collection(db, "applications"));
+    const totalApps = appCountSnap.data().count;
+    
+    const licenseSnap = await getDoc(licenseRef);
+    const licenseData = licenseSnap.data();
 
+    // 1. Update global counter for the UI
+    window.licenseInfo = {
+        current: totalApps,
+        max: licenseData.maxRecords,
+        isLocked: licenseData.isLocked || totalApps >= licenseData.maxRecords
+    };
+
+    // --- START OF EMAIL ALERT LOGIC ---
+    const slotsLeft = window.licenseInfo.max - window.licenseInfo.current;
+    const today = new Date().toDateString();
+    // Fetch last sent date from Firestore, not local storage
+    const lastAlertDate = licenseData.lastNotificationSent || "";
+
+    // Trigger only if 100 or fewer slots remain AND we haven't sent an alert today
+    if (slotsLeft <= 100 && slotsLeft > 0 && lastAlertDate !== today) {
+        
+        // Update Firestore first to "lock" the action and prevent double-sending
+        await updateDoc(licenseRef, {
+            lastNotificationSent: today
+        });
+
+        await addDoc(collection(db, "mail"), {
+            to: "eduproassist44@gmail.com", 
+            message: {
+                subject: `⚠️ URGENT: ${slotsLeft} Application Slots Remaining`,
+                html: `
+                    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <div style="background: #e67e22; padding: 30px; text-align: center;">
+                            <h1 style="color: white; margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: 1px;">Capacity Warning</h1>
+                        </div>
+                        <div style="padding: 35px; color: #333; line-height: 1.6; background: #ffffff;">
+                            <p style="font-size: 16px;">Attention <strong>Administrator</strong>,</p>
+                            <p>The system has detected that the application capacity is nearly reached. To maintain institutional operations, please review the usage statistics:</p>
+                            
+                            <div style="background: #fff9f4; border: 1px solid #ffdfc4; border-radius: 8px; padding: 20px; margin: 25px 0; text-align: center;">
+                                <p style="margin: 0; font-weight: bold; color: #a35d1c; font-size: 12px; text-transform: uppercase;">Current System Load</p>
+                                <p style="font-size: 28px; margin: 10px 0; font-weight: 800; color: #2d3436;">${window.licenseInfo.current} / ${window.licenseInfo.max}</p>
+                                <div style="width: 100%; background: #eee; height: 8px; border-radius: 10px; margin: 15px 0; overflow: hidden;">
+                                    <div style="width: ${(window.licenseInfo.current / window.licenseInfo.max) * 100}%; background: #e67e22; height: 100%;"></div>
+                                </div>
+                                <p style="margin: 0; color: #d35400; font-weight: bold;">⚠️ ${slotsLeft} slots remaining before lockdown.</p>
+                            </div>
+
+                            <p>Once the limit is exceeded, the student application portal and staff processing dashboard will be restricted until a tier upgrade is applied.</p>
+                            
+                            <div style="text-align: center; margin-top: 30px;">
+                                <a href="https://yourdomain.com/staff.html" style="display: inline-block; background: #2d3436; color: white; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px;">UPGRADE LICENSE TIER</a>
+                            </div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 20px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee;">
+                            © 2026 Atlas Management System • Infrastructure Alert Service
+                        </div>
+                    </div>
+                `
+            }
+        });
+        console.log("University license warning email sent and recorded in Firestore.");
+    }
+    // --- END OF EMAIL ALERT LOGIC ---
+
+    if (window.licenseInfo.isLocked) {
+        document.getElementById('mainDashboard').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'none';
+        showTiersPage(true); 
+    }
+}
 
 window.showTiersPage = async (isLocked) => {
     const overlay = document.getElementById('tierOverlay');
