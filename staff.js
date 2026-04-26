@@ -25,6 +25,10 @@ onAuthStateChanged(auth, async (user) => {
     if (staffSnap.exists()) {
         window.currentStaffName = staffSnap.data().fullName || "Staff";
 
+        // Check license before showing anything
+        await checkLicenseStatus();
+        if (window.licenseInfo.isLocked) return; 
+
         const cycleQuery = query(collection(db, "application_cycles"), orderBy("academicYear", "desc"));
         onSnapshot(cycleQuery, (snapshot) => {
             renderCycleExplorer(snapshot.docs);
