@@ -45,6 +45,21 @@ onAuthStateChanged(auth, async (user) => {
                 loadApplications();
             }
         });
+
+        // Licensing & Tier Monitor
+        const configRef = doc(db, "system_config", "licensing");
+        onSnapshot(configRef, (configSnap) => {
+            const config = configSnap.data();
+            currentTierLimit = config.current_limit;
+            
+            // Get total apps across all cycles
+            const allAppsQuery = query(collection(db, "applications"));
+            onSnapshot(allAppsQuery, (appSnap) => {
+                currentStudentCount = appSnap.size;
+                checkLockout();
+                updateTierDisplay();
+            });
+        });
         setupProfile(user);
     } else {
         console.warn("Security: UID", user.uid, "not found in staff collection.");
