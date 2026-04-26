@@ -1177,6 +1177,26 @@ window.addCourseRow = (course = '', campus = '', mode = '') => {
 };
 
 
+function checkLockout() {
+    if (currentStudentCount >= currentTierLimit) {
+        isLocked = true;
+        document.getElementById('lockoutOverlay').style.display = 'flex';
+        // Disable all sidebar clicks
+        document.querySelectorAll('.sidebar-folder, .sub-tab').forEach(el => {
+            el.style.pointerEvents = 'none';
+            el.style.opacity = '0.5';
+        });
+    } else {
+        isLocked = false;
+        document.getElementById('lockoutOverlay').style.display = 'none';
+        document.querySelectorAll('.sidebar-folder, .sub-tab').forEach(el => {
+            el.style.pointerEvents = 'auto';
+            el.style.opacity = '1';
+        });
+    }
+}
+
+
 
 
 
