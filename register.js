@@ -102,7 +102,17 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
     }
 
     const { uid, correctPin } = window.pendingUser;
+if (enteredPin === correctPin) {
+        try {
+            const userRef = doc(db, "users", uid);
+            // Set verified TRUE and timestamp the verification for the 14-day rule
+            await updateDoc(userRef, { 
+                isVerified: true,
+                lastVerifiedAt: new Date() 
+            });
 
+            alert("Email Verified Successfully!");
+            window.location.href = "login.html";
         } catch (error) {
             alert("Error updating verification: " + error.message);
         }
