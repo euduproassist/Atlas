@@ -114,32 +114,6 @@ document.getElementById('forgotPass').addEventListener('click', (e) => {
     }
 });
 
-document.getElementById('verifyPinBtn').addEventListener('click', async () => {
-    const enteredPin = document.getElementById('inputPin').value;
-    if (!window.pendingUser) return;
-
-    const { uid, correctPin } = window.pendingUser;
-
-    if (enteredPin === correctPin) {
-    try {
-        await updateDoc(doc(db, "users", uid), { 
-            isVerified: true,
-            lastVerifiedAt: new Date() // Updates timestamp for 14-day rule
-        });
-        alert("Verification Successful!");
-        
-        // CHANGE THIS: Instead of location.reload(), go to the dashboard
-        window.location.href = "applicant.html"; 
-
-    } catch (error) {
-        console.error("Atlas PIN Verification Error:", error);
-        alert("Error: " + error.message);
-    }
-
-    } else {
-        alert("Incorrect PIN. Please try again.");
-    }
-});
 
 document.getElementById('resendPinBtn').addEventListener('click', async () => {
     if (!window.pendingUser) return;
