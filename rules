@@ -10,6 +10,15 @@ service cloud.firestore {
       );
     }
 
+    // 1. STUDENTS / USERS COLLECTION
+    match /users/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isStaffOrAdmin());
+      allow create: if request.auth != null && request.auth.uid == userId;
+  
+      // FIXED: Allows the update if the user is logged in OR if they are ONLY updating verification fields
+      allow update: if (request.auth != null && request.auth.uid == userId) || 
+               (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isVerified', 'lastVerifiedAt']));
+    }
 
     // 2. STAFF COLLECTION
     match /staff/{staffId} {
