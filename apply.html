@@ -322,6 +322,33 @@
                     <input type="file" id="file_sponsor" accept=".pdf,.jpg,.png">
                 </div>
 
+                <div class="section-title">4. Legal Declaration & Compliance</div>
+                <div style="background: #fff9e6; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px;">
+                        <input type="checkbox" id="check_admission" style="width: 20px; height: 20px; cursor: pointer;">
+                        <label for="check_admission" style="font-size: 0.85rem; color: #856404;">
+                            I agree to the <a href="policy_admission.html" target="_blank" style="color: #4a90e2; font-weight: 600;">Admission Compliance & Accuracy Declaration</a>.
+                        </label>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px;">
+                        <input type="checkbox" id="check_rules" style="width: 20px; height: 20px; cursor: pointer;">
+                        <label for="check_rules" style="font-size: 0.85rem; color: #856404;">
+                            I accept the <a href="policy_rules.html" target="_blank" style="color: #4a90e2; font-weight: 600;">Institutional General Rules, Regulations, and Prospectus</a>.
+                        </label>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <input type="checkbox" id="check_sharing" style="width: 20px; height: 20px; cursor: pointer;">
+                        <label for="check_sharing" style="font-size: 0.85rem; color: #856404;">
+                            I consent to <a href="policy_sharing.html" target="_blank" style="color: #4a90e2; font-weight: 600;">Third-Party Data Sharing & POPIA Processing</a>.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-cancel" onclick="goToStep(2)">Back</button>
+                    <button type="submit" class="btn btn-next" id="uploadBtn" disabled style="opacity: 0.5; cursor: not-allowed;">Upload & Continue</button>
+                </div>
+
             <div id="step4Container" style="display: none;">
                 <h2>Step 4 of 4: Review & Confirm</h2>
                 <p>Please review your details below. Your application has been saved as a draft.</p>
