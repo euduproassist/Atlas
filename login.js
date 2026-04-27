@@ -128,6 +128,11 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
             alert("Verification Successful! Please log in now.");
             location.reload(); 
 
+            } catch (error) {
+            console.error("Atlas PIN Verification Error:", error);
+            alert("Error updating verification: " + error.message);
+        }
+
     } else {
         alert("Incorrect PIN. Please try again.");
     }
