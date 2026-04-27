@@ -86,7 +86,6 @@ loginForm.addEventListener('submit', async (e) => {
 
             window.pendingUser = { uid: user.uid, correctPin: newPin };
             document.getElementById('pinModal').style.display = 'flex';
-            await signOut(auth);
             return;
         }
 
