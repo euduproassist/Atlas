@@ -71,10 +71,6 @@ service cloud.firestore {
       );
     }
 
-    match /mail/{mailId} {
-      allow read: if false; 
-      allow write: if isStaffOrAdmin() || (request.auth != null && (request.resource.data.to == request.auth.token.email || request.resource.data.to == request.auth.email));
-   }
    
     // 7. SYSTEM CONFIG (Read-only for authenticated users)
     match /system_config/payments {
