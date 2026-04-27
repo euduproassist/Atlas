@@ -1,2 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Third-Party Consent</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --text-dark: #333;
+            --bg-light: #f8f9fa;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+        }
+        .policy-box {
+            max-width: 800px;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 10px;
+            color: #000;
+            text-decoration: underline;
+        }
+        .clause {
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 5px;
+        }
+        .bullet-point {
+            display: block;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .bullet-point::before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .footer-note {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="policy-box">
+        <h2>CONSENT FOR THIRD-PARTY DATA SHARING AND PROCESSING</h2>
+
+        <div class="section">
+            <span class="section-title">1. PREAMBLE AND SCOPE</span>
+            <span class="clause">In accordance with the Protection of Personal Information Act (POPIA), No. 4 of 2013, and other applicable data protection legislations in South Africa, this institution ("the Institution") requires your explicit consent to share your personal, academic, and demographic data with verified third-party service providers. This consent is a prerequisite for facilitating essential student support services including, but not limited to, external career placements, off-campus housing, and financial aid processing.</span>
+        </div>
+
+        <div class="section">
+            <span class="section-title">2. NATURE OF DATA TO BE SHARED</span>
+            <span class="clause">By accepting this agreement, you authorize the Institution to disclose the following categories of information as captured in your digital application profile:</span>
+            <span class="bullet-point">Personal Identifiers: Full names, Identity/Passport number, and student number.</span>
+            <span class="bullet-point">Contact Details: Mobile number, email address, and physical residential address.</span>
+            <span class="bullet-point">Academic Records: Current qualification, module percentages, year of study, and Admission Point Score (APS).</span>
+            <span class="bullet-point">Demographic Data: Race, gender, and disability status (where required for statutory reporting or specialized support).</span>
+            <span class="bullet-point">Documentation: Digital copies of ID documents, academic transcripts, and matric certificates stored in the Institution’s Document Vault.</span>
+        </div>
+
+        <div class="section">
+            <span class="section-title">3. AUTHORIZED THIRD-PARTY RECIPIENTS</span>
+            <span class="clause">Data will only be shared with entities that have entered into formal Data Processing Agreements with the Institution, ensuring they maintain equivalent security standards. These include:</span>
+            <span class="bullet-point">Career and Recruitment Portals: For the purposes of work-integrated learning (WIL), internships, bursary applications, and graduate recruitment.</span>
+            <span class="bullet-point">Accredited Housing Providers: To facilitate applications for off-campus student accommodation and private residential leases.</span>
+            <span class="bullet-point">Financial Institutions and Regulatory Bodies: Including NSFAS, scholarship donors, and credit bureaus for fee-funding verification.</span>
+            <span class="bullet-point">Service Providers: Technical partners managing the cloud infrastructure, Firebase authentication, and payment gateways (e.g., Paystack).</span>
+        </div>
+
+        <div class="section">
+            <span class="section-title">4. PURPOSE OF PROCESSING</span>
+            <span class="clause">The sharing of data is conducted strictly for the following purposes:</span>
+            <span class="bullet-point">To enable external parties to verify your enrollment status and academic eligibility.</span>
+            <span class="bullet-point">To streamline the transition from academic study to professional employment.</span>
+            <span class="bullet-point">To ensure student safety and administrative compliance in off-campus housing.</span>
+            <span class="bullet-point">To fulfill statutory reporting requirements to the Department of Higher Education and Training (DHET).</span>
+        </div>
+
+        <div class="section">
+            <span class="section-title">5. DATA SECURITY AND RETENTION</span>
+            <span class="clause">The Institution employs industry-standard encryption and Firebase security rules to protect your data during transit and at rest. Third parties are contractually prohibited from using your data for marketing purposes or further distribution without additional consent. Your data will be retained for the duration of your academic lifecycle and for the minimum period required by the National Archives and Records Service of South Africa Act.</span>
+        </div>
+
+        <div class="section">
+            <span class="section-title">6. STUDENT RIGHTS AND WITHDRAWAL OF CONSENT</span>
+            <span class="clause">You have the right to:</span>
+            <span class="bullet-point">Request access to the record of third parties who have received your data.</span>
+            <span class="bullet-point">Object to the processing of your personal information for specific non-essential purposes.</span>
+            <span class="bullet-point">Request the correction or deletion of inaccurate data.</span>
+            <span class="bullet-point">Withdraw this consent at any time by notifying the Registrar’s Office in writing, acknowledging that such withdrawal may result in the termination of access to certain institutional and third-party services (e.g., housing or career placements).</span>
+        </div>
+
+        <div class="section">
+            <span class="section-title">7. DECLARATION AND ACCEPTANCE</span>
+            <span class="clause">I, the undersigned applicant, hereby grant the Institution permission to share my personal and academic information with authorized third-party providers as outlined above. I confirm that all information provided in my application is true and correct, and I understand that providing false information may result in the immediate cancellation of my application or registration.</span>
+        </div>
+
+        <div class="footer-note">
+            End of Consent Declaration - Student Data Protection Office
+        </div>
+    </div>
+
+</body>
+</html>
 
 
