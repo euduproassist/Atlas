@@ -114,6 +114,30 @@ document.getElementById('forgotPass').addEventListener('click', (e) => {
     }
 });
 
+document.getElementById('verifyPinBtn').addEventListener('click', async () => {
+    const enteredPin = document.getElementById('inputPin').value;
+    
+    // Check if PIN is correct
+    if (enteredPin === window.pendingUser.correctPin) {
+        try {
+            // Update Firestore to say they are verified
+            await updateDoc(doc(db, "users", window.pendingUser.uid), { 
+                isVerified: true,
+                lastVerifiedAt: new Date()
+            });
+
+            alert("Verification Successful!");
+
+            // CHANGE YOUR REDIRECT TO THIS:
+            window.location.href = "applicant.html"; 
+
+        } catch (error) {
+            console.error(error);
+        }
+    } else {
+        alert("Incorrect PIN");
+    }
+});
 
 document.getElementById('resendPinBtn').addEventListener('click', async () => {
     if (!window.pendingUser) return;
