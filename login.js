@@ -121,16 +121,6 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
 
     const { uid, correctPin } = window.pendingUser;
 
-    if (enteredPin === correctPin) {
-        try {
-            await updateDoc(doc(db, "users", uid), { isVerified: true });
-            alert("Verification Successful! Please log in now.");
-            location.reload(); 
-
-            } catch (error) {
-            console.error("Atlas PIN Verification Error:", error);
-            alert("Error updating verification: " + error.message);
-        }
 
     } else {
         alert("Incorrect PIN. Please try again.");
