@@ -94,7 +94,6 @@ loginForm.addEventListener('submit', async (e) => {
         window.location.href = "applicant.html"; 
 
         } catch (error) {
-        console.error("Atlas Login Error:", error);
         if (error.code === 'auth/user-not-found') {
             alert("No user found. Redirecting to Register.");
             window.location.href = "register.html";
