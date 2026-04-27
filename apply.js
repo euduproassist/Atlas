@@ -929,6 +929,23 @@ async function processFile(file) {
     });
 }
 
+async function generatePolicyPDF(title, content, fileName) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const splitContent = doc.splitTextToSize(content, pageWidth - (margin * 2));
+    
+    doc.setFontSize(16);
+    doc.text(title, margin, 20);
+    doc.setFontSize(10);
+    doc.text(splitContent, margin, 30);
+    
+    const blob = doc.output('blob');
+    return new File([blob], `${fileName}.pdf`, { type: 'application/pdf' });
+}
+
+
 
 
 
