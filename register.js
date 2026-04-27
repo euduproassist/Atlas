@@ -73,6 +73,7 @@ registerForm.addEventListener('submit', async (e) => {
         };
 
     } catch (error) {
+        console.error("Atlas Registration Error:", error);
         if (error.code === 'auth/email-already-in-use') {
             const email = document.getElementById('regEmail').value;
             const q = query(collection(db, "users"), where("email", "==", email));
