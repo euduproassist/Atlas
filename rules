@@ -10,14 +10,6 @@ service cloud.firestore {
       );
     }
 
-// 1. STUDENTS / USERS COLLECTION
-   match /users/{userId} {
-     allow read: if request.auth != null && (request.auth.uid == userId || isStaffOrAdmin());
-     allow create: if request.auth != null && request.auth.uid == userId;
-     // This update allows changing the PIN and Verification status even during the login/handshake phase
-     allow update: if request.auth != null && (request.auth.uid == userId || 
-     request.resource.data.diff(resource.data).affectedKeys().hasAny(['isVerified', 'verificationPin', 'lastVerifiedAt']));
-    }
 
     // 2. STAFF COLLECTION
     match /staff/{staffId} {
