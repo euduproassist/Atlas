@@ -168,7 +168,5 @@ document.getElementById('resendPinBtn').addEventListener('click', async () => {
         });
         window.pendingUser.correctPin = newPin; // Sync new pin for verification
         alert("A new PIN has been sent to your email.");
-    } catch (e) {
-        console.error(e);
-    }
+
 });
