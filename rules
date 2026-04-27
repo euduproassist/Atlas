@@ -10,14 +10,6 @@ service cloud.firestore {
       );
     }
 
-    // 1. STUDENTS / USERS COLLECTION
-    match /users/{userId} {
-      allow read: if request.auth != null && (request.auth.uid == userId || isStaffOrAdmin());
-      // Allow the user to create their profile if the ID matches their Auth UID
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow update: if (request.auth != null && request.auth.uid == userId) || 
-(resource.data.isVerified == false && request.resource.data.diff(resource.data).affectedKeys().hasAny(['isVerified', 'verificationPin']));
-    }
 
     // 2. STAFF COLLECTION
     match /staff/{staffId} {
