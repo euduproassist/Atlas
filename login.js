@@ -93,14 +93,6 @@ loginForm.addEventListener('submit', async (e) => {
         alert("Login Successful!");
         window.location.href = "applicant.html"; 
 
-    } catch (error) {
-        if (error.code === 'auth/user-not-found') {
-            alert("No user found. Redirecting to Register.");
-            window.location.href = "register.html";
-        } else {
-            alert("Error: " + error.message);
-        }
-    }
 });
 
 // Forgot Password
