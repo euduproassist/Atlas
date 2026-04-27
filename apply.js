@@ -809,6 +809,35 @@ document.getElementById('check_admission').addEventListener('change', validateCo
 document.getElementById('check_rules').addEventListener('change', validateCompliance);
 document.getElementById('check_sharing').addEventListener('change', validateCompliance);
 
+window.goToStep = async function(stepNumber) {
+    const user = auth.currentUser;
+    
+    // Hide current step
+    document.getElementById(`step${currentStep}Container`).style.display = 'none';
+    
+    // Show new step
+    document.getElementById(`step${stepNumber}Container`).style.display = 'block';
+
+    if (stepNumber === 2) {
+        document.getElementById('attendance').required = true;
+        document.getElementById('campus').required = true;
+        document.getElementById('choice1').required = true;
+    }
+    
+    // --- ADDED FIX: Trigger summary when entering Step 4 ---
+    if (stepNumber === 4) {
+        window.renderReviewSummary();
+    }
+    
+    // Update the step counter
+    currentStep = stepNumber;
+
+    // Save the step progress to Firebase immediately
+    if (user) {
+        await setDoc(doc(db, "drafts", user.uid), { currentStep: currentStep }, { merge: true });
+    }
+    window.scrollTo(0, 0);
+};
 
 window.renderReviewSummary = async function() {
     const user = auth.currentUser;
