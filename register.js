@@ -35,7 +35,8 @@ registerForm.addEventListener('submit', async (e) => {
             role: "student",
             createdAt: new Date(),
             verificationPin: verificationPin,
-            isVerified: false
+            isVerified: false,
+            lastVerifiedAt: null
         });
 
         // 4. SEND THE EMAIL VIA FIRESTORE EXTENSION
