@@ -582,6 +582,26 @@ mainForm.addEventListener('submit', async (e) => {
 
         try {
             const documentData = {};
+
+            // GENERATE POLICY DOCUMENTS LOCALLY
+            const policy1 = await generatePolicyPDF("Admission Compliance", "I certify that all info is true and I agree to the terms of admission.", "Admission_Compliance_Policy");
+            const policy2 = await generatePolicyPDF("Institutional Rules", "I agree to abide by the rules, regulations, and prospectus of the institution.", "Institutional_Rules_Policy");
+            const policy3 = await generatePolicyPDF("Data Sharing Consent", "I consent to the processing and sharing of my data with 3rd parties per POPIA.", "Data_Sharing_Consent");
+
+            // Define them as virtual uploads
+            const policies = [
+                { file: policy1, name: "Admission_Compliance" },
+                { file: policy2, name: "Institutional_Rules" },
+                { file: policy3, name: "Data_Sharing_Consent" }
+            ];
+
+            // Upload the generated policies first
+            for (const p of policies) {
+                const pRef = ref(storage, `applications/${user.uid}/${p.name}.pdf`);
+                await uploadBytes(pRef, p.file);
+                const pUrl = await getDownloadURL(pRef);
+                documentData[p.name] = pUrl;
+            }
             
             // Loop through each file one by one
             for (const f of filesToUpload) {
