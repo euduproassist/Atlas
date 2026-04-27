@@ -779,6 +779,28 @@ window.validatePostSchool = function() {
     return { allFilled, anyFilled };
 };
 
+// --- NEW: COMPLIANCE GATING LOGIC ---
+const validateCompliance = () => {
+    const c1 = document.getElementById('check_admission').checked;
+    const c2 = document.getElementById('check_rules').checked;
+    const c3 = document.getElementById('check_sharing').checked;
+    const uploadBtn = document.getElementById('uploadBtn');
+    
+    if (c1 && c2 && c3) {
+        uploadBtn.disabled = false;
+        uploadBtn.style.opacity = "1";
+        uploadBtn.style.cursor = "pointer";
+    } else {
+        uploadBtn.disabled = true;
+        uploadBtn.style.opacity = "0.5";
+        uploadBtn.style.cursor = "not-allowed";
+    }
+};
+
+document.getElementById('check_admission').addEventListener('change', validateCompliance);
+document.getElementById('check_rules').addEventListener('change', validateCompliance);
+document.getElementById('check_sharing').addEventListener('change', validateCompliance);
+
 // Add this at the very end of apply.js
 window.goToStep = async function(stepNumber) {
     const user = auth.currentUser;
