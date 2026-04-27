@@ -128,9 +128,6 @@ document.getElementById('verifyPinBtn').addEventListener('click', async () => {
             alert("Verification Successful! Please log in now.");
             location.reload(); 
 
-        } catch (error) {
-            alert("Error: " + error.message);
-        }
     } else {
         alert("Incorrect PIN. Please try again.");
     }
