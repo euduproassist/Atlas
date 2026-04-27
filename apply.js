@@ -809,31 +809,6 @@ document.getElementById('check_admission').addEventListener('change', validateCo
 document.getElementById('check_rules').addEventListener('change', validateCompliance);
 document.getElementById('check_sharing').addEventListener('change', validateCompliance);
 
-// Add this at the very end of apply.js
-window.goToStep = async function(stepNumber) {
-    const user = auth.currentUser;
-    
-    // Hide current step
-    document.getElementById(`step${currentStep}Container`).style.display = 'none';
-    
-    // Show new step
-    document.getElementById(`step${stepNumber}Container`).style.display = 'block';
-
-    if (stepNumber === 2) {
-    document.getElementById('attendance').required = true;
-    document.getElementById('campus').required = true;
-    document.getElementById('choice1').required = true;
-    }
-    
-    // Update the step counter
-    currentStep = stepNumber;
-
-    // Save the step progress to Firebase immediately (R0 cost - tiny string)
-    if (user) {
-        await setDoc(doc(db, "drafts", user.uid), { currentStep: currentStep }, { merge: true });
-    }
-    window.scrollTo(0, 0);
-};
 
 window.renderReviewSummary = async function() {
     const user = auth.currentUser;
