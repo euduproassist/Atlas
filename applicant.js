@@ -418,7 +418,10 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
         { name: 'Grade_11_Results', label: 'Grade 11 Results' },
         { name: 'Transcripts', label: 'Academic Transcripts' },
         { name: 'Proof_of_Address', label: 'Proof of Residence' },
-        { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' }
+        { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' }, 
+        { name: 'Admission_Compliance', label: 'Admission Compliance', readOnly: true },
+        { name: 'Institutional_Rules', label: 'Institutional Rules', readOnly: true },
+        { name: 'Data_Sharing_Consent', label: 'Data Sharing Consent', readOnly: true }
     ];
 
 
