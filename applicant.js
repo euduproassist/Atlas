@@ -438,14 +438,6 @@ document.getElementById('openVaultBtn').addEventListener('click', async () => {
                     <td style="padding: 12px 10px; font-size: 0.85rem;">
     ${hasFile ? `<a href="${fileUrl}" target="_blank" style="color: #4a90e2; font-weight: 600; text-decoration: none;">${data.documents[`${f.name}_filename`] || 'View Document'}</a>` : '<span style="color: #d32f2f;">No File</span>'}
 </td>
-                 <td style="padding: 12px 10px; text-align: center;">
-    ${docStatuses[f.name] === 'processed' ? 
-        `<span style="color: #27ae60; font-weight: 800; font-size: 0.75rem;"><i class="fas fa-check-circle"></i> PROCESSED</span>` : 
-        `<span onclick="handleVaultUpload('${f.name}')" style="color: ${hasFile ? '#27ae60' : '#d32f2f'}; cursor: pointer; font-weight: 600; text-decoration: underline; font-size: 0.8rem;">
-            ${hasFile ? 'RE-UPLOAD' : (docStatuses[f.name] === 'missing' ? 'UPLOAD MISSING' : 'UPLOAD')}
-        </span>`
-    }
-</td>
                 </tr>
             `; 
         });
