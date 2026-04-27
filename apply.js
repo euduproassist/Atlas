@@ -603,12 +603,6 @@ mainForm.addEventListener('submit', async (e) => {
                 }
             }
 
-            // Save document metadata to drafts collection
-            await setDoc(doc(db, "drafts", user.uid), {
-                documents: documentData,
-                lastUpdated: new Date()
-            }, { merge: true });
-
             // 3. Final Application Submission Logic
             const [draftSnap, appSnap] = await Promise.all([
                 getDoc(doc(db, "drafts", user.uid)),
