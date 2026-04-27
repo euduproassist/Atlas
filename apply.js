@@ -603,6 +603,20 @@ mainForm.addEventListener('submit', async (e) => {
                 }
             }
 
+            // Save document metadata AND Legal Compliance to drafts collection
+            const complianceData = {
+                admissionAgreed: document.getElementById('check_admission').checked,
+                rulesAccepted: document.getElementById('check_rules').checked,
+                thirdPartyConsent: document.getElementById('check_sharing').checked,
+                agreedAt: new Date()
+            };
+
+            await setDoc(doc(db, "drafts", user.uid), {
+                documents: documentData,
+                compliance: complianceData,
+                lastUpdated: new Date()
+            }, { merge: true });
+
             // 3. Final Application Submission Logic
             const [draftSnap, appSnap] = await Promise.all([
                 getDoc(doc(db, "drafts", user.uid)),
