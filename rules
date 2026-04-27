@@ -50,6 +50,11 @@ service cloud.firestore {
       );
 
       // This ensures the student can only create an application if they don't already have one for the current cycle
+      allow create: if request.auth != null && 
+               request.auth.uid == applicationId && 
+               !exists(/databases/$(database)/documents/applications/$(applicationId)) &&
+               request.resource.data.compliance.admissionAgreed == true &&
+               request.resource.data.compliance.rulesAccepted == true;
 
        allow update: if request.auth != null && (
     request.auth.uid == applicationId || isStaffOrAdmin()
