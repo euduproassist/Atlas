@@ -1,14 +1,4 @@
-    // Close button (X) styling and logic
-    const closeBtn = `<div onclick="document.getElementById('statusModal').style.display='none'" style="position:absolute; top:10px; right:15px; font-size:24px; cursor:pointer; color:#888;">&times;</div>`;
-    
-
-
-Whitestone FET College (Pretoria)
-​Berea Technical College (Pretoria Information Center/Satellite)
 ​St. Augustine College (Pretoria Satellite/Distance manual entries)
-​Academy of Business and Computer Studies (Pretoria)
-​Tshwane Institute of Technology (Pretoria Central)
-​Globaltech FET College (Pretoria)
 
 
 
@@ -20,12 +10,10 @@ Atteridgeville Community Learning Centre
 ​Botselo Community Learning Centre
 
 
-Almond-G Private College
 ​Athenaeum Private College
 ​Damelin (Pretoria CBD Campus)
 ​Damelia (Menlyn Campus)
-​Eagle Crest FET College
-​Empilweni Training Center
+​Eagle Crest FET College/Eaglesvale College
 Kwazulu-Natal Business College (Pretoria Branch)
 ​Lindiwe FET College
 ​Loftus FET College
