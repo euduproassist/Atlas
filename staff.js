@@ -399,7 +399,8 @@ const filesToCheck = [
     { name: 'Grade_11_Results', label: 'Grade 11 Results' },
     { name: 'Transcripts', label: 'Academic Transcripts' },
     { name: 'Proof_of_Address', label: 'Proof of Residence' },
-    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' }
+    { name: 'Sponsor_ID', label: 'Sponsor / Parent ID' },
+    { name: 'Proof_of_Payment', label: 'Proof of Payment' }
 ];
 
 let vaultHTML = `
