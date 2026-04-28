@@ -959,6 +959,37 @@ async function processFile(file) {
     });
 }
 
+async function generatePolicyPDF(title, content, fileName, userData) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const margin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    // 1. HEADER SECTION
+    doc.setFontSize(18);
+    doc.setTextColor(74, 144, 226); // Primary Blue
+    doc.text(title, margin, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0); // Black
+    doc.text(`Academic Year: ${userData.year}`, margin, 30);
+    doc.text(`Full Name: ${userData.name}`, margin, 35);
+    doc.text(`Application ID: ${userData.appId}`, margin, 40);
+    doc.text(`Date Agreed: ${userData.date}`, margin, 45);
+    
+    doc.setLineWidth(0.5);
+    doc.line(margin, 50, pageWidth - margin, 50); // Horizontal Line
+
+    // 2. ESSAY CONTENT
+    doc.setFontSize(11);
+    const splitContent = doc.splitTextToSize(content, pageWidth - (margin * 2));
+    doc.text(splitContent, margin, 60);
+    
+    const blob = doc.output('blob');
+    return new File([blob], `${fileName}.pdf`, { type: 'application/pdf' });
+}
+
+
 
 
 
