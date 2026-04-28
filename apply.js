@@ -593,6 +593,23 @@ mainForm.addEventListener('submit', async (e) => {
         try {
             const documentData = {};
 
+                        // Gather Metadata for PDF Header
+            const draftData = (await getDoc(doc(db, "drafts", user.uid))).data();
+            const yearSuffix = new Date().getFullYear().toString().slice(-2);
+            const tempAppId = draftData.applicationId || `APP-${yearSuffix}${Math.floor(100000 + Math.random() * 900000)}`;
+            
+            const pdfMeta = {
+                year: activeCycle.academicYear,
+                name: `${document.getElementById('fullNames').value} ${document.getElementById('surname').value}`,
+                appId: tempAppId,
+                date: new Date().toLocaleDateString()
+            };
+
+            // GENERATE POLICY DOCUMENTS WITH FULL TEXT AND HEADERS
+            const policy1 = await generatePolicyPDF("Admission Compliance", POLICY_TEXTS.admission, "Admission_Compliance_Policy", pdfMeta);
+            const policy2 = await generatePolicyPDF("Institutional Rules", POLICY_TEXTS.rules, "Institutional_Rules_Policy", pdfMeta);
+            const policy3 = await generatePolicyPDF("Data Sharing Consent", POLICY_TEXTS.sharing, "Data_Sharing_Consent", pdfMeta);
+
             // Define them as virtual uploads
             const policies = [
                 { file: policy1, name: "Admission_Compliance" },
