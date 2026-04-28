@@ -31,7 +31,8 @@ let activeCycle = null;
         { id: 'file_grade11', name: 'Grade_11_Results' },
         { id: 'file_transcripts', name: 'Transcripts' },
         { id: 'file_address', name: 'Proof_of_Address' },
-        { id: 'file_sponsor', name: 'Sponsor_ID' }
+        { id: 'file_sponsor', name: 'Sponsor_ID' },
+        { id: 'file_payment', name: 'Proof_of_Payment' }
     ];
 
 // Attach listeners to every file input for immediate background processing
